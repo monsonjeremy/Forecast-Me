@@ -1,89 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import api from '../utils/api'
-
-function SelectSpot (props) {
-    var spots = [
-        {name: 'Santa Cruz', id: '2958'},
-        {name:'Steamer Lane', id:'4188'},
-        {name:'Four Mile', id:'5023'},
-        {name:'Waddell Creek', id:'5021'},
-        {name: 'Mitchell\'s Cove', id:'5028'},
-        {name: '26th Ave', id:'5030'}
-    ]
-    return (
-        <div>
-            <ul className='spots'>
-                {spots.map((spot, index) => {
-                    return (
-                        <li
-                            style = {spot.name === props.selectedSpot.name ? {color: '#d0021b'}: null}
-                            onClick={props.onSelect.bind(null, spot)}
-                            key={spot.name}>
-                            {spot.name}
-                        </li>
-                    )
-                })}
-            </ul>
-        </div>
-    )
-}
-
-SelectSpot.propTypes = {
-    selectedSpot: PropTypes.object.isRequired,
-    onSelect: PropTypes.func.isRequired,
-}
-
-ForecastBox.propTypes = {
-    forecast: PropTypes.object.isRequired,
-}
-
-DayContainer.propTypes = {
-    date: PropTypes.array.isRequired,
-}
-
-function ForecastBox(props){
-    return (
-        <div>
-        {props.forecast.dateStamp.map((date, index) => {
-            return (
-                <div key={'date' + index} className='day-box'>
-                    <DayContainer date={date} />
-                </div>
-            )
-        })}
-        </div>
-    )
-}
-
-function DayContainer(props){
-    return (
-        <div className='forecast-by-day'>
-        {props.date.map( (date, index) => {
-        return (
-            date
-            /*<ul className='forecast-list'>
-                {props.forecast.dateStamp.map((dateStamps, indexone) => {
-                    {dateStamps.map((date, indextwo) => {
-                        return (
-                            <li key={date} className='date'>
-                                {console.log('date: ' + JSON.stringify(date))}
-                                {console.log('surf: ' + props.forecast.surf_max[indexone][indextwo])}
-                                <div>{date}</div>
-                                <div>{props.forecast.surf_max[indexone][indextwo]}</div>
-                            </li>
-                        )
-                    })}
-                })}
-                <li className='surf-forecast'>
-                </li>
-            </ul>
-            */
-        )
-    })}
-    </div>
-    )
-}
+import SelectSpot from './SelectSpot'
+import ForecastBox from './ForecastBox'
+import DayContainer from './DayContainer'
 
 class Spots extends React.Component {
 
@@ -120,7 +40,7 @@ class Spots extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className='container-fluid'>
                 <SelectSpot 
                     selectedSpot={this.state.selectedSpot}
                     onSelect={this.updateSpot}

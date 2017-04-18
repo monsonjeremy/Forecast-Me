@@ -3,7 +3,6 @@ body {
 }
 
 .container {
-    max-width: 200px;
     margin: 0 auto;
 }
 
@@ -26,8 +25,16 @@ li {
     list-style-type: none;
 }
 
-.surf-max {
+.forecast-box {
+    width: 100;
     display: flex;
+    text-align: center;
+}
+
+.day-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 
 .loading {
