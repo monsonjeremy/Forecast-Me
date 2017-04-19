@@ -1,11 +1,11 @@
 import React from 'react'
-import Spots from './Spots'
+import ForecastPage from './ForecastPage'
 
 class App extends React.Component {
     render() {
         return (
             <div className='container'>
-                <Spots />
+                <ForecastPage />
             </div>
         )
     }

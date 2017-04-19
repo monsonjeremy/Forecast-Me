@@ -6,14 +6,14 @@ import ForecastBox from './ForecastBox'
 import DayContainer from './DayContainer'
 import RegionSelector from './RegionSelector'
 
-class Spots extends React.Component {
+class ForecastPage extends React.Component {
 
     constructor (props) {
         super(props)
         this.state = {
             selectedRegion: null,
             selectedSpot: null,
-            forecast: null
+            forecast: null,
         }
 
         this.updateSpot = this.updateSpot.bind(this)
@@ -38,7 +38,7 @@ class Spots extends React.Component {
                     forecast: forecast,
                 }
             })
-        })
+        }.bind(this))
     }
     
     updateSpot(spot) {
@@ -70,10 +70,9 @@ class Spots extends React.Component {
                     onSelect={this.updateSpot}
                     />*/}
                 <div>
-                    {!this.state.forecast ? 
-                        <div className="loading">
-                            <div className="squareXS"></div>
-                            <div className="squareXL"></div>
+                    {!this.state.forecast? 
+                        <div>
+                            Select A Region
                         </div>
                     : <ForecastBox forecast={this.state.forecast} /> }
                 </div>
@@ -83,4 +82,4 @@ class Spots extends React.Component {
 }
 
 
-module.exports = Spots
+module.exports = ForecastPage

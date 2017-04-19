@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import api from '../utils/api'
+import DropdownList from './DropdownList'
 
 function RegionSelector (props) {
     var regions = [
@@ -17,8 +18,8 @@ function RegionSelector (props) {
             ]
         },
         { 
-          name:'Los Angeles',
-          id: '1234',
+          name:'North Orange Country',
+          id: '2143',
           spots:  
             [
                 {name:'Newport', id:'1241'},
@@ -29,23 +30,21 @@ function RegionSelector (props) {
 
     return (
         <div className="content col-xs-3 col-md-3">
-            <div className="admin-panel"><label htmlFor="toggle" className="admin-text">Select Your Region</label></div>
-            <input type="checkbox" id="toggle"/>
-            <label className="cog octicon octicon-gear" htmlFor="toggle"></label>
-            <div className="menu">
-                <div className="arrow"></div>
-                    {regions.map((region) => {
-                        return (
-                            <a href="#" key={region.name}>{region.name}<span className="icon octicon octicon-person"></span></a>
-                        )
-                    })}
+            <div className="btn-group">
+                <DropdownList 
+                    list={regions} 
+                    title={ props.selectedRegion == null ? 'Select Your Region' : props.selectedRegion.name }
+                    keyName = 'region-selector'
+                    id = 'region-selector-dropdown'
+                    actions = {props.onSelect}
+                />
             </div>
         </div>
     )
 }
 
 RegionSelector.propTypes = {
-    selectedSpot: PropTypes.object.isRequired,
+    selectedRegion: PropTypes.object,
     onSelect: PropTypes.func.isRequired,
 }
 
