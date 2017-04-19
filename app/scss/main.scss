@@ -37,6 +37,118 @@ li {
     justify-content: space-around;
 }
 
+/* ----------------- REGION/SPOT DROPDOWNS ----------------- */
+
+.content
+{
+	position: relative;
+	top: 5px;
+	width: 250px;
+	margin: 0 auto;
+	padding-bottom: 50px;
+	z-index: 1;
+}
+
+.admin-panel
+{
+	background: #F8F8F8;
+	width: 240px;
+	height: 40px;
+	color: #888888;
+	border: none;
+	border-radius: 3px;
+	padding: 0 0 0 10px;
+	font: bold 13px Helvetica, sans-serif;
+	text-transform: uppercase;
+	line-height: 41px;
+	cursor: default;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+	margin-bottom: 7px;
+	box-shadow: 0 1px 1px rgba( 0, 0, 0, 0.2 );
+}
+
+.cog
+{
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 5px;
+	margin-top: 5px;
+	margin-right: 6px;
+	border: none;
+	color: #888888;
+	font-size: 20px;
+}
+
+.admin-text:hover, .cog:hover { cursor: pointer; color: #555555; }
+
+input#toggle { display: none; }
+input#toggle ~ .menu { display: block; }
+input#toggle:checked ~ .menu { display: none; }
+
+.menu a
+{
+	display: block;
+	background: #F8F8F8;
+	width: 240px;
+	height: 40px;
+	padding: 0 0 0 10px;
+	font: bold 13px Helvetica, sans-serif;
+	text-transform: uppercase;
+	text-decoration: none;
+	color: #000000;
+	color: rgba( 0, 0, 0, 0.4 );
+	line-height: 40px;
+	box-shadow: 0 1px 1px rgba( 0, 0, 0, 0.2 );
+}
+
+.menu a:nth-child( 2 )
+{
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+}
+
+.menu a:last-child
+{
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+}
+
+.menu a:hover { color: #555555; }
+
+.menu a:hover > .octicon { color: #555555; }
+
+.icon
+{
+	float: right;
+	margin-top: 10px;
+	font-size: 20px;
+	color: #000000;
+	color: rgba( 0, 0, 0, 0.4 );
+	opacity: 0.8;
+}
+
+.octicon-person { margin-right: 16px; }
+.octicon-graph { margin-right: 11px; }
+.octicon-cloud-upload { margin-right: 11px; }
+.octicon-pencil { margin-right: 13px; }
+
+.arrow
+{
+	width: 0;
+	height: 0;
+	margin-left: 15px;
+	border-left: 7px solid transparent;
+	border-right: 7px solid transparent;
+	border-bottom: 9px solid #F8F8F8;
+}
+
+ /* ----------------- LOADING BOXES ----------------- */
+
 .loading {
 	position: absolute;
 	top: 50%;

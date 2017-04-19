@@ -1,24 +1,44 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import api from '../utils/api'
-import SelectSpot from './SelectSpot'
+import SpotSelector from './SpotSelector'
 import ForecastBox from './ForecastBox'
 import DayContainer from './DayContainer'
+import RegionSelector from './RegionSelector'
 
 class Spots extends React.Component {
 
     constructor (props) {
         super(props)
         this.state = {
-            selectedSpot: {name: 'Santa Cruz', id: '2958'},
+            selectedRegion: null,
+            selectedSpot: null,
             forecast: null
         }
 
         this.updateSpot = this.updateSpot.bind(this)
+        this.updateRegion = this.updateRegion.bind(this)
     }
 
     componentDidMount () {
-        this.updateSpot(this.state.selectedSpot)
+        // this.updateSpot(this.state.selectedSpot)
+    }
+
+    updateRegion(region){
+        this.setState(function () {
+            return {
+                selectedRegion: region,
+            }
+        })
+
+        api.fetchSpot(region.id)
+        .then(function (forecast) {
+            this.setState(function () {
+                return {
+                    forecast: forecast,
+                }
+            })
+        })
     }
     
     updateSpot(spot) {
@@ -40,11 +60,15 @@ class Spots extends React.Component {
 
     render() {
         return (
-            <div className='container-fluid'>
-                <SelectSpot 
+            <div className='row region-spot-select'>
+                <RegionSelector 
+                onSelect={this.updateRegion}
+                selectedRegion={this.state.selectedRegion}
+                />
+                {/*<SpotSelector 
                     selectedSpot={this.state.selectedSpot}
                     onSelect={this.updateSpot}
-                    />
+                    />*/}
                 <div>
                     {!this.state.forecast ? 
                         <div className="loading">
