@@ -1,50 +1,26 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import api from '../utils/api'
+import DropdownList from './DropdownList'
 
 function SpotSelector (props) {
-    var spots = [
-        { 
-          region:'Santa Cruz',
-          id: '2958',
-          spots:  
-            [
-                {name:'Steamer Lane', id:'4188'},
-                {name:'Four Mile', id:'5023'},
-                {name:'Waddell Creek', id:'5021'},
-                {name: 'Mitchell\'s Cove', id:'5028'},
-                {name: '26th Ave', id:'5030'}
-            ]
-        },
-        { 
-          region:'Los Angeles',
-          id: '1234',
-          spots:  
-            [
-                {name:'Newport', id:'1241'},
-                {name:'HB', id:'3421'},
-            ]
-        }
-    ]
-
     return (
-        <ul className='spot-selector container-fluid'>
-            {spots.map((spot, index) => {
-                return (
-                    <li
-                        style = {spot.name === props.selectedSpot.name ? {color: '#d0021b'}: null}
-                        onClick={props.onSelect.bind(null, spot)}
-                        key={spot.name}>
-                        {spot.name}
-                    </li>
-                )
-            })}
-        </ul>
+        <div className="content col-xs-3 col-md-3">
+            <div className="btn-group">
+                <DropdownList 
+                    list={props.spots} 
+                    title={ props.selectedSpot == null || !props.spots.includes(props.selectedSpot) ? 'Select A Spot' : props.selectedSpot.name }
+                    keyName = 'spot-selector'
+                    id = 'spot-selector-dropdown'
+                    actions = {props.onSelect}
+                />
+            </div>
+        </div>
     )
 }
 
 SpotSelector.propTypes = {
-    selectedSpot: PropTypes.object.isRequired,
+    selectedSpot: PropTypes.object,
     onSelect: PropTypes.func.isRequired,
 }
 

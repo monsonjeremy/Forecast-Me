@@ -1,9 +1,9 @@
 var path = require('path')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = {
-    entry: ['./app/index.js', './app/scss/main.scss'],
+    entry: ['./app/index.js', './app/scss/main.scss', 'bootstrap-loader'],
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'index_bundle.js'
@@ -15,11 +15,13 @@ module.exports = {
             },{ // regular css files
                 test: /\.css$/,
                 loader: ExtractTextPlugin.extract({
-                    loader: 'css-loader?importLoaders=1',
+                    use: 'css-loader?importLoaders=1',
                 }),
             },{ // sass / scss loader for webpack
                 test: /\.(sass|scss)$/,
-                loader: ExtractTextPlugin.extract(['css-loader', 'sass-loader'])
+                use: ExtractTextPlugin.extract(['css-loader', 'sass-loader'])
+            },{ 
+                test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' 
             }
         ]
     },
@@ -30,5 +32,6 @@ module.exports = {
         }),
         new HtmlWebpackPlugin({
             template: 'app/index.html'
-    })]
+        }),
+    ]
 }
