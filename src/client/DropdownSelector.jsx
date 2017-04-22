@@ -2,7 +2,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import DropdownList from './DropdownList'
+import { DropdownButton, MenuItem } from 'react-bootstrap'
 
 type Props = {
   options: Object,
@@ -15,13 +15,23 @@ type Props = {
 const DropdownSelector = ({ title, options, keyName, id, onSelect }: Props) =>
   <div className="content">
     <div className="btn-group">
-      <DropdownList
-        list={options}
+      <DropdownButton
+        bsStyle={'primary'}
         title={title}
-        keyName={keyName}
+        key={keyName}
         id={id}
-        actions={onSelect}
-      />
+      >
+        {options.map(element =>
+          <MenuItem
+            key={element.name}
+            eventKey={element.name}
+            onClick={() => onSelect(element)}
+          >
+            {element.name}
+          </MenuItem>,
+          )
+        }
+      </DropdownButton>
     </div>
   </div>
 
