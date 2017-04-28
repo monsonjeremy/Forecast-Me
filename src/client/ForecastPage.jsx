@@ -76,6 +76,7 @@ class ForecastPage extends React.Component {
         <div className="container-fluid row region-spot-select">
           <DropdownSelector
             options={this.regionSpotList}
+            bsStyle={'primary'}
             onSelect={this.updateRegion}
             title={this.state.selectedRegion == null ? 'Select Your Region' : this.state.selectedRegion.name}
             keyName={'region-selector'}
@@ -84,6 +85,7 @@ class ForecastPage extends React.Component {
           {this.state.selectedRegion != null &&
             <DropdownSelector
               options={this.state.selectedRegion.spots}
+              bsStyle={'success'}
               onSelect={this.updateSpot}
               title={this.state.selectedSpot == null ||
               !this.state.selectedRegion.spots.includes(this.state.selectedSpot) ?

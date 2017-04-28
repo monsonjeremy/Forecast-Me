@@ -5,21 +5,25 @@ import PropTypes from 'prop-types'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
 
 type Props = {
+  bsStyle: string,
   options: Object,
   onSelect: Function,
   title: string,
   keyName: string,
   id: string,
+  displayblock: boolean,
 }
 
-const DropdownSelector = ({ title, options, keyName, id, onSelect }: Props) =>
+const DropdownSelector = ({ bsStyle, title, options, keyName,
+displayblock, id, onSelect }: Props) =>
   <div className="content">
     <div className="btn-group">
       <DropdownButton
-        bsStyle={'primary'}
+        bsStyle={bsStyle}
         title={title}
         key={keyName}
         id={id}
+        block={displayblock}
       >
         {options.map(element =>
           <MenuItem
@@ -38,14 +42,18 @@ const DropdownSelector = ({ title, options, keyName, id, onSelect }: Props) =>
 
 DropdownSelector.defaultProps = {
   id: null,
+  bsStyle: null,
+  displayblock: false,
 }
 
 DropdownSelector.propTypes = {
+  bsStyle: PropTypes.string,
   options: PropTypes.instanceOf(Object).isRequired,
   title: PropTypes.string.isRequired,
   onSelect: PropTypes.func.isRequired,
   keyName: PropTypes.string.isRequired,
   id: PropTypes.string,
+  displayblock: PropTypes.bool,
 }
 
 export default DropdownSelector
