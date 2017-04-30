@@ -33,8 +33,9 @@ export default {
       },
       {
         test: /\.(sass|scss)$/,
-        use: ExtractTextPlugin.extract(
-          ['css-loader', 'sass-loader']),
+        use: [
+          'style-loader', 'css-loader', 'sass-loader',
+        ],
       },
       {
         test: /\.(png|woff|woff2|eot|ttf|svg)$/,
@@ -52,7 +53,7 @@ export default {
   },
   plugins: [
     new ExtractTextPlugin({ // define where to save the file
-      filename: 'dist/[name].bundle.css',
+      filename: '[name].bundle.css',
       allChunks: true,
     }),
     new webpack.optimize.OccurrenceOrderPlugin(),

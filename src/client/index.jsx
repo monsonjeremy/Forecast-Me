@@ -9,8 +9,7 @@ import { AppContainer } from 'react-hot-loader'
 import App from './app'
 import { APP_CONTAINER_SELECTOR } from '../shared/config'
 
-// flow-disable-next-line
-require('../../public/scss/main.scss')
+import '../../public/scss/main.scss'
 
 const rootEl = document.querySelector(APP_CONTAINER_SELECTOR)
 
