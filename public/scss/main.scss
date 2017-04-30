@@ -1,6 +1,6 @@
-body {
+.js-app {
     font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;
-    background-color: grey;
+    background-color: lightgray;
 }
 
 .container {
@@ -36,4 +36,9 @@ li {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+}
+
+.content {
+  float: left;
+  padding-left: 10px;
 }
