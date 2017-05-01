@@ -9,8 +9,6 @@ import { AppContainer } from 'react-hot-loader'
 import App from './app'
 import { APP_CONTAINER_SELECTOR } from '../shared/config'
 
-import '../../public/scss/main.scss'
-
 const rootEl = document.querySelector(APP_CONTAINER_SELECTOR)
 
 const wrapApp = AppComponent =>

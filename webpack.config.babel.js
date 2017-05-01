@@ -10,8 +10,8 @@ import { isProd } from './src/shared/util'
 export default {
   entry: [
     'react-hot-loader/patch',
-    './src/client',
     './public/scss/main.scss',
+    './src/client',
     'bootstrap-loader'],
   output: {
     filename: 'js/bundle.js',
@@ -26,16 +26,16 @@ export default {
         use: ['babel-loader'],
       },
       {
+        test: /\.(sass|scss)$/,
+        use: [
+          'css-loader', 'sass-loader',
+        ],
+      },
+      {
         test: /\.css$/,
         use: ExtractTextPlugin.extract(
           'css-loader?importLoaders=1',
         ),
-      },
-      {
-        test: /\.(sass|scss)$/,
-        use: [
-          'style-loader', 'css-loader', 'sass-loader',
-        ],
       },
       {
         test: /\.(png|woff|woff2|eot|ttf|svg)$/,
