@@ -3,11 +3,15 @@
 import { APP_CONTAINER_CLASS, STATIC_PATH, WDS_PORT } from '../shared/config'
 import { isProd } from '../shared/util'
 
+const linkStylesheet = isProd ? `<link rel="stylesheet" href="${STATIC_PATH}/css/main.bundle.css">` : ''
+
 const renderApp = (title: string) =>
 `<!doctype html>
 <html>
   <head>
+    <link rel="stylesheet" href="${STATIC_PATH}/css/bootstrap.min.css">
     <title>${title}</title>
+    ${linkStylesheet}
   </head>
   <body>
     <div class="${APP_CONTAINER_CLASS}"></div>

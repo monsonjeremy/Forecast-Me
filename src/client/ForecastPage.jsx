@@ -75,40 +75,40 @@ class ForecastPage extends React.Component {
     return (
       <div>
         <SiteNavbar className="forecastme-nav" />
-        <div className="jumbotron row forecast-jumbotron">
-          <div className="col-xs-12 col-md-12 text-center" id="forecast-header">
-            <h3>Select your {this.state.selectedRegion == null ? 'region' : 'spot'}</h3>
-          </div>
-          <div className="col-xs-12 col-md-12 text-center" id="forecast-selectors">
-            <div className="text-center">
-              <DropdownSelector
-                options={this.regionSpotList}
-                bsStyle={'primary'}
-                onSelect={this.updateRegion}
-                title={this.state.selectedRegion == null ? 'Select Your Region' : this.state.selectedRegion.name}
-                keyName={'region-selector'}
-                id={'region-selector-dropdown'}
-              />
-              {this.state.selectedRegion != null &&
+        <div className="container forecast-header img-fluid">
+          <div className="forecast-header-content">
+            <div className="text-center" id="forecast-selectors">
+              <div className="text-center">
                 <DropdownSelector
-                  options={this.state.selectedRegion.spots}
-                  bsStyle={'success'}
-                  onSelect={this.updateSpot}
-                  title={this.state.selectedSpot == null ||
-                  !this.state.selectedRegion.spots.includes(this.state.selectedSpot) ?
-                  'Select A Spot' :
-                  this.state.selectedSpot.name}
-                  keyName={'spot-selector'}
-                  id={'spot-selector-dropdown'}
+                  options={this.regionSpotList}
+                  onSelect={this.updateRegion}
+                  title={this.state.selectedRegion == null ? 'Select Your Region' : this.state.selectedRegion.name}
+                  keyName={'region-selector'}
+                  id={'region-selector-dropdown'}
                 />
-              }
+                {this.state.selectedRegion != null &&
+                  <DropdownSelector
+                    options={this.state.selectedRegion.spots}
+                    onSelect={this.updateSpot}
+                    title={this.state.selectedSpot == null ||
+                    !this.state.selectedRegion.spots.includes(this.state.selectedSpot) ?
+                    'Select A Spot' :
+                    this.state.selectedSpot.name}
+                    keyName={'spot-selector'}
+                    id={'spot-selector-dropdown'}
+                  />
+                }
+              </div>
             </div>
           </div>
         </div>
         <div>
           {!this.state.forecast ?
-            <div>
-              Select A Region
+            <div className="forecast-container row">
+              <div className="text-center">
+                <h1 className="col-xs-12 col-md-12">WELCOME!</h1>
+                <h3 className="col-xs-12 col-md-12">Please select a location above</h3>
+              </div>
             </div>
           : <ForecastBox forecast={this.state.forecast} /> }
         </div>

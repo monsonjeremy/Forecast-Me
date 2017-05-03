@@ -16,9 +16,10 @@ type Props = {
 
 const DropdownSelector = ({ bsStyle, title, options, keyName,
 displayblock, id, onSelect }: Props) =>
-  <div className="content">
+  <div className="content dropdown-selector">
     <div className="btn-group">
       <DropdownButton
+        className="hover-effect"
         bsStyle={bsStyle}
         title={title}
         key={keyName}

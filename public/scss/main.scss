@@ -1,54 +1,77 @@
+/* --------- IMPORTS ---------- */
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat:200,300,400,600');
+
+/* --------- GENERAL ---------- */
+
 .js-app {
-    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;
+  font-family: Montserrat;
 }
 
 body { 
-    padding-top: 65px; 
+    padding-top: 50px; 
 }
 
-.forecast-jumbotron {
-  padding-top: 15px;
-  padding-bottom: 15px;
-  background-color: #00BFFF;
-  opacity: 30%;
+/* --------- FORECAST HEADER STYLING ---------- */
+
+.forecast-header {
+  height: 40vh;
+  width: 100%;
+  background-image: url('../assets/swell-lines.jpg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items:center;
+  justify-content: center;
+}
+
+.forecast-header-content {
+  display: table-cell;
+  vertical-align: middle;
+  float: none;
+}
+
+.dropdown-selector {
+  padding-bottom: 5px;
+}
+
+.dropdown-menu {
+  left: 50%;
+  right: auto;
   text-align: center;
-}
-.container {
-    margin: 0 auto;
+  transform: translate(-50%, 0);
 }
 
-.spots {
-    display: flex;
-    justify-content: center;
+/* --------- FORECAST CONTAINER STYLING ---------- */
+
+.forecast-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 60px;
 }
 
-.spots li {
-    margin: 10px;
-    font-weight: bold;
-    cursor: pointer;
+/* --------- BUTTON HOVER EFFECT ---------- */
+
+.hover-effect {
+  font-size: 2vw;
+  letter-spacing: 0.1em;
+  color: #e8e8e8;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(45deg,#d350db,teal,#d350db);
+  background-size: 400% 400%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    animation: gradient 10s ease infinite;
+    font-size: 2.05vw;
+  }
 }
 
-ul {
-    padding: 0;
-}
-
-li {
-    list-style-type: none;
-}
-
-.forecast-box {
-    width: 100;
-    display: flex;
-    text-align: center;
-}
-
-.day-box {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-}
-
-.content {
-  float: left;
-  padding-left: 10px;
+@keyframes gradient {
+  50% {
+    background-position: 100% 0;
+  }
 }

@@ -1,6 +1,6 @@
 // @flow
 
-export const WEB_PORT = process.env.PORT || 8000
+export const WEB_PORT = process.env.PORT || 8009
 export const STATIC_PATH = '/static'
 export const APP_NAME = 'Forecast Me'
 export const WDS_PORT = 7000

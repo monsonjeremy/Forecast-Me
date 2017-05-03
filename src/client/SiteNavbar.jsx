@@ -13,7 +13,9 @@ type Props = {
 }
 
 const SiteNavbar = ({ bsStyle, collapseOnSelect, fixedTop, fluid }: Props) =>
-  <Navbar bsStyle={bsStyle} collapseOnSelect={collapseOnSelect} fixedTop={fixedTop} fluid={fluid}>
+  <Navbar
+    inverse bsStyle={bsStyle} collapseOnSelect={collapseOnSelect} fixedTop={fixedTop} fluid={fluid}
+  >
     <Navbar.Header>
       <Navbar.Brand>
         <a href="/">{APP_NAME}</a>
