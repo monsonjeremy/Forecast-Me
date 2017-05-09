@@ -12,7 +12,8 @@ const extractSass = new ExtractTextWebpackPlugin({
   disable: !isProd,
 })
 
-export default {
+const config = {
+
   entry: [
     'react-hot-loader/patch',
     './src/client',
@@ -99,6 +100,8 @@ export default {
     }),
   ],
 }
+
+export default config
 
 if (isProd) {
   module.exports.plugins.push(
