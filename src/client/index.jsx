@@ -5,14 +5,10 @@ import 'babel-polyfill'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
-import $ from 'jquery'
-import Tether from 'tether'
 
 import App from './app'
 import { APP_CONTAINER_SELECTOR } from '../shared/config'
 
-window.jQuery = $
-window.Tether = Tether
 require('bootstrap')
 
 const rootEl = document.querySelector(APP_CONTAINER_SELECTOR)

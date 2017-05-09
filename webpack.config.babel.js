@@ -44,15 +44,41 @@ export default {
         loader: 'url-loader?limit=100000',
       },
       {
-        test: /\.(png|jpg|gif)$/,
+        test: /\.(png|gif)$/,
         loader: 'file-loader',
         include: path.resolve(__dirname, 'public/assets/'),
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        loaders: ['file-loader?context=src/assets/images/&name=images/[path][name].[ext]', {
+          loader: 'image-webpack-loader',
+          query: {
+            mozjpeg: {
+              progressive: true,
+            },
+            gifsicle: {
+              interlaced: false,
+            },
+            optipng: {
+              optimizationLevel: 4,
+            },
+            pngquant: {
+              quality: '75-90',
+              speed: 3,
+            },
+          },
+        }],
+        exclude: /node_modules/,
+        include: __dirname,
       },
     ],
   },
   devtool: isProd ? false : 'source-map',
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx', '.json', '.scss', '.css', '.jpeg', '.jpg', '.gif', '.png'],
+    alias: {
+      images: path.resolve(__dirname, 'src/assets/images'),
+    },
   },
   devServer: {
     port: WDS_PORT,
@@ -64,5 +90,18 @@ export default {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery',
+      Tether: 'tether',
+      'window.Tether': 'tether',
+    }),
   ],
+}
+
+if (isProd) {
+  module.exports.plugins.push(
+    new webpack.optimize.UglifyJsPlugin(),
+  )
 }
