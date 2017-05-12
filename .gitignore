@@ -6,3 +6,4 @@ random
 /*.log
 /coverage/
 /lib/
+.yarnclean

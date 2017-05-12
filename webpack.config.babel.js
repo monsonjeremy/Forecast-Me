@@ -13,16 +13,22 @@ const extractSass = new ExtractTextWebpackPlugin({
 })
 
 const config = {
-
   entry: [
     'react-hot-loader/patch',
+    'bootstrap-loader?bootstrapPath=./node_modules/bootstrap-sass',
     './src/client',
-    './public/scss/main.scss',
   ],
   output: {
     filename: 'js/bundle.js',
     path: path.resolve(__dirname, 'dist'),
     publicPath: isProd ? '/static/' : `http://localhost:${WDS_PORT}/dist/`,
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'],
+    alias: {
+      images: path.resolve(__dirname, 'src/assets/images'),
+      styles: path.resolve(__dirname, 'src', 'assets', 'stylsheets'),
+    },
   },
   module: {
     rules: [
@@ -45,12 +51,7 @@ const config = {
         loader: 'url-loader?limit=100000',
       },
       {
-        test: /\.(png|gif)$/,
-        loader: 'file-loader',
-        include: path.resolve(__dirname, 'public/assets/'),
-      },
-      {
-        test: /\.(jpe?g|png|gif|svg)$/i,
+        test: /\.(jpe?g|png|gif)$/i,
         loaders: ['file-loader?context=src/assets/images/&name=images/[path][name].[ext]', {
           loader: 'image-webpack-loader',
           query: {
@@ -70,17 +71,10 @@ const config = {
           },
         }],
         exclude: /node_modules/,
-        include: __dirname,
       },
     ],
   },
   devtool: isProd ? false : 'source-map',
-  resolve: {
-    extensions: ['.js', '.jsx', '.json', '.scss', '.css', '.jpeg', '.jpg', '.gif', '.png'],
-    alias: {
-      images: path.resolve(__dirname, 'src/assets/images'),
-    },
-  },
   devServer: {
     port: WDS_PORT,
     hot: true,
@@ -101,10 +95,4 @@ const config = {
   ],
 }
 
-export default config
-
-if (isProd) {
-  module.exports.plugins.push(
-    new webpack.optimize.UglifyJsPlugin(),
-  )
-}
+module.exports = config
