@@ -9,7 +9,6 @@ const renderApp = (title: string) =>
 `<!doctype html>
 <html>
   <head>
-    <link rel="stylesheet" href="${STATIC_PATH}/css/bootstrap.min.css">
     <title>${title}</title>
     ${linkStylesheet}
   </head>

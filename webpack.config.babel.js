@@ -12,16 +12,23 @@ const extractSass = new ExtractTextWebpackPlugin({
   disable: !isProd,
 })
 
-export default {
+const config = {
   entry: [
     'react-hot-loader/patch',
+    'bootstrap-loader?bootstrapPath=./node_modules/bootstrap-sass',
     './src/client',
-    './public/scss/main.scss',
   ],
   output: {
     filename: 'js/bundle.js',
     path: path.resolve(__dirname, 'dist'),
     publicPath: isProd ? '/static/' : `http://localhost:${WDS_PORT}/dist/`,
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'],
+    alias: {
+      images: path.resolve(__dirname, 'src/assets/images'),
+      styles: path.resolve(__dirname, 'src', 'assets', 'stylsheets'),
+    },
   },
   module: {
     rules: [
@@ -44,16 +51,30 @@ export default {
         loader: 'url-loader?limit=100000',
       },
       {
-        test: /\.(png|jpg|gif)$/,
-        loader: 'file-loader',
-        include: path.resolve(__dirname, 'public/assets/'),
+        test: /\.(jpe?g|png|gif)$/i,
+        loaders: ['file-loader?context=src/assets/images/&name=images/[path][name].[ext]', {
+          loader: 'image-webpack-loader',
+          query: {
+            mozjpeg: {
+              progressive: true,
+            },
+            gifsicle: {
+              interlaced: false,
+            },
+            optipng: {
+              optimizationLevel: 4,
+            },
+            pngquant: {
+              quality: '75-90',
+              speed: 3,
+            },
+          },
+        }],
+        exclude: /node_modules/,
       },
     ],
   },
   devtool: isProd ? false : 'source-map',
-  resolve: {
-    extensions: ['.js', '.jsx'],
-  },
   devServer: {
     port: WDS_PORT,
     hot: true,
@@ -64,5 +85,14 @@ export default {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery',
+      Tether: 'tether',
+      'window.Tether': 'tether',
+    }),
   ],
 }
+
+module.exports = config
