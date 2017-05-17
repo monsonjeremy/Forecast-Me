@@ -8,12 +8,17 @@ type Props = {
   forecast: Object,
 }
 
+let counter = 0
 const ForecastBox = ({ forecast }: Props) =>
   <div className="forecast-box container">
-    {forecast.dateStamp.map(date =>
-      <div key={date} className="day-box">
-        <DayContainer date={date} />
-      </div>,
+    {forecast.dateStamp.map((date, index) => {
+      counter += 1
+      return (
+        <div key={`${date}${counter}`} className="day-box">
+          <DayContainer date={date} forecast={forecast} forecastDay={index} />
+        </div>
+      )
+    },
     )}
   </div>
 
