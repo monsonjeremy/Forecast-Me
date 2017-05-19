@@ -6,10 +6,10 @@ import { Navbar, NavItem, Nav } from 'react-bootstrap'
 import { APP_NAME } from '../shared/config'
 
 type Props = {
-  bsStyle: string,
-  collapseOnSelect: boolean,
-  fixedTop: boolean,
-  fluid: boolean,
+  bsStyle?: string,
+  collapseOnSelect?: boolean,
+  fixedTop?: boolean,
+  fluid?: boolean,
 }
 
 const SiteNavbar = ({ bsStyle, collapseOnSelect, fixedTop, fluid }: Props) =>
