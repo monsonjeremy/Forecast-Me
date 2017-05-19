@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import api from '../shared/api'
 import ForecastBox from './ForecastBox'
@@ -30,8 +32,8 @@ const regions = [
 
 class ForecastPage extends React.Component {
 
-  constructor(props) {
-    super(props)
+  constructor() {
+    super()
     this.state = {
       selectedRegion: null,
       selectedSpot: null,
@@ -43,7 +45,17 @@ class ForecastPage extends React.Component {
     this.updateRegion = this.updateRegion.bind(this)
   }
 
-  updateRegion(region) {
+  state: {
+    selectedRegion: any,
+    selectedSpot: any,
+    forecast: any,
+  }
+
+  regionSpotList: Array<Object>
+  updateRegion: Function
+  updateSpot: Function
+
+  updateRegion(region: Object) {
     this.setState({
       selectedRegion: region,
       forecast: null,
@@ -57,7 +69,7 @@ class ForecastPage extends React.Component {
     })
   }
 
-  updateSpot(spot) {
+  updateSpot(spot: Object) {
     this.setState({
       selectedSpot: spot,
       forecast: null,
@@ -69,6 +81,14 @@ class ForecastPage extends React.Component {
         forecast,
       })
     })
+  }
+
+  isSpot() {
+    if (this.state.selectedSpot === null) {
+      return false
+    }
+
+    return true
   }
 
   render() {
@@ -110,7 +130,7 @@ class ForecastPage extends React.Component {
                 <h3 className="col-xs-12 col-md-12">Please select a location above</h3>
               </div>
             </div>
-          : <ForecastBox forecast={this.state.forecast} /> }
+          : <ForecastBox forecast={this.state.forecast} isSpot={this.isSpot()} /> }
         </div>
       </div>
     )
