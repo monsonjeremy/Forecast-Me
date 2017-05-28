@@ -3,6 +3,7 @@
 import path from 'path'
 import webpack from 'webpack'
 import ExtractTextWebpackPlugin from 'extract-text-webpack-plugin'
+import CompressionPlugin from 'compression-webpack-plugin'
 
 import { WDS_PORT } from './src/shared/config'
 import { isProd } from './src/shared/util'
@@ -85,6 +86,13 @@ const config = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
+    new CompressionPlugin({
+      asset: '[path].gz[query]',
+      algorithm: 'gzip',
+      test: /\.js$|\.css$|\.html$/,
+      threshold: 10240,
+      minRatio: 0.8,
+    }),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
@@ -93,6 +101,12 @@ const config = {
       'window.Tether': 'tether',
     }),
   ],
+}
+
+if (isProd) {
+  config.plugins.push(
+    new webpack.optimize.AggressiveMergingPlugin(),
+  )
 }
 
 module.exports = config

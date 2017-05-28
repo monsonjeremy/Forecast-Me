@@ -58,6 +58,7 @@ class ForecastPage extends React.Component {
   updateRegion(region: Object) {
     this.setState({
       selectedRegion: region,
+      selectedSpot: null,
       forecast: null,
     })
 
