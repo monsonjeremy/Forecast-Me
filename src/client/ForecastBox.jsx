@@ -9,22 +9,15 @@ type Props = {
   isSpot: boolean,
 }
 
-let counter = 0
 const ForecastBox = ({ forecast, isSpot }: Props) =>
   <div className="forecast-box container">
-    {forecast.dateStamp.map((date, index) => {
-      counter += 1
-      return (
-        <div key={`${date}${counter}`} className="day-box">
-          <DayContainer
-            date={date}
-            forecast={forecast}
-            forecastDay={index}
-            isSpot={isSpot}
-          />
-        </div>
-      )
-    },
+    {forecast.Surf.dateStamp.map((date, index) =>
+      <DayContainer
+        date={date}
+        forecast={forecast}
+        forecastDay={index}
+        isSpot={isSpot}
+      />,
     )}
   </div>
 

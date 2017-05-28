@@ -2,6 +2,10 @@
 
 @import url('https://fonts.googleapis.com/css?family=Montserrat:200,300,400,600');
 
+/* --------- VARIABLES ---------- */
+
+$fh-background-img: url('../images/forecast-me-header.jpg');
+
 /* --------- GENERAL ---------- */
 
 .js-app {
@@ -12,12 +16,26 @@ body {
     padding-top: 50px; 
 }
 
+hr.style-two {
+    border: 0;
+    height: 1.1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+
 /* --------- FORECAST HEADER STYLING ---------- */
 
 .forecast-header {
   height: 40vh;
   width: 100%;
-  background-image: url('../images/forecast-me-header.jpg');
+  background-image: $fh-background-img;
+  background-image: -webkit-image-set(  
+    $fh-background-img 1x,  
+    $fh-background-img 2x  
+  );  
+  background-image: image-set(  
+    $fh-background-img 1x,  
+    $fh-background-img 2x 
+  );
   background-size: cover;
   background-position: center;
   display: flex;
@@ -44,11 +62,48 @@ body {
 
 /* --------- FORECAST CONTAINER STYLING ---------- */
 
-.forecast-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-top: 60px;
+.day-date-title {
+  padding: 15px 0px 0px 0px;
+}
+
+.charts-wrapper {
+  padding-top: 10px;
+
+  .recharts-responsive-container{
+    background-color: lightgrey;
+    border-bottom-right-radius:15px;
+    border-bottom-left-radius:15px;
+  }
+
+  .surf-forecast-title{
+
+    h3 {
+      margin: 0;
+    }
+
+    background-color: grey;
+    border-top-right-radius:15px;
+    border-top-left-radius:15px;
+  }
+
+  .tide-forecast-title{
+
+    h3 {
+      margin: 0;
+    }
+
+    background-color: grey;
+    border-top-right-radius:15px;
+    border-top-left-radius:15px;
+  }
+
+  .recharts-cartesian-axis-line {
+    stroke-width: 5px;
+  }
+}
+
+.recharts-responsive-container {
+  margin: 0 auto;
 }
 
 /* --------- BUTTON HOVER EFFECT ---------- */

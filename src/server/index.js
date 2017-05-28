@@ -17,6 +17,13 @@ app.get('/', (req, res) => {
   res.send(renderApp(APP_NAME))
 })
 
+app.get('*.js', (req, res, next) => {
+  console.log('compression is working')
+  req.url += '.gz'
+  res.set('Content-Encoding', 'gzip')
+  next()
+})
+
 app.listen(WEB_PORT, () => {
   // eslint-disable-next-line no-console
   console.log(`Server running on port ${WEB_PORT} ${isProd ? '(production)' :

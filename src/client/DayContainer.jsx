@@ -2,8 +2,10 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { VictoryBar, VictoryChart, VictoryStack, VictoryAxis } from 'victory'
-import { formatSurflineData } from '../shared/api'
+import moment from 'moment'
+import StackedSurfChart from './components/StackedSurfChart'
+import TideLineChart from './components/TideLineChart'
+import { formatSurflineData, roundUpMaxSurfHeight, filterTideData } from '../shared/dataManipulation'
 
 type Props = {
   date: Array<string>,
@@ -12,49 +14,63 @@ type Props = {
   isSpot: boolean,
 }
 
-const createTimeStringArray = (dateTimes) => {
-  const timeStrings = []
-  // flow-disable-next-line
-  dateTimes.map(date => timeStrings.push(new Date(date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })))
-  return timeStrings
-}
-
 const DayContainer = ({ date, forecast, forecastDay, isSpot }: Props) => {
-  const forecastdata = formatSurflineData(date, forecast, forecastDay, isSpot)
-  const axisTimes = createTimeStringArray(date)
+  const forecastSurfData = formatSurflineData(date, forecast.Surf, forecastDay, isSpot)
+  const surfChartWidth = '85%'
+
+  const dateTitle = moment(date[0]).format('ddd MMMM Do')
+  const tideData = filterTideData(dateTitle, forecast.Tide.dataPoints)
+  const tideChartWidth = '85%'
+
+  let topBarDataKey = 'aggSurfMax'
+  let bottomBarDataKey = 'aggSurfMin'
+
+  if (isSpot) {
+    topBarDataKey = 'surfMax'
+    bottomBarDataKey = 'surfMin'
+  }
+
+  console.log(tideData)
 
   return (
-    <div className={'forecast-by-day'}>
-      <VictoryChart
-        width={300}
-        height={250}
-        domainPadding={20}
-      >
-        <VictoryAxis
-          tickValues={[5, 11, 17, 23]}
-          tickFormat={axisTimes}
-        />
-        <VictoryStack>
-          <VictoryBar
-            data={forecastdata}
-            x={datum => new Date(datum.dateTime).getHours()}
-            y={datum => datum.aggSurfMin}
-            labels={datum => datum.aggSurfMin}
-            animate={{ duration: 2000,
-              onLoad: { duration: 1000 },
-              onEnter: { duration: 500, before: () => ({ y: 0 }) } }}
-          />
-          <VictoryBar
-            data={forecastdata}
-            x={datum => new Date(datum.dateTime).getHours()}
-            y={datum => datum.aggSurfMax - datum.aggSurfMin}
-            labels={datum => datum.aggSurfMax}
-            animate={{ duration: 2000,
-              onLoad: { duration: 1000 },
-              onEnter: { duration: 500, before: () => ({ y: 0 }) } }}
-          />
-        </VictoryStack>
-      </VictoryChart>
+    <div className="days row">
+      <div className="day-date-title col-xs-12 col-md-12 text-center">
+        <h2>{dateTitle}</h2>
+        <hr className="style-two" />
+      </div>
+      <br />
+      <div className="cols-xs-12 col-md-12 text-center">
+        <div className="charts-wrapper row">
+          <div className="surf-forecast-day col-xs-12 col-md-4 text-center">
+            <div className="surf-forecast-title" style={{ width: surfChartWidth, margin: 'auto' }}>
+              <h3>SURF</h3>
+            </div>
+            <StackedSurfChart
+              className="stacked-surf-charts"
+              xAxisDataKey={'hour'}
+              yAxisUpperBound={roundUpMaxSurfHeight(forecast.surf_max_maximum) + 3}
+              topBarDataKey={topBarDataKey}
+              bottomBarDataKey={bottomBarDataKey}
+              data={forecastSurfData}
+              width={surfChartWidth}
+            />
+          </div>
+          <div className="tide-forecast-day col-xs-12 col-md-8 text-center">
+            <div className="tide-forecast-title" style={{ width: tideChartWidth, margin: 'auto' }}>
+              <h3>TIDE</h3>
+            </div>
+            <TideLineChart
+              className="tide-chart"
+              xAxisDataKey="time"
+              yAxisUpperBound={7}
+              lineDataKey={'height'}
+              data={tideData}
+              width={tideChartWidth}
+              height={300}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
