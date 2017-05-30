@@ -57,6 +57,7 @@
     "bootstrap": "v4.0.0-alpha.6",
     "bootstrap-loader": "^2.0.0",
     "compression-webpack-plugin": "^0.4.0",
+    "copy-webpack-plugin": "^4.0.1",
     "cross-env": "^4.0.0",
     "css-loader": "^0.28.1",
     "empty": "^0.10.1",

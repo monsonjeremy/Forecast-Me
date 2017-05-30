@@ -18,7 +18,6 @@ app.get('/', (req, res) => {
 })
 
 app.get('*.js', (req, res, next) => {
-  console.log('compression is working')
   req.url += '.gz'
   res.set('Content-Encoding', 'gzip')
   next()
