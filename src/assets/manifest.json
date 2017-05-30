@@ -1,0 +1,7 @@
+{
+  "short_name": "ForecastMe",
+  "name": "Forecast Me",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

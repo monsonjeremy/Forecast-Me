@@ -4,6 +4,7 @@ import path from 'path'
 import webpack from 'webpack'
 import ExtractTextWebpackPlugin from 'extract-text-webpack-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
+import CopyWebpackPlugin from 'copy-webpack-plugin'
 
 import { WDS_PORT } from './src/shared/config'
 import { isProd } from './src/shared/util'
@@ -28,7 +29,7 @@ const config = {
     extensions: ['.js', '.jsx'],
     alias: {
       images: path.resolve(__dirname, 'src/assets/images'),
-      styles: path.resolve(__dirname, 'src', 'assets', 'stylsheets'),
+      styles: path.resolve(__dirname, 'src/assets/stylsheets'),
     },
   },
   module: {
@@ -86,6 +87,9 @@ const config = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
+    new CopyWebpackPlugin([
+      { from: './src/assets/manifest.json' },
+    ]),
     new CompressionPlugin({
       asset: '[path].gz[query]',
       algorithm: 'gzip',

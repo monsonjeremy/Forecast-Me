@@ -10,6 +10,7 @@ import App from './app'
 import { APP_CONTAINER_SELECTOR } from '../shared/config'
 
 import '../assets/stylesheets/main.scss'
+import '../assets/manifest.json'
 
 const rootEl = document.querySelector(APP_CONTAINER_SELECTOR)
 

@@ -7,9 +7,12 @@ const linkStylesheet = isProd ? `<link rel="stylesheet" href="${STATIC_PATH}/css
 
 const renderApp = (title: string) =>
 `<!doctype html>
-<html>
+<html lang="en">
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <link rel="manifest" href="${isProd ? STATIC_PATH : `http://localhost:${WDS_PORT}/dist`}/manifest.json">
     <title>${title}</title>
     ${linkStylesheet}
   </head>

@@ -30,8 +30,6 @@ const DayContainer = ({ date, forecast, forecastDay, isSpot }: Props) => {
     bottomBarDataKey = 'surfMin'
   }
 
-  console.log(tideData)
-
   return (
     <div className="days row">
       <div className="day-date-title col-xs-12 col-md-12 text-center">
