@@ -55,7 +55,7 @@ module.exports = {
   filterTideData: (dayToGraph: string, tideForecast: Array<Object>) =>
     tideForecast.filter((tideObject) => {
       // eslint-disable-next-line
-      tideObject.time = moment(tideObject.Rawtime).format('h A')
+      tideObject.printtime = moment(tideObject.Rawtime).format('h A')
       return moment(tideObject.Localtime).format('ddd MMMM Do') === dayToGraph && tideObject.type !== 'Sunset' && tideObject.type !== 'Sunrise'
     }),
 

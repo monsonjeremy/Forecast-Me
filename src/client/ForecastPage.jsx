@@ -43,6 +43,7 @@ class ForecastPage extends React.Component {
     this.regionSpotList = regions
     this.updateSpot = this.updateSpot.bind(this)
     this.updateRegion = this.updateRegion.bind(this)
+    this.isSpot = this.isSpot.bind(this)
   }
 
   state: {
@@ -54,6 +55,7 @@ class ForecastPage extends React.Component {
   regionSpotList: Array<Object>
   updateRegion: Function
   updateSpot: Function
+  isSpot: Function
 
   updateRegion(region: Object) {
     this.setState({

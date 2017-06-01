@@ -59,7 +59,7 @@ const DayContainer = ({ date, forecast, forecastDay, isSpot }: Props) => {
             </div>
             <TideLineChart
               className="tide-chart"
-              xAxisDataKey="time"
+              xAxisDataKey="printtime"
               yAxisUpperBound={7}
               lineDataKey={'height'}
               data={tideData}
