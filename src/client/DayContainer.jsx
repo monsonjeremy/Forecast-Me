@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import StackedSurfChart from './components/StackedSurfChart'
 import TideLineChart from './components/TideLineChart'
+import AreaChart from './components/AreaChart'
 import { formatSurflineData, roundUpMaxSurfHeight, filterTideData } from '../shared/dataManipulation'
 
 type Props = {
@@ -57,14 +58,9 @@ const DayContainer = ({ date, forecast, forecastDay, isSpot }: Props) => {
             <div className="tide-forecast-title" style={{ width: tideChartWidth, margin: 'auto' }}>
               <h3>TIDE</h3>
             </div>
-            <TideLineChart
-              className="tide-chart"
-              xAxisDataKey="printtime"
-              yAxisUpperBound={7}
-              lineDataKey={'height'}
+            <AreaChart
               data={tideData}
-              width={tideChartWidth}
-              height={300}
+              size={[300, 300]}
             />
           </div>
         </div>

@@ -438,17 +438,13 @@ var D3TimeLineChart = React.createClass({
 
     return (
       <div>
-                <svg id={this.props.id} width={this.state.width} height={this.props.height}>
-                    {defs}
-                    <g transform={this.transform}>
-                        {elements}
-
-                    </g>
-
-                </svg>
-
-
-            </div>
+        <svg id={this.props.id} width={this.state.width} height={this.props.height}>
+          {defs}
+          <g transform={this.transform}>
+            {elements}
+          </g>
+        </svg>
+      </div>
     );
   },
   showToolTip: function(e) {
