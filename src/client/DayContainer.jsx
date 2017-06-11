@@ -3,10 +3,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import StackedSurfChart from './components/StackedSurfChart'
-import TideLineChart from './components/TideLineChart'
-import AreaChart from './components/AreaChart'
-import { formatSurflineData, roundUpMaxSurfHeight, filterTideData } from '../shared/dataManipulation'
+import StackedBarChart from './components/stacked_bar_chart/StackedBarChart'
+import { formatSurflineData, roundUpMaxSurfHeight /* filterTideData */ } from '../shared/dataManipulation'
 
 type Props = {
   date: Array<string>,
@@ -20,16 +18,28 @@ const DayContainer = ({ date, forecast, forecastDay, isSpot }: Props) => {
   const surfChartWidth = '85%'
 
   const dateTitle = moment(date[0]).format('ddd MMMM Do')
-  const tideData = filterTideData(dateTitle, forecast.Tide.dataPoints)
+  // const tideData = filterTideData(dateTitle, forecast.Tide.dataPoints)
   const tideChartWidth = '85%'
 
-  let topBarDataKey = 'aggSurfMax'
-  let bottomBarDataKey = 'aggSurfMin'
+  // let topBarDataKey = 'aggSurfMax'
+  // let bottomBarDataKey = 'aggSurfMin'
 
-  if (isSpot) {
+  /* if (isSpot) {
     topBarDataKey = 'surfMax'
     bottomBarDataKey = 'surfMin'
+  }*/
+
+  const params = {
+    width: 500,
+    height: 500,
+    axisMargin: 83,
+    topMargin: 10,
+    bottomMargin: 5,
+    yMax: roundUpMaxSurfHeight(forecast.surf_max_maximum) + 3,
+    keys: ['aggSurfMin', 'aggSurfMax'],
   }
+
+  const fullWidth = 700
 
   return (
     <div className="days row">
@@ -44,24 +54,16 @@ const DayContainer = ({ date, forecast, forecastDay, isSpot }: Props) => {
             <div className="surf-forecast-title" style={{ width: surfChartWidth, margin: 'auto' }}>
               <h3>SURF</h3>
             </div>
-            <StackedSurfChart
-              className="stacked-surf-charts"
-              xAxisDataKey={'hour'}
-              yAxisUpperBound={roundUpMaxSurfHeight(forecast.surf_max_maximum) + 3}
-              topBarDataKey={topBarDataKey}
-              bottomBarDataKey={bottomBarDataKey}
-              data={forecastSurfData}
-              width={surfChartWidth}
-            />
+            <div>
+              <svg width={fullWidth} height={params.height}>
+                <StackedBarChart {...params} data={forecastSurfData} />
+              </svg>
+            </div>
           </div>
           <div className="tide-forecast-day col-xs-12 col-md-8 text-center">
             <div className="tide-forecast-title" style={{ width: tideChartWidth, margin: 'auto' }}>
               <h3>TIDE</h3>
             </div>
-            <AreaChart
-              data={tideData}
-              size={[300, 300]}
-            />
           </div>
         </div>
       </div>
