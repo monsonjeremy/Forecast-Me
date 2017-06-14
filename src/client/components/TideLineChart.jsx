@@ -26,7 +26,7 @@ const TideLineChart = ({ xAxisDataKey,
   height,
   margin,
 }: Props) =>
-  <ResponsiveContainer
+  (<ResponsiveContainer
     width={width}
     height={height}
     margin={margin}
@@ -50,7 +50,7 @@ const TideLineChart = ({ xAxisDataKey,
       />
       <Area type="monotone" dataKey={lineDataKey} stroke="#8884d8" fillOpacity={1} fill="url(#colorTide)" />
     </AreaChart>
-  </ResponsiveContainer>
+  </ResponsiveContainer>)
 
 TideLineChart.propTypes = {
   xAxisDataKey: PropTypes.string.isRequired,

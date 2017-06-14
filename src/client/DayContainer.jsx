@@ -21,22 +21,24 @@ const DayContainer = ({ date, forecast, forecastDay, isSpot }: Props) => {
   // const tideData = filterTideData(dateTitle, forecast.Tide.dataPoints)
   const tideChartWidth = '85%'
 
-  // let topBarDataKey = 'aggSurfMax'
-  // let bottomBarDataKey = 'aggSurfMin'
+  let topBarDataKey = 'aggSurfMax'
+  let bottomBarDataKey = 'aggSurfMin'
 
-  /* if (isSpot) {
+  if (isSpot) {
     topBarDataKey = 'surfMax'
     bottomBarDataKey = 'surfMin'
-  }*/
+  }
+
+  const dataKeys = [bottomBarDataKey, topBarDataKey]
 
   const params = {
-    width: 500,
+    width: 300,
     height: 500,
     axisMargin: 83,
     topMargin: 10,
     bottomMargin: 5,
-    yMax: roundUpMaxSurfHeight(forecast.surf_max_maximum) + 3,
-    keys: ['aggSurfMin', 'aggSurfMax'],
+    yMax: roundUpMaxSurfHeight(forecast.Surf.surf_max_maximum) + 3,
+    keys: dataKeys,
   }
 
   const fullWidth = 700

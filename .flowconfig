@@ -1,3 +1,4 @@
 [options]
 suppress_comment= \\(.\\|\n\\)*\\flow-disable-next-line
+suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
 module.name_mapper.extension='scss' -> 'empty/object'

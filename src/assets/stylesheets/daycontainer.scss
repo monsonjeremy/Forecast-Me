@@ -1,0 +1,169 @@
+@import "compass/css3";
+
+$back: #333;
+$color: lightgrey;
+$speed: 1.5s;
+
+.arrowdiv {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+/* --------- RIGHT FACING ARROW ---------- */
+
+.arrowright {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: 50vh;
+  margin-left: -60px;
+  display: inline-block;
+  font-size: 26px;
+  color: $color;
+  text-align: center;
+  width: 130px;
+  height: 60px;
+  line-height: 60px;
+  border: 5px solid $color;
+  overflow: hidden;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: width $speed*.5 ease-in-out,
+              margin $speed*.5 ease-in-out,
+              border-radius $speed*.25 ease-in-out,
+              color $speed*.25 ease-in-out;
+  &:hover, &.auto {
+    width: 60px;
+    margin-left: -30px;
+    border-radius: 40px;
+    color: rgba($color, 0);
+    transition: width $speed*.5 ease-in-out,
+                margin $speed*.5 ease-in-out,
+                border-radius $speed.25 ease-in-out,
+                color $speed*.25 ease-in-out $speed*.25;
+    &:before {
+      animation: rightLineUp $speed cubic-bezier(0.0, 0.6, 1.0, 0.4) infinite .5s;
+    }
+    &:after {
+      animation: rightTipUp $speed cubic-bezier(0.0, 0.6, 1.0, 0.4) infinite .5s;
+    }
+  }
+  &:before {
+    position: absolute;
+    display: inline-block;
+    content: "";
+    background: $color;
+    width: 20px;
+    height: 5px;
+    top: 50%;
+    left: 50%;
+    margin-top: 2px;
+    margin-left: -13px;
+    transform: translateY(50px);
+  }
+  &:after {
+    position: absolute;
+    display: inline-block;
+    content: "";
+    width: 20px;
+    height: 20px;
+    color: $color;
+    border-top: 5px solid;
+    border-left: 5px solid;
+    top: 50%;
+    left: 50%;
+    margin-top: -6px;
+    margin-left: -10px;
+    transform: translateY(50px) rotateZ(135deg);
+  }
+}
+
+@keyframes rightTipUp {
+  0%   { transform: translateY(50px) rotateZ(135deg); }
+  100%   { transform: translateY(-70px) rotateZ(135deg); }
+}
+
+@keyframes rightLineUp {
+  0%   { transform: translateY(50px); }
+  100%   { transform: translateY(-70px); }
+}
+
+
+/* --------- LEFT FACING ARROW ---------- */
+
+.arrowleft {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: 50vh;
+  margin-left: -60px;
+  display: inline-block;
+  font-size: 26px;
+  color: $color;
+  text-align: center;
+  width: 120px;
+  height: 60px;
+  line-height: 60px;
+  border: 5px solid $color;
+  overflow: hidden;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: width $speed*.5 ease-in-out,
+              margin $speed*.5 ease-in-out,
+              border-radius $speed*.25 ease-in-out,
+              color $speed*.25 ease-in-out;
+  &:hover, &.auto {
+    width: 60px;
+    margin-left: -30px;
+    border-radius: 40px;
+    color: rgba($color, 0);
+    transition: width $speed*.5 ease-in-out,
+                margin $speed*.5 ease-in-out,
+                border-radius $speed.25 ease-in-out,
+                color $speed*.25 ease-in-out $speed*.25;
+    &:before {
+      animation: leftLineUp $speed cubic-bezier(0.0, 0.6, 1.0, 0.4) infinite .5s;
+    }
+    &:after {
+      animation: leftTipUp $speed cubic-bezier(0.0, 0.6, 1.0, 0.4) infinite .5s;
+    }
+  }
+  &:before {
+    position: absolute;
+    display: inline-block;
+    content: "";
+    background: $color;
+    width: 20px;
+    height: 5px;
+    top: 50%;
+    left: 50%;
+    margin-top: 2px;
+    margin-left: -6px;
+    transform: translateY(50px);
+  }
+  &:after {
+    position: absolute;
+    display: inline-block;
+    content: "";
+    width: 20px;
+    height: 20px;
+    color: $color;
+    border-top: 5px solid;
+    border-left: 5px solid;
+    top: 50%;
+    left: 50%;
+    margin-top: -6px;
+    margin-left: -10px;
+    transform: translateY(50px) rotateZ(-45deg);
+  }
+}
+
+@keyframes leftTipUp {
+  0%   { transform: translateY(50px) rotateZ(-45deg); }
+  100%   { transform: translateY(-70px) rotateZ(-45deg); }
+}
+
+@keyframes leftLineUp {
+  0%   { transform: translateY(50px); }
+  100%   { transform: translateY(-70px); }
+}

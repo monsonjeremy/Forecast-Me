@@ -44,7 +44,7 @@ const config = {
         loader: extractSass.extract({
           fallback: 'style-loader',
           use: [
-            'css-loader', 'sass-loader',
+            'css-loader', `sass-loader?includePaths[]=${path.resolve(__dirname, './node_modules/compass-mixins/lib')}`,
           ],
         }),
       },

@@ -16,7 +16,7 @@ type Props = {
 
 const DropdownSelector = ({ bsStyle, title, options, keyName,
 displayblock, id, onSelect }: Props) =>
-  <div className="content dropdown-selector">
+  (<div className="content dropdown-selector">
     <div className="btn-group">
       <DropdownButton
         className="hover-effect"
@@ -27,19 +27,18 @@ displayblock, id, onSelect }: Props) =>
         block={displayblock}
       >
         {options.map(element =>
-          <MenuItem
+          (<MenuItem
             key={element.name}
             eventKey={element.name}
             onClick={() => onSelect(element)}
           >
             {element.name}
-          </MenuItem>,
+          </MenuItem>),
           )
         }
       </DropdownButton>
     </div>
-  </div>
-
+  </div>)
 
 DropdownSelector.defaultProps = {
   id: null,

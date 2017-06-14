@@ -13,8 +13,12 @@ type Props = {
 }
 
 const SiteNavbar = ({ bsStyle, collapseOnSelect, fixedTop, fluid }: Props) =>
-  <Navbar
-    inverse bsStyle={bsStyle} collapseOnSelect={collapseOnSelect} fixedTop={fixedTop} fluid={fluid}
+  (<Navbar
+    inverse
+    bsStyle={bsStyle}
+    collapseOnSelect={collapseOnSelect}
+    fixedTop={fixedTop}
+    fluid={fluid}
   >
     <Navbar.Header>
       <Navbar.Brand>
@@ -28,7 +32,7 @@ const SiteNavbar = ({ bsStyle, collapseOnSelect, fixedTop, fluid }: Props) =>
         <NavItem eventKey={2} href="/extras">Other stuff</NavItem>
       </Nav>
     </Navbar.Collapse>
-  </Navbar>
+  </Navbar>)
 
 
 SiteNavbar.defaultProps = {

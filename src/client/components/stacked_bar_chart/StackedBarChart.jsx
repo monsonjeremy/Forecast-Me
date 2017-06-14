@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import * as d3 from 'd3'
 import StackedBarChartBar from './StackedBarChartBar'
 
@@ -11,8 +12,9 @@ class StackedBarChart extends Component {
 
     this.updateD3 = this.updateD3.bind(this)
     this.makeBar = this.makeBar.bind(this)
-    this.xScale = d3.scaleLinear()
+    this.xScale = d3.scaleBand()
     this.yScale = d3.scaleLinear()
+    this.heightScale = d3.scaleLinear()
     this.color = d3.scaleOrdinal()
     this.stackedBarChart = d3.stack()
 
@@ -21,44 +23,50 @@ class StackedBarChart extends Component {
 
   componentWillReceiveProps(newProps: Object) {
     this.updateD3(newProps)
+    this.forceUpdate()
   }
 
   stackedBarChart: Function
   updateD3: Function
   xScale: Function
   yScale: Function
+  heightScale: Function
   color: Function
   makeBar: Function
 
-  updateD3(props: Props) {
-    console.log(props.data)
+  updateD3(props: Object) {
     this.stackedBarChart
       .keys(props.keys)
       .order(d3.stackOrderNone)
       .offset(d3.stackOffsetNone)
 
-    console.log(this.stackedBarChart(props.data))
-
     this.xScale
-      .domain([(props.data.map(d => d.hour))])
-      .rangeRound([0, props.width])
+      .domain(props.data.map(d => new Date(d.dateTime)))
+      .rangeRound([0, props.width], 0.05)
+      .padding(0.05)
     this.yScale
+      .domain([0, props.yMax])
+      .range([props.height - props.topMargin - props.bottomMargin, 0])
+    this.heightScale
       .domain([0, props.yMax])
       .range([0, props.height - props.topMargin - props.bottomMargin])
     this.color
-      .range(['#98abc5', '#8a89a6', '#7b6888'])
+      .domain(props.keys)
+      .range(['#1a1aff', '#66a3ff'])
   }
 
-  makeBar(bar: Object) {
-    const surfHeight = bar.y
+  makeBar(data: Object) {
+    const labelText = `${data.surfMin}-${data.surfMax}ft`
     const props = {
-      surfheight: surfHeight,
-      x: this.props.axisMargin,
-      y: this.yScale(bar.y),
-      width: this.xScale(bar.x),
-      height: this.yScale(bar.y),
-      key: `histogram-bar-${bar.x}-${bar.y}`,
+      label: labelText,
+      showLabel: data.y0 > 0,
+      x: this.xScale(new Date(data.date)),
+      y: this.yScale(data.y1),
+      width: this.xScale.bandwidth(),
+      height: this.heightScale(data.y1 - data.y0),
+      colorFill: this.color(data.keyName),
     }
+
     return (
       <StackedBarChartBar {...props} />
     )
@@ -66,16 +74,43 @@ class StackedBarChart extends Component {
 
   render() {
     const translate = `translate(0, ${this.props.topMargin})`
-    const bars = this.stackedBarChart(this.props.data)
+    this.props.data.forEach((d) => {
+      let yZero = 0
+      d.surfTypes = this.color.domain().map((surf) => {
+        const obj: {
+          surfMin: number,
+          surfMax: number,
+          keyName: string,
+          y0: number,
+          y1: number,
+          date: any,
+        } = {
+          surfMin: Math.round(d[this.props.keys[0]]),
+          surfMax: Math.round(d[this.props.keys[0]] + d[this.props.keys[1]]),
+          keyName: surf,
+          y0: yZero,
+          y1: yZero += +d[surf],
+          date: d.dateTime,
+        }
+        return obj
+      })
+      d.total = d.surfTypes[d.surfTypes.length - 1].y1
+    })
 
     return (
       <g className="histogram" transform={translate}>
         <g className="bars">
-          {bars.map(this.makeBar)}
+          {this.props.data.map(d => d.surfTypes.map(surfData => this.makeBar(surfData)))}
         </g>
       </g>
     )
   }
+}
+
+StackedBarChart.propTypes = {
+  topMargin: PropTypes.number.isRequired,
+  data: PropTypes.instanceOf(Object).isRequired,
+  keys: PropTypes.instanceOf(Array).isRequired,
 }
 
 export default StackedBarChart

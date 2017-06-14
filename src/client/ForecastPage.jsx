@@ -2,7 +2,7 @@
 
 import React from 'react'
 import api from '../shared/api'
-import ForecastBox from './ForecastBox'
+import ForecastDateControl from './ForecastDateControl'
 import SiteNavbar from './SiteNavbar'
 import DropdownSelector from './DropdownSelector'
 
@@ -133,7 +133,7 @@ class ForecastPage extends React.Component {
                 <h3 className="col-xs-12 col-md-12">Please select a location above</h3>
               </div>
             </div>
-          : <ForecastBox forecast={this.state.forecast} isSpot={this.isSpot()} /> }
+          : <ForecastDateControl forecast={this.state.forecast} isSpot={this.isSpot()} /> }
         </div>
       </div>
     )
