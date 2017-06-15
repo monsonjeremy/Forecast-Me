@@ -6,7 +6,6 @@ import * as d3 from 'd3'
 import StackedBarChartBar from './StackedBarChartBar'
 
 class StackedBarChart extends Component {
-
   constructor(props: Object) {
     super(props)
 
@@ -35,10 +34,7 @@ class StackedBarChart extends Component {
   makeBar: Function
 
   updateD3(props: Object) {
-    this.stackedBarChart
-      .keys(props.keys)
-      .order(d3.stackOrderNone)
-      .offset(d3.stackOffsetNone)
+    this.stackedBarChart.keys(props.keys).order(d3.stackOrderNone).offset(d3.stackOffsetNone)
 
     this.xScale
       .domain(props.data.map(d => new Date(d.dateTime)))
@@ -50,9 +46,7 @@ class StackedBarChart extends Component {
     this.heightScale
       .domain([0, props.yMax])
       .range([0, props.height - props.topMargin - props.bottomMargin])
-    this.color
-      .domain(props.keys)
-      .range(['#1a1aff', '#66a3ff'])
+    this.color.domain(props.keys).range(['#1a1aff', '#66a3ff'])
   }
 
   makeBar(data: Object) {
@@ -67,9 +61,7 @@ class StackedBarChart extends Component {
       colorFill: this.color(data.keyName),
     }
 
-    return (
-      <StackedBarChartBar {...props} />
-    )
+    return <StackedBarChartBar {...props} />
   }
 
   render() {
@@ -89,7 +81,7 @@ class StackedBarChart extends Component {
           surfMax: Math.round(d[this.props.keys[0]] + d[this.props.keys[1]]),
           keyName: surf,
           y0: yZero,
-          y1: yZero += +d[surf],
+          y1: (yZero += +d[surf]),
           date: d.dateTime,
         }
         return obj

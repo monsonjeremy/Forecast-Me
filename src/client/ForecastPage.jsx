@@ -10,28 +10,22 @@ const regions = [
   {
     name: 'Santa Cruz',
     id: '2958',
-    spots:
-    [
+    spots: [
       { name: 'Steamer Lane', id: '4188' },
       { name: 'Four Mile', id: '5023' },
       { name: 'Waddell Creek', id: '5021' },
-      { name: 'Mitchell\'s Cove', id: '5028' },
+      { name: "Mitchell's Cove", id: '5028' },
       { name: '26th Ave', id: '5030' },
     ],
   },
   {
     name: 'North Orange Country',
     id: '2143',
-    spots:
-    [
-      { name: 'Newport', id: '1241' },
-      { name: 'HB', id: '3421' },
-    ],
+    spots: [{ name: 'Newport', id: '1241' }, { name: 'HB', id: '3421' }],
   },
 ]
 
 class ForecastPage extends React.Component {
-
   constructor() {
     super()
     this.state = {
@@ -45,6 +39,7 @@ class ForecastPage extends React.Component {
     this.updateRegion = this.updateRegion.bind(this)
     this.isSpot = this.isSpot.bind(this)
     this.isLoading = this.isLoading.bind(this)
+    this.spotSelectorTitle = this.spotSelectorTitle.bind(this)
   }
 
   state: {
@@ -58,6 +53,7 @@ class ForecastPage extends React.Component {
   updateSpot: Function
   isSpot: Function
   isLoading: Function
+  spotSelectorTitle: Function
 
   updateRegion(region: Object) {
     this.setState({
@@ -66,8 +62,7 @@ class ForecastPage extends React.Component {
       forecast: null,
     })
 
-    api.fetchSpot(region.id)
-    .then((forecast) => {
+    api.fetchSpot(region.id).then((forecast) => {
       this.setState({
         forecast,
       })
@@ -80,8 +75,7 @@ class ForecastPage extends React.Component {
       forecast: null,
     })
 
-    api.fetchSpot(spot.id)
-    .then((forecast) => {
+    api.fetchSpot(spot.id).then((forecast) => {
       this.setState({
         forecast,
       })
@@ -97,9 +91,7 @@ class ForecastPage extends React.Component {
   }
 
   isLoading() {
-    console.log(this.state.selectedSpot || this.state.selectedRegion)
-    console.log(!this.state.forecast)
-    if ((this.state.selectedSpot || this.state.selectedRegion) && (!this.state.forecast)) {
+    if ((this.state.selectedSpot || this.state.selectedRegion) && !this.state.forecast) {
       return (
         <div className="forecast-container container-fluid">
           <div className="text-center row">
@@ -121,6 +113,14 @@ class ForecastPage extends React.Component {
     )
   }
 
+  spotSelectorTitle() {
+    const isSpotSelected =
+      this.state.selectedSpot == null ||
+      !this.state.selectedRegion.spots.includes(this.state.selectedSpot)
+
+    return isSpotSelected ? 'Select A Spot' : this.state.selectedSpot.name
+  }
+
   render() {
     return (
       <div>
@@ -132,7 +132,11 @@ class ForecastPage extends React.Component {
                 <DropdownSelector
                   options={this.regionSpotList}
                   onSelect={this.updateRegion}
-                  title={this.state.selectedRegion == null ? 'Select Your Region' : this.state.selectedRegion.name}
+                  title={
+                    this.state.selectedRegion == null
+                      ? 'Select Your Region'
+                      : this.state.selectedRegion.name
+                  }
                   keyName={'region-selector'}
                   id={'region-selector-dropdown'}
                 />
@@ -140,20 +144,17 @@ class ForecastPage extends React.Component {
                   <DropdownSelector
                     options={this.state.selectedRegion.spots}
                     onSelect={this.updateSpot}
-                    title={this.state.selectedSpot == null ||
-                    !this.state.selectedRegion.spots.includes(this.state.selectedSpot) ?
-                    'Select A Spot' :
-                    this.state.selectedSpot.name}
                     keyName={'spot-selector'}
                     id={'spot-selector-dropdown'}
-                  />
-                }
+                    title={this.spotSelectorTitle()}
+                  />}
               </div>
             </div>
           </div>
         </div>
-        {!this.state.forecast ? this.isLoading() :
-        <ForecastDateControl forecast={this.state.forecast} isSpot={this.isSpot()} /> }
+        {!this.state.forecast
+          ? this.isLoading()
+          : <ForecastDateControl forecast={this.state.forecast} isSpot={this.isSpot()} />}
       </div>
     )
   }
