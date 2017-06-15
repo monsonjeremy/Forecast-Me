@@ -17,7 +17,7 @@ const DayContainer = ({ date, forecast, forecastDay, isSpot }: Props) => {
   const forecastSurfData = formatSurflineData(date, forecast.Surf, forecastDay, isSpot)
   const surfChartWidth = '85%'
 
-  const dateTitle = moment(date[0]).format('ddd MMMM Do')
+  const dateTitle = moment(date[0], 'MMMM DD, YYYY HH:mm:ss').format('ddd MMMM Do')
   // const tideData = filterTideData(dateTitle, forecast.Tide.dataPoints)
   const tideChartWidth = '85%'
 
@@ -41,7 +41,7 @@ const DayContainer = ({ date, forecast, forecastDay, isSpot }: Props) => {
     keys: dataKeys,
   }
 
-  const fullWidth = 700
+  const fullWidth = 500
 
   return (
     <div className="days row">
@@ -57,7 +57,7 @@ const DayContainer = ({ date, forecast, forecastDay, isSpot }: Props) => {
               <h3>SURF</h3>
             </div>
             <div>
-              <svg width={fullWidth} height={params.height}>
+              <svg width={'100%'} height={'100%'} viewBox={`-100 150 ${fullWidth} ${params.height}`}>
                 <StackedBarChart {...params} data={forecastSurfData} />
               </svg>
             </div>

@@ -111,6 +111,8 @@ StackedBarChart.propTypes = {
   topMargin: PropTypes.number.isRequired,
   data: PropTypes.instanceOf(Object).isRequired,
   keys: PropTypes.instanceOf(Array).isRequired,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
 }
 
 export default StackedBarChart
