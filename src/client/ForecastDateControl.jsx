@@ -55,12 +55,12 @@ class ForecastDateControl extends Component {
 
   render() {
     return (
-      <div className="forecast-box container">
+      <div className="forecast-box container-fluid">
         <div className="row is-flex">
           <div className="col-s-12 col-md-1 arrowdiv textcenter">
             {
               this.state.index > 0 ?
-              (<div className="previous_btn" title="Previous" onClick={this.leftArrowClick} role="button" tabIndex={0}>
+              (<div className="previous_btn" title="Previous" onClick={this.leftArrowClick} role="button">
                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="65px" height="65px" viewBox="-11 -11.5 65 66">
                   <g>
                     <g>
@@ -88,7 +88,7 @@ class ForecastDateControl extends Component {
           <div className="col-s-12 col-md-1 arrowdiv textcenter">
             {
               this.state.index < this.state.dates.length - 1 ?
-              (<div className="next_btn" title="Next" onClick={this.rightArrowClick} role="button" tabIndex={0}>
+              (<div className="next_btn" title="Next" onClick={this.rightArrowClick} role="button">
                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="65px" height="65px" viewBox="-11 -11.5 65 66">
                   <g>
                     <g>

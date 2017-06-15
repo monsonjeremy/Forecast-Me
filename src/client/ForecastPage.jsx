@@ -44,6 +44,7 @@ class ForecastPage extends React.Component {
     this.updateSpot = this.updateSpot.bind(this)
     this.updateRegion = this.updateRegion.bind(this)
     this.isSpot = this.isSpot.bind(this)
+    this.isLoading = this.isLoading.bind(this)
   }
 
   state: {
@@ -56,6 +57,7 @@ class ForecastPage extends React.Component {
   updateRegion: Function
   updateSpot: Function
   isSpot: Function
+  isLoading: Function
 
   updateRegion(region: Object) {
     this.setState({
@@ -94,11 +96,36 @@ class ForecastPage extends React.Component {
     return true
   }
 
+  isLoading() {
+    console.log(this.state.selectedSpot || this.state.selectedRegion)
+    console.log(!this.state.forecast)
+    if ((this.state.selectedSpot || this.state.selectedRegion) && (!this.state.forecast)) {
+      return (
+        <div className="forecast-container container-fluid">
+          <div className="text-center row">
+            <div className="wave-wrapper col-xs-12">
+              <h1 className="loading-text">LOADING...</h1>
+              <div className="wave" />
+            </div>
+          </div>
+        </div>
+      )
+    }
+    return (
+      <div className="forecast-container container-fluid">
+        <div className="text-center row">
+          <h1 className="col-xs-12 col-md-12">WELCOME!</h1>
+          <h3 className="col-xs-12 col-md-12">Please select a location above</h3>
+        </div>
+      </div>
+    )
+  }
+
   render() {
     return (
       <div>
         <SiteNavbar className="forecastme-nav" />
-        <div className="container forecast-header img-fluid">
+        <div className="container-fluid forecast-header img-fluid">
           <div className="forecast-header-content">
             <div className="text-center" id="forecast-selectors">
               <div className="text-center">
@@ -125,16 +152,8 @@ class ForecastPage extends React.Component {
             </div>
           </div>
         </div>
-        <div>
-          {!this.state.forecast ?
-            <div className="forecast-container row">
-              <div className="text-center">
-                <h1 className="col-xs-12 col-md-12">WELCOME!</h1>
-                <h3 className="col-xs-12 col-md-12">Please select a location above</h3>
-              </div>
-            </div>
-          : <ForecastDateControl forecast={this.state.forecast} isSpot={this.isSpot()} /> }
-        </div>
+        {!this.state.forecast ? this.isLoading() :
+        <ForecastDateControl forecast={this.state.forecast} isSpot={this.isSpot()} /> }
       </div>
     )
   }
