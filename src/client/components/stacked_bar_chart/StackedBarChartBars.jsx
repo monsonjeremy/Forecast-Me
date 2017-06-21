@@ -18,11 +18,11 @@ const StackedBarChartBars = ({ data, xScale, yScale, heightScale, colorScale }: 
     const props = {
       label: labelText,
       showLabel: d.y0 > 0,
-      x: xScale(new Date(d.date)),
-      y: yScale(d.y1),
-      width: xScale.bandwidth(),
-      height: heightScale(d.y1 - d.y0),
-      colorFill: colorScale(d.keyName),
+      x: xScale(new Date(d.date)), // Pass in date to retrieve X val
+      y: yScale(d.y1), // Pass in data val to retrieve Y val
+      width: xScale.bandwidth(), // Get the width of the bar
+      height: heightScale(d.y1 - d.y0), // Top data - Bottom data to get height of bar
+      colorFill: colorScale(d.keyName), // Get fill color for the bar
     }
     return <StackedBarChartBar {...props} />
   }
