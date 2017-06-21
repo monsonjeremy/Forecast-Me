@@ -7,6 +7,9 @@
     "stage-3"
   ],
   "plugins": [
-    "flow-react-proptypes", "transform-object-rest-spread", "transform-es2015-destructuring", "transform-class-properties"
+    "flow-react-proptypes",
+    "transform-object-rest-spread",
+    "transform-es2015-destructuring",
+    "transform-class-properties"
   ]
 }
