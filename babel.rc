@@ -3,9 +3,10 @@
     "env",
     "flow",
     "react",
-    "stage-0"
+    "es2015",
+    "stage-3"
   ],
   "plugins": [
-    "flow-react-proptypes"
+    "flow-react-proptypes", "transform-object-rest-spread", "transform-es2015-destructuring", "transform-class-properties"
   ]
 }

@@ -37,14 +37,27 @@ const config = {
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: ['babel-loader'],
+        loader: 'babel-loader',
+        query: {
+          presets: ['env', 'flow', 'react', 'es2015', 'stage-3'],
+          plugins: [
+            'flow-react-proptypes',
+            'transform-object-rest-spread',
+            'transform-es2015-destructuring',
+            'transform-class-properties',
+          ],
+        },
       },
       {
         test: /\.scss$/,
         loader: extractSass.extract({
           fallback: 'style-loader',
           use: [
-            'css-loader', `sass-loader?includePaths[]=${path.resolve(__dirname, './node_modules/compass-mixins/lib')}`,
+            'css-loader',
+            `sass-loader?includePaths[]=${path.resolve(
+              __dirname,
+              './node_modules/compass-mixins/lib',
+            )}`,
           ],
         }),
       },
@@ -54,24 +67,27 @@ const config = {
       },
       {
         test: /\.(jpe?g|png|gif)$/i,
-        loaders: ['file-loader?context=src/assets/images/&name=images/[path][name].[ext]', {
-          loader: 'image-webpack-loader',
-          query: {
-            mozjpeg: {
-              progressive: true,
-            },
-            gifsicle: {
-              interlaced: false,
-            },
-            optipng: {
-              optimizationLevel: 4,
-            },
-            pngquant: {
-              quality: '75-90',
-              speed: 3,
+        loaders: [
+          'file-loader?context=src/assets/images/&name=images/[path][name].[ext]',
+          {
+            loader: 'image-webpack-loader',
+            query: {
+              mozjpeg: {
+                progressive: true,
+              },
+              gifsicle: {
+                interlaced: false,
+              },
+              optipng: {
+                optimizationLevel: 4,
+              },
+              pngquant: {
+                quality: '75-90',
+                speed: 3,
+              },
             },
           },
-        }],
+        ],
         exclude: /node_modules/,
       },
     ],
@@ -87,9 +103,7 @@ const config = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    new CopyWebpackPlugin([
-      { from: './src/assets/manifest.json' },
-    ]),
+    new CopyWebpackPlugin([{ from: './src/assets/manifest.json' }]),
     new CompressionPlugin({
       asset: '[path].gz[query]',
       algorithm: 'gzip',
@@ -108,9 +122,7 @@ const config = {
 }
 
 if (isProd) {
-  config.plugins.push(
-    new webpack.optimize.AggressiveMergingPlugin(),
-  )
+  config.plugins.push(new webpack.optimize.AggressiveMergingPlugin())
 }
 
 module.exports = config
