@@ -9,6 +9,10 @@ const mapNewStateToOldState = (oldState, newState) => {
 
 const AnimatedDataWrapper = (dataProp, transitionDuration = 300) => ComposedComponent =>
   class extends Component {
+    propTypes = {
+      dataKeys: PropTypes.arrayOf(String).isRequired,
+    }
+
     constructor(props) {
       super(props)
       const data = this.props[dataProp]
@@ -20,8 +24,7 @@ const AnimatedDataWrapper = (dataProp, transitionDuration = 300) => ComposedComp
     componentWillReceiveProps(nextProps) {
       const data = this.props[dataProp]
       const nextData = nextProps[dataProp]
-      // eslint-disable-next-line
-      const dataKeys = this.props.dataKeys // Giving a prop type error even though it is defined in prop types. Could be a bug.
+      const dataKeys = this.props.dataKeys
       const dataUnchanged = Object.keys(data)
         .map(label => data[label] === nextData[label])
         .reduce((prev, curr) => prev && curr)
@@ -80,11 +83,11 @@ const AnimatedDataWrapper = (dataProp, transitionDuration = 300) => ComposedComp
     }
   }
 
-AnimatedDataWrapper.PropType = {
-  dataKeys: PropTypes.arrayOf(String).isRequired,
+AnimatedDataWrapper.propTypes = {
   date: PropTypes.instanceOf(Array).isRequired,
-  forecast: PropTypes.object.isRequired,
+  forecast: PropTypes.instanceOf(Object).isRequired,
   maxSurf: PropTypes.number.isRequired,
+  dataKeys: PropTypes.arrayOf(String).isRequired,
 }
 
 export default AnimatedDataWrapper
