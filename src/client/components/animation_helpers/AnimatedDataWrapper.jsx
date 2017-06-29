@@ -9,16 +9,16 @@ const mapNewStateToOldState = (oldState, newState) => {
 
 const AnimatedDataWrapper = (dataProp, transitionDuration = 300) => ComposedComponent =>
   class extends Component {
-    static propTypes = {
-      dataKeys: PropTypes.arrayOf(String).isRequired,
-    }
-
     constructor(props) {
       super(props)
       const data = this.props[dataProp]
       this.state = Object.keys(data)
         .map(label => ({ [label]: data[label] }))
         .reduce((prev, curr) => ({ ...prev, ...curr }), {})
+    }
+
+    static propTypes = {
+      dataKeys: PropTypes.arrayOf(String).isRequired,
     }
 
     componentWillReceiveProps(nextProps) {
