@@ -7,18 +7,14 @@ const mapNewStateToOldState = (oldState, newState) => {
   return oldState
 }
 
-const AnimatedDataWrapper = (dataProp, transitionDuration = 300) => ComposedComponent =>
-  class extends Component {
+const AnimatedDataWrapper = (dataProp, transitionDuration = 300) => (ComposedComponent) => {
+  class Composed extends Component {
     constructor(props) {
       super(props)
       const data = this.props[dataProp]
       this.state = Object.keys(data)
         .map(label => ({ [label]: data[label] }))
         .reduce((prev, curr) => ({ ...prev, ...curr }), {})
-    }
-
-    static propTypes = {
-      dataKeys: PropTypes.arrayOf(String).isRequired,
     }
 
     componentWillReceiveProps(nextProps) {
@@ -82,6 +78,11 @@ const AnimatedDataWrapper = (dataProp, transitionDuration = 300) => ComposedComp
       return <ComposedComponent {...newProps} />
     }
   }
+
+  Composed.propTypes = {
+    dataKeys: PropTypes.arrayOf(String).isRequired,
+  }
+}
 
 AnimatedDataWrapper.propTypes = {
   date: PropTypes.instanceOf(Array).isRequired,
