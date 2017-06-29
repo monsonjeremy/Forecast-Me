@@ -9,7 +9,7 @@ const mapNewStateToOldState = (oldState, newState) => {
 
 const AnimatedDataWrapper = (dataProp, transitionDuration = 300) => ComposedComponent =>
   class extends Component {
-    propTypes = {
+    static propTypes = {
       dataKeys: PropTypes.arrayOf(String).isRequired,
     }
 
