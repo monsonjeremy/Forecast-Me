@@ -17,6 +17,50 @@ const AnimatedDataWrapper = (dataProp, transitionDuration = 300) => (ComposedCom
         .reduce((prev, curr) => ({ ...prev, ...curr }), {})
     }
 
+    // Handle the case where we are rendering the graph for the first time
+    componentWillMount() {
+      const data = this.props[dataProp]
+      const dataKeys = this.props.dataKeys
+      d3.select(this).transition().tween('attr.scale', null)
+      d3
+        .select(this)
+        .transition()
+        .duration(transitionDuration + 200)
+        .ease(d3.easeLinear)
+        .tween('attr.scale', () => {
+          const barInterpolators = data.map((...args) => {
+            const index = args[1]
+            return dataKeys.map((key) => {
+              const interpolator = d3.interpolateNumber(0, this.state[index][key])
+              return { key, interpolator }
+            })
+          })
+          return (t) => {
+            const newState = barInterpolators
+              .map(bar =>
+                bar
+                  .map(({ key, interpolator }) => ({ [key]: interpolator(t) }))
+                  .reduce((result, currentObject) => {
+                    Object.keys(currentObject).map((key) => {
+                      if (Object.prototype.hasOwnProperty.call(currentObject, key)) {
+                        result[key] = currentObject[key]
+                      }
+                      return null
+                    })
+                    return result
+                  }, {}),
+              )
+              .reduce((newObject, value, index) => {
+                newObject[index] = value
+                return newObject
+              }, {})
+            const oldState = this.state
+            const updatedState = mapNewStateToOldState(oldState, newState)
+            this.setState(updatedState)
+          }
+        })
+    }
+
     componentWillReceiveProps(nextProps) {
       const data = this.props[dataProp]
       const nextData = nextProps[dataProp]
@@ -80,8 +124,10 @@ const AnimatedDataWrapper = (dataProp, transitionDuration = 300) => (ComposedCom
   }
 
   Composed.propTypes = {
-    dataKeys: PropTypes.arrayOf(String).isRequired,
+    dataKeys: PropTypes.instanceOf(Array).isRequired,
   }
+
+  return Composed
 }
 
 AnimatedDataWrapper.propTypes = {
