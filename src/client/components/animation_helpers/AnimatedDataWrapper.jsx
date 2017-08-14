@@ -7,7 +7,7 @@ const mapNewStateToOldState = (oldState, newState) => {
   return oldState
 }
 
-const AnimatedDataWrapper = (dataProp, transitionDuration = 300) => (ComposedComponent) => {
+const AnimatedDataWrapper = (dataProp, transitionDuration = 1200) => (ComposedComponent) => {
   class Composed extends Component {
     constructor(props) {
       super(props)
@@ -17,7 +17,6 @@ const AnimatedDataWrapper = (dataProp, transitionDuration = 300) => (ComposedCom
         .reduce((prev, curr) => ({ ...prev, ...curr }), {})
     }
 
-    // Handle the case where we are rendering the graph for the first time
     componentWillMount() {
       const data = this.props[dataProp]
       const dataKeys = this.props.dataKeys
@@ -26,7 +25,7 @@ const AnimatedDataWrapper = (dataProp, transitionDuration = 300) => (ComposedCom
         .select(this)
         .transition()
         .duration(transitionDuration + 200)
-        .ease(d3.easeLinear)
+        .ease(d3.easeBounceOut)
         .tween('attr.scale', () => {
           const barInterpolators = data.map((...args) => {
             const index = args[1]
@@ -76,7 +75,7 @@ const AnimatedDataWrapper = (dataProp, transitionDuration = 300) => (ComposedCom
         .select(this)
         .transition()
         .duration(transitionDuration)
-        .ease(d3.easeLinear)
+        .ease(d3.easeBounceOut)
         .tween('attr.scale', () => {
           const barInterpolators = data.map((...args) => {
             const index = args[1]
