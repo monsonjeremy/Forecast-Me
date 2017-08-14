@@ -17,7 +17,8 @@ type Props = {
 
 const yAxisNums = [-7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7]
 
-const TideLineChart = ({ xAxisDataKey,
+const TideLineChart = ({
+  xAxisDataKey,
   yAxisDataKey,
   yAxisUpperBound,
   lineDataKey,
@@ -26,15 +27,8 @@ const TideLineChart = ({ xAxisDataKey,
   height,
   margin,
 }: Props) =>
-  <ResponsiveContainer
-    width={width}
-    height={height}
-    margin={margin}
-  >
-    <AreaChart
-      margin={{ top: 10, right: 50, bottom: 10, left: 0 }}
-      data={data}
-    >
+  (<ResponsiveContainer width={width} height={height} margin={margin}>
+    <AreaChart margin={{ top: 10, right: 50, bottom: 10, left: 0 }} data={data}>
       <defs>
         <linearGradient id="colorTide" x1="0" y1="0" x2="0" y2="1">
           <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
@@ -48,9 +42,15 @@ const TideLineChart = ({ xAxisDataKey,
         domain={[-yAxisUpperBound, yAxisUpperBound]}
         tickLine={false}
       />
-      <Area type="monotone" dataKey={lineDataKey} stroke="#8884d8" fillOpacity={1} fill="url(#colorTide)" />
+      <Area
+        type="monotone"
+        dataKey={lineDataKey}
+        stroke="#8884d8"
+        fillOpacity={1}
+        fill="url(#colorTide)"
+      />
     </AreaChart>
-  </ResponsiveContainer>
+  </ResponsiveContainer>)
 
 TideLineChart.propTypes = {
   xAxisDataKey: PropTypes.string.isRequired,

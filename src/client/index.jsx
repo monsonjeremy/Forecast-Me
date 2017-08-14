@@ -15,9 +15,9 @@ import '../assets/manifest.json'
 const rootEl = document.querySelector(APP_CONTAINER_SELECTOR)
 
 const wrapApp = AppComponent =>
-  <AppContainer>
+  (<AppContainer>
     <AppComponent />
-  </AppContainer>
+  </AppContainer>)
 
 ReactDOM.render(wrapApp(App), rootEl)
 

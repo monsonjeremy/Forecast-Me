@@ -3,31 +3,32 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import StackedSurfChart from './components/StackedSurfChart'
-import TideLineChart from './components/TideLineChart'
-import { formatSurflineData, roundUpMaxSurfHeight, filterTideData } from '../shared/dataManipulation'
+import GraphContainer from './components/GraphContainer'
+import '../assets/stylesheets/daycontainer.scss'
 
 type Props = {
-  date: Array<string>,
-  forecast: Object,
-  forecastDay: number,
-  isSpot: boolean,
+  date: Array<String>,
+  forecast: Array<Object>,
+  maxSurf: number,
+  dataKeys: Array<String>,
 }
 
-const DayContainer = ({ date, forecast, forecastDay, isSpot }: Props) => {
-  const forecastSurfData = formatSurflineData(date, forecast.Surf, forecastDay, isSpot)
-  const surfChartWidth = '85%'
+const DayContainer = ({ date, forecast, maxSurf, dataKeys }: Props) => {
+  // Format the date in the Title section of the container ('Wed June 21st')
+  const dateTitle = moment(date[0], 'MMMM DD, YYYY HH:mm:ss').format('ddd MMMM Do')
 
-  const dateTitle = moment(date[0]).format('ddd MMMM Do')
-  const tideData = filterTideData(dateTitle, forecast.Tide.dataPoints)
-  const tideChartWidth = '85%'
-
-  let topBarDataKey = 'aggSurfMax'
-  let bottomBarDataKey = 'aggSurfMin'
-
-  if (isSpot) {
-    topBarDataKey = 'surfMax'
-    bottomBarDataKey = 'surfMin'
+  // This could maybe be moved to a different component
+  // Keeping it here until other graphs are finished in case graphs within the same day container
+  // need to know each others information
+  const params = {
+    data: forecast,
+    width: 300,
+    height: 500,
+    axisMargin: 83,
+    topMargin: 10,
+    bottomMargin: 5,
+    yMax: maxSurf,
+    keys: dataKeys,
   }
 
   return (
@@ -38,36 +39,7 @@ const DayContainer = ({ date, forecast, forecastDay, isSpot }: Props) => {
       </div>
       <br />
       <div className="cols-xs-12 col-md-12 text-center">
-        <div className="charts-wrapper row">
-          <div className="surf-forecast-day col-xs-12 col-md-4 text-center">
-            <div className="surf-forecast-title" style={{ width: surfChartWidth, margin: 'auto' }}>
-              <h3>SURF</h3>
-            </div>
-            <StackedSurfChart
-              className="stacked-surf-charts"
-              xAxisDataKey={'hour'}
-              yAxisUpperBound={roundUpMaxSurfHeight(forecast.surf_max_maximum) + 3}
-              topBarDataKey={topBarDataKey}
-              bottomBarDataKey={bottomBarDataKey}
-              data={forecastSurfData}
-              width={surfChartWidth}
-            />
-          </div>
-          <div className="tide-forecast-day col-xs-12 col-md-8 text-center">
-            <div className="tide-forecast-title" style={{ width: tideChartWidth, margin: 'auto' }}>
-              <h3>TIDE</h3>
-            </div>
-            <TideLineChart
-              className="tide-chart"
-              xAxisDataKey="time"
-              yAxisUpperBound={7}
-              lineDataKey={'height'}
-              data={tideData}
-              width={tideChartWidth}
-              height={300}
-            />
-          </div>
-        </div>
+        <GraphContainer {...params} />
       </div>
     </div>
   )
@@ -75,9 +47,9 @@ const DayContainer = ({ date, forecast, forecastDay, isSpot }: Props) => {
 
 DayContainer.propTypes = {
   date: PropTypes.instanceOf(Array).isRequired,
-  forecast: PropTypes.instanceOf(Object).isRequired,
-  forecastDay: PropTypes.number.isRequired,
-  isSpot: PropTypes.bool.isRequired,
+  forecast: PropTypes.arrayOf(Object).isRequired,
+  maxSurf: PropTypes.number.isRequired,
+  dataKeys: PropTypes.instanceOf(Array).isRequired,
 }
 
 export default DayContainer

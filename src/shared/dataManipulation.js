@@ -9,12 +9,12 @@ module.exports = {
     forecastDay: number,
     isSpot: boolean) => {
     const formattedData = []
-    // eslint-disable-next-line
-    dateTimeArray.map((date, index) => {
+    dateTimeArray.forEach((date, index) => {
       if (isSpot === false) {
         formattedData.push({
           dateTime: date,
-          hour: moment(date).format('h A'),
+          anindex: index,
+          hour: moment(date, 'MMMM DD, YYYY HH:mm:ss').format('h A'),
           swellHeight1: forecastObject.swell_height1[forecastDay][index],
           swellHeight2: forecastObject.swell_height2[forecastDay][index],
           swellHeight3: forecastObject.swell_height3[forecastDay][index],
@@ -32,7 +32,8 @@ module.exports = {
       } else {
         formattedData.push({
           dateTime: date,
-          hour: moment(date).format('h A'),
+          anindex: index,
+          hour: moment(date, 'MMMM DD, YYYY HH:mm:ss').format('h A'),
           swellHeight1: forecastObject.swell_height1[forecastDay][index],
           swellHeight2: forecastObject.swell_height2[forecastDay][index],
           swellHeight3: forecastObject.swell_height3[forecastDay][index],
@@ -54,9 +55,9 @@ module.exports = {
 
   filterTideData: (dayToGraph: string, tideForecast: Array<Object>) =>
     tideForecast.filter((tideObject) => {
-      // eslint-disable-next-line
-      tideObject.time = moment(tideObject.Rawtime).format('h A')
-      return moment(tideObject.Localtime).format('ddd MMMM Do') === dayToGraph && tideObject.type !== 'Sunset' && tideObject.type !== 'Sunrise'
+      const printTime = moment(tideObject.Rawtime, 'MMMM DD, YYYY HH:mm:ss').format('h A')
+      tideObject.printtime = printTime
+      return printTime === dayToGraph && tideObject.type !== 'Sunset' && tideObject.type !== 'Sunrise'
     }),
 
 }

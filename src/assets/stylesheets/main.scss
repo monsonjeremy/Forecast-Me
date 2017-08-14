@@ -1,32 +1,33 @@
-/* --------- IMPORTS ---------- */
+// --------- IMPORTS ---------- */
 
 @import url('https://fonts.googleapis.com/css?family=Montserrat:200,300,400,600');
 
-/* --------- VARIABLES ---------- */
+// --------- VARIABLES ---------- */
 
 $fh-background-img: url('../images/forecast-me-header.jpg');
 
-/* --------- GENERAL ---------- */
+// --------- GENERAL ----------
 
 .js-app {
   font-family: Montserrat;
 }
 
-body { 
-    padding-top: 50px; 
+body {
+  padding-top: 50px;
 }
 
-hr.style-two {
+hr {
+  &.style-two {
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
     border: 0;
     height: 1.1px;
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+  }
 }
 
-/* --------- FORECAST HEADER STYLING ---------- */
+// --------- FORECAST HEADER STYLING ---------- */
 
 .forecast-header {
-  height: 40vh;
-  width: 100%;
+  height: 500px;
   background-image: $fh-background-img;
   background-image: -webkit-image-set(  
     $fh-background-img 1x,  
@@ -53,6 +54,10 @@ hr.style-two {
   padding-bottom: 5px;
 }
 
+#forecast-selectors ul{
+  font-size: 25px;
+}
+
 .dropdown-menu {
   left: 50%;
   right: auto;
@@ -60,10 +65,20 @@ hr.style-two {
   transform: translate(-50%, 0);
 }
 
-/* --------- FORECAST CONTAINER STYLING ---------- */
+// --------- FORECAST CONTAINER STYLING ---------- */
+
+.forecast-container {
+  display: flex;
+  justify-content: center;
+  vertical-align: center;
+}
 
 .day-date-title {
   padding: 15px 0px 0px 0px;
+}
+
+.graphs {
+  background-color: lightgrey;
 }
 
 .charts-wrapper {
@@ -106,7 +121,7 @@ hr.style-two {
   margin: 0 auto;
 }
 
-/* --------- BUTTON HOVER EFFECT ---------- */
+// --------- BUTTON HOVER EFFECT ---------- */
 
 .hover-effect {
   font-size: 2vw;
@@ -131,108 +146,37 @@ hr.style-two {
   }
 }
 
-/* -------- WAVE LOADER -------------*/
+//******* WAVE LOADER *********/
 
-.progress {
-  position: absolute;
-  background-color: #fff;
-  top: 50%;
-  left: 50%;
-  margin-left: -100px;
+
+.wave-wrapper {
+  width: 500px;
+  height: 500px;
+  border-radius: 5px;
+  top: 40%;
+  background-image: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);
+  overflow: hidden;
 }
-.progress span {
-  position: absolute;
-  background-color: #ffa500;
-  height: 5px;
-  bottom: 0;
-  width: 10px;
-  animation: ani 1.5s infinite ease-in-out;
+
+.loading-text{
+  margin-top: 40%;
+  z-index: 2;
+  color: black;
+  position: relative;
 }
-.progress span:nth-child(0) {
-  left: 0px;
-  animation-delay: 0s;
+
+.wave {
+  z-index: -2;
+  width: 1000px;
+  height: 1025px;
+  margin-left: -281px;
+  margin-top: -900px;
+  border-radius: 35%;
+  background: rgba(255, 255, 255, .75);
+  animation: wave 15s infinite linear;
 }
-.progress span:nth-child(1) {
-  left: 15px;
-  animation-delay: 0.15s;
-}
-.progress span:nth-child(2) {
-  left: 30px;
-  animation-delay: 0.3s;
-}
-.progress span:nth-child(3) {
-  left: 45px;
-  animation-delay: 0.45s;
-}
-.progress span:nth-child(4) {
-  left: 60px;
-  animation-delay: 0.6s;
-}
-.progress span:nth-child(5) {
-  left: 75px;
-  animation-delay: 0.75s;
-}
-.progress span:nth-child(6) {
-  left: 90px;
-  animation-delay: 0.9s;
-}
-.progress span:nth-child(7) {
-  left: 105px;
-  animation-delay: 1.05s;
-}
-.progress span:nth-child(8) {
-  left: 120px;
-  animation-delay: 1.2s;
-}
-.progress span:nth-child(9) {
-  left: 135px;
-  animation-delay: 1.35s;
-}
-.progress span:nth-child(10) {
-  left: 150px;
-  animation-delay: 1.5s;
-}
-@-moz-keyframes ani {
-  0%, 50%, 100% {
-    height: 5px;
-  }
-  25% {
-    height: 30px;
-    background-color: #f44;
-    border-radius: 10%;
-    transform: translateX(30px);
-  }
-}
-@-webkit-keyframes ani {
-  0%, 50%, 100% {
-    height: 5px;
-  }
-  25% {
-    height: 30px;
-    background-color: #f44;
-    border-radius: 10%;
-    transform: translateX(30px);
-  }
-}
-@-o-keyframes ani {
-  0%, 50%, 100% {
-    height: 5px;
-  }
-  25% {
-    height: 30px;
-    background-color: #f44;
-    border-radius: 10%;
-    transform: translateX(30px);
-  }
-}
-@keyframes ani {
-  0%, 50%, 100% {
-    height: 5px;
-  }
-  25% {
-    height: 30px;
-    background-color: #f44;
-    border-radius: 10%;
-    transform: translateX(30px);
-  }
+
+@keyframes wave {
+  from { transform: rotate(0deg);}
+  from { transform: rotate(360deg);}
 }
