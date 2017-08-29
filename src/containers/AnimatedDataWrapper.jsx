@@ -1,11 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import * as d3 from 'd3'
-
-const mapNewStateToOldState = (oldState, newState) => {
-  Object.keys(oldState).forEach(key => Object.assign(oldState[key], newState[key]))
-  return oldState
-}
+import _ from '../helpers/helperFunctions'
 
 const AnimatedDataWrapper = (dataProp, transitionDuration = 1200) => (ComposedComponent) => {
   class Composed extends Component {
@@ -20,9 +16,7 @@ const AnimatedDataWrapper = (dataProp, transitionDuration = 1200) => (ComposedCo
     componentWillMount() {
       const data = this.props[dataProp]
       const dataKeys = this.props.dataKeys
-      d3.select(this).transition().tween('attr.scale', null)
       d3
-        .select(this)
         .transition()
         .duration(transitionDuration + 200)
         .ease(d3.easeBounceOut)
@@ -38,11 +32,7 @@ const AnimatedDataWrapper = (dataProp, transitionDuration = 1200) => (ComposedCo
             const newState = barInterpolators
               .map(bar =>
                 bar
-                  .map(({ key, interpolator, }) => {
-                    console.log(t)
-                    console.log(interpolator(t))
-                    return { [key]: interpolator(t), }
-                  })
+                  .map(({ key, interpolator, }) => ({ [key]: interpolator(t), }))
                   .reduce((result, currentObject) => {
                     Object.keys(currentObject).map((key) => {
                       if (Object.prototype.hasOwnProperty.call(currentObject, key)) {
@@ -58,7 +48,7 @@ const AnimatedDataWrapper = (dataProp, transitionDuration = 1200) => (ComposedCo
                 return newObject
               }, {})
             const oldState = this.state
-            const updatedState = mapNewStateToOldState(oldState, newState)
+            const updatedState = _.mapNewStateToOldState(oldState, newState)
             this.setState(updatedState)
           }
         })
@@ -68,16 +58,12 @@ const AnimatedDataWrapper = (dataProp, transitionDuration = 1200) => (ComposedCo
       const data = this.props[dataProp]
       const nextData = nextProps[dataProp]
       const dataKeys = this.props.dataKeys
-      const dataUnchanged = Object.keys(data)
-        .map(label => data[label] === nextData[label])
-        .reduce((prev, curr) => prev && curr)
-      if (dataUnchanged) {
-        return
-      }
-      d3.select(this).transition().tween('attr.scale', null)
       d3
         .select(this)
         .transition()
+        .tween('attr.scale', null)
+      d3
+        .transition(this)
         .duration(transitionDuration)
         .ease(d3.easeBounceOut)
         .tween('attr.scale', () => {
@@ -111,7 +97,7 @@ const AnimatedDataWrapper = (dataProp, transitionDuration = 1200) => (ComposedCo
                 return newObject
               }, {})
             const oldState = this.state
-            const updatedState = mapNewStateToOldState(oldState, newState)
+            const updatedState = _.mapNewStateToOldState(oldState, newState)
             this.setState(updatedState)
           }
         })

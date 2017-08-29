@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import * as d3 from 'd3'
 
 const AnimatedScaleWrapper = (scaleProps = [], transitionDuration = 300) => ComposedComponent =>
@@ -78,10 +77,5 @@ const AnimatedScaleWrapper = (scaleProps = [], transitionDuration = 300) => Comp
       return <ComposedComponent {...newProps} />
     }
   }
-
-AnimatedScaleWrapper.PropType = {
-  scaleProps: PropTypes.array.isRequired,
-  transitionDuration: PropTypes.number,
-}
 
 export default AnimatedScaleWrapper

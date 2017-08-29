@@ -3,6 +3,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import StackedBarChart from './stacked_bar_chart/StackedBarChart'
+import AnimatedAreaChart from './AreaChart'
 
 type Props = {
   data: Array<Object>,
@@ -13,6 +14,7 @@ type Props = {
   bottomMargin: number,
   yMax: number,
   keys: Array<String>,
+  tide: Array<Object>,
 }
 
 const GraphContainer = ({
@@ -24,6 +26,7 @@ const GraphContainer = ({
   bottomMargin,
   yMax,
   keys,
+  tide,
 }: Props) => {
   // Full width of the SVG Element containing the graph
   const props = {
@@ -37,6 +40,19 @@ const GraphContainer = ({
     keys,
   }
   const graphFullWidth = 500
+
+  // Tide graph props
+  const size = [200, 100]
+  const margins = [15, 15, 15, 15]
+  const vwidth = size[0] - margins[1] - margins[3]
+  const vheight = size[1] - margins[0] - margins[2]
+  const view = [vwidth, vheight]
+  const tideGraphProps = {
+    data: tide,
+    size,
+    view,
+    margins,
+  }
 
   return (
     <div className="charts-wrapper row">
@@ -59,6 +75,9 @@ const GraphContainer = ({
         {/* TODO: Remove these style tags and move to Sass */}
         <div className="tide-forecast-title" style={{ width: '100%', margin: 'auto', }}>
           <h3>TIDE</h3>
+        </div>
+        <div>
+          <AnimatedAreaChart {...tideGraphProps} />
         </div>
       </div>
     </div>

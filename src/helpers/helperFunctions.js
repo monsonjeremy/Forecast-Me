@@ -57,9 +57,15 @@ export default {
   filterTideData: (dayToGraph: string, tideForecast: Array<Object>) =>
     tideForecast.filter((tideObject) => {
       const printTime = moment(tideObject.Rawtime, 'MMMM DD, YYYY HH:mm:ss').format('h A')
+      const dateOfEntry = moment(tideObject.Rawtime, 'MMMM DD, YYYY HH:mm:ss').format('ddd MMMM Do')
       tideObject.printtime = printTime
       return (
-        printTime === dayToGraph && tideObject.type !== 'Sunset' && tideObject.type !== 'Sunrise'
+        dateOfEntry === dayToGraph && tideObject.type !== 'Sunset' && tideObject.type !== 'Sunrise'
       )
     }),
+
+  mapNewStateToOldState: (oldState: Object, newState: Object) => {
+    Object.keys(oldState).forEach(key => Object.assign(oldState[key], newState[key]))
+    return oldState
+  },
 }
