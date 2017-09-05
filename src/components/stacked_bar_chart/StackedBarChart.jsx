@@ -32,7 +32,10 @@ class StackedBarChart extends Component {
   makeBar: Function
 
   updateD3(props: Object) {
-    this.stackedBarChart.keys(props.keys).order(d3.stackOrderNone).offset(d3.stackOffsetNone)
+    this.stackedBarChart
+      .keys(props.keys)
+      .order(d3.stackOrderNone)
+      .offset(d3.stackOffsetNone)
 
     // Create an X axis scale based on the hours of the day we want bars for
     this.xScale
@@ -69,7 +72,6 @@ class StackedBarChart extends Component {
 
   render() {
     const translate = `translate(0, ${this.props.topMargin})`
-
     // Map through the data and return the necessary values to graph a bar
     const data = this.props.data.map((d) => {
       let yZero = 0
@@ -89,9 +91,11 @@ class StackedBarChart extends Component {
     })
 
     return (
-      <g className="histogram" transform={translate}>
-        {this.createBarSeries(data)}
-      </g>
+      <svg viewBox={`-100 150 ${this.props.width} ${String(this.props.height)}`}>
+        <g className="histogram" transform={translate}>
+          {this.createBarSeries(data)}
+        </g>
+      </svg>
     )
   }
 }

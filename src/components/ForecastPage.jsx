@@ -2,16 +2,11 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import DayContainer from './DayContainer'
-import helpers from '../helpers/helperFunctions'
 import LoadingAnimation from './LoadingAnimation'
-import ArrowButton from './ArrowButton'
 import GetStarted from './GetStarted'
 import OpenSelectorButton from '../containers/OpenSelectorButton'
-import AnimatedDataWrapper from '../containers/AnimatedDataWrapper'
 import WelcomeContainer from '../containers/WelcomeMessageContainer'
-
-const AnimatedDayContainer = AnimatedDataWrapper('forecast')(DayContainer)
+import ForecastPresentation from './ForecastPresentation'
 
 type Props = {
   incrementDay: Function,
@@ -56,63 +51,32 @@ class ForecastPage extends Component {
   renderForecast: Function
 
   renderForecast() {
-    const rawSurfData = this.props.appData.forecast.Surf
-    const dayForecastDateStrings = rawSurfData.dateStamp[this.props.appState.activeDay]
-    const forecastDay = this.props.appState.activeDay
-    const formattedSurfData = helpers.formatSurflineData(
-      dayForecastDateStrings,
-      rawSurfData,
-      forecastDay,
-      this.props.appState.isSpot
-    )
-
     const props = {
-      date: dayForecastDateStrings,
-      forecast: formattedSurfData,
-      maxSurf: helpers.roundUpMaxSurfHeight(rawSurfData.surf_max_maximum) + 3,
+      surf: this.props.appData.forecast.Surf,
+      tide: this.props.appData.forecast.Tide,
+      isSpot: this.props.appState.isSpot,
       dataKeys: this.getDataKeys(),
-      tide: this.props.appData.forecast.Tide.dataPoints,
+      activeDay: this.props.appState.activeDay,
+      incrementDay: this.props.incrementDay,
+      decrementDay: this.props.decrementDay,
     }
 
-    return (
-      <div className="forecast-box container-fluid">
-        <div className="row is-flex">
-          <div className="col-s-12 col-md-1 arrowdiv textcenter">
-            {this.props.appState.activeDay > 0
-              ? <ArrowButton
-                orientation={'left'}
-                onClick={() => this.props.decrementDay(this.props.appState.activeDay)}
-              />
-              : <div className="previous_btn" title="Previous" />}
-          </div>
-          <div className="col-s-12 col-md-10">
-            <AnimatedDayContainer {...props} />
-          </div>
-          <div className="col-s-12 col-md-1 arrowdiv textcenter">
-            {this.props.appState.activeDay < rawSurfData.dateStamp.length - 1
-              ? <ArrowButton
-                orientation={'right'}
-                onClick={() => this.props.incrementDay(this.props.appState.activeDay)}
-              />
-              : <div className="next_btn" title="Next" />}
-          </div>
-        </div>
-      </div>
-    )
+    return <ForecastPresentation {...props} />
   }
 
   render() {
     return (
       <div>
         <WelcomeContainer />
-        <GetStarted />
+        {!this.props.appData.forecastFetched && <GetStarted />}
         <OpenSelectorButton />
         {/* If the forecast is fetched and is not loading, render it */
           this.props.appData.forecastFetched &&
           !this.props.appData.forecastIsLoading &&
           this.renderForecast()}
         {/* If the forecast is loading, render loading animation */
-          this.props.appData.forecastIsLoading && <LoadingAnimation />}
+          this.props.appData.forecastFetched &&
+        this.props.appData.forecastIsLoading && <LoadingAnimation />}
       </div>
     )
   }

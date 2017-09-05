@@ -3,7 +3,6 @@
 
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import * as d3 from 'd3'
 
 type Props = {
   scale: Function,
@@ -12,6 +11,7 @@ type Props = {
   widthScale: Function,
   useWidthScaleForTicks?: boolean,
   tickValues: Array<Date | string | number>,
+  labelFn: Function,
   orientation?: string,
   tickOffset?: number,
 }
@@ -36,14 +36,13 @@ class HorizontalAxis extends PureComponent {
       widthScale,
       useWidthScaleForTicks,
       orientation,
+      labelFn,
     } = this.props
     let { tickValues, } = this.props
     if (tickValues.length === 0) {
       tickValues = scale.ticks(5)
     }
 
-    const tickFormat = d3.timeFormat('%m/%d')
-    const labelFn = value => tickFormat(value)
     return tickValues.map((tickValue, key) => {
       let xPos = 0
 
@@ -65,7 +64,7 @@ class HorizontalAxis extends PureComponent {
       let y2 = margins[1]
       let y1 = y2 - tickLength
       if (orientation === HorizontalAxis.orientation.BOTTOM) {
-        tickLength = margins[3] / 6
+        tickLength = margins[3] / 9
         y2 = tickLength
         y1 = 0
       }
@@ -74,13 +73,13 @@ class HorizontalAxis extends PureComponent {
         <g {...{ transform, key, }}>
           <line
             {...{ y1, y2, }}
-            style={{ strokeWidth: '1px', stroke: 'black', }}
+            style={{ strokeWidth: '.5px', stroke: 'black', }}
             className="chart__axis-tick chart__axis-tick--horizontal"
             x1={0}
             x2={0}
           />
           <text
-            dy={'1em'}
+            dy={'.5em'}
             className="chart__axis-text chart__axis-text--horizontal"
             style={{ fontSize: '4px', }}
             textAnchor={'middle'}
@@ -97,7 +96,7 @@ class HorizontalAxis extends PureComponent {
   render() {
     const { view, orientation, } = this.props
     const [width, height] = view
-    let yPos = height + 1
+    let yPos = height
     if (orientation === HorizontalAxis.orientation.TOP) {
       yPos = 0
     }
@@ -134,6 +133,7 @@ HorizontalAxis.propTypes = {
   view: PropTypes.arrayOf(PropTypes.number).isRequired,
   tickOffset: PropTypes.number,
   widthScale: PropTypes.func.isRequired,
+  labelFn: PropTypes.func.isRequired,
   useWidthScaleForTicks: PropTypes.bool,
   orientation: PropTypes.string,
 }

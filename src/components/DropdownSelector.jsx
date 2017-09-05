@@ -110,7 +110,7 @@ DropdownItem.propTypes = {
 }
 
 DropdownSelector.propTypes = {
-  options: PropTypes.oneOf(PropTypes.any, PropTypes.arrayOf(Object)),
+  options: PropTypes.arrayOf(Object),
   title: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   isDisabled: PropTypes.bool,

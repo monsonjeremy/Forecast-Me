@@ -60,7 +60,7 @@ class VerticalAxis extends PureComponent {
             y2={0}
           />
           <text
-            dy={3}
+            dy={2}
             style={{ fontSize: '4px', }}
             className="chart__axis-text chart__axis-text--vertical"
             textAnchor={anchorPosition}
@@ -78,7 +78,7 @@ class VerticalAxis extends PureComponent {
     const { view, margins, orientation, } = this.props
     let width = margins[3]
     let xPos = -width
-    let x1 = width - 1
+    let x1 = width
     if (orientation === VerticalAxis.orientation.RIGHT) {
       width = margins[1] // refactor, might be a bug here, haven't checked
       xPos = view[0]
@@ -103,9 +103,16 @@ class VerticalAxis extends PureComponent {
 
 const AnimatedVerticalAxis = AnimatedScaleWrapper(['scale'])(VerticalAxis)
 
-const buildVerticalAxis = (view: Array<number>, margins: Array<number>, scale: Function) => {
+const buildVerticalAxis = (
+  view: Array<number>,
+  margins: Array<number>,
+  scale: Function,
+  tickValues: any = null
+) => {
   const orientation = VerticalAxis.orientation.LEFT
-  const tickValues = scale.ticks()
+  if (tickValues === null) {
+    tickValues = scale.ticks()
+  }
   const labelFn = value => value
   return <AnimatedVerticalAxis {...{ scale, margins, view, tickValues, orientation, labelFn, }} />
 }

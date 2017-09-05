@@ -195,6 +195,10 @@ p {
     }
 }
 
+.full-width {
+    width: 100%;
+}
+
 
 /* --------- FORECAST HEADER STYLING ---------- */
 
@@ -261,10 +265,6 @@ p {
     .recharts-cartesian-axis-line {
         stroke-width: 5px;
     }
-}
-
-.recharts-responsive-container {
-    margin: 0 auto;
 }
 
 //******* WAVE LOADER *********/

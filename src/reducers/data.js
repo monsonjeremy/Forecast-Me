@@ -1,6 +1,6 @@
 // @flow
 
-import { FETCH_FORECAST, RESET_APP_DATA } from '../actions/data'
+import { FETCH_FORECAST, RESET_APP_DATA, SET_FORECAST } from '../actions/data'
 
 const initialState = {
   forecastFetched: false,
@@ -21,6 +21,10 @@ const dataReducer = (
         ...state,
         forecastFetched: true,
         forecastIsLoading: true,
+      }
+    case SET_FORECAST:
+      return {
+        ...state,
         ...action.payload,
       }
     default:

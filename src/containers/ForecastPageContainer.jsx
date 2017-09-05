@@ -7,7 +7,7 @@ import api from '../helpers/api'
 import Navbar from '../components/Navbar'
 import SpotSelectDrawer from '../components/SpotSelectDrawer'
 
-import { fetchForecast, resetAppData } from '../actions/data'
+import { fetchForecast, setForecast, resetAppData } from '../actions/data'
 import {
   resetAppState,
   setRegion,
@@ -95,9 +95,10 @@ const mapDispatchToProps = dispatch => ({
     dispatch(resetAppData())
     // Dispatch an action to update the selected region
     dispatch(setRegion(region))
+    dispatch(fetchForecast())
     // Dispatch a Thunk to fetch the response of the API call and update the QA analysis
     return api.fetchSpot(region.id).then((response) => {
-      dispatch(fetchForecast(response.data, false))
+      dispatch(setForecast(response.data, false))
     })
   },
   fetchSpot: (spot) => {
@@ -105,9 +106,10 @@ const mapDispatchToProps = dispatch => ({
     dispatch(resetAppData())
     // Dispatch an action to update the selected spot
     dispatch(setSpot(spot))
+    dispatch(fetchForecast())
     // Dispatch a Thunk to fetch the response of the API call and update the QA analysis
     return api.fetchSpot(spot.id).then((response) => {
-      dispatch(fetchForecast(response.data, false))
+      dispatch(setForecast(response.data, false))
     })
   },
 })

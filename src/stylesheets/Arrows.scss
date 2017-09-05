@@ -1,0 +1,9 @@
+/******** ARROWS **********/
+
+.arrow-btn {
+  background-color: transparent;
+  border: none;
+  &[disabled] {
+    opacity: .3;
+  }
+}

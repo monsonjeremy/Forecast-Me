@@ -3,9 +3,10 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import * as d3 from 'd3'
+import moment from 'moment'
+
 import HorizontalAxis from './HorizontalAxis'
 import buildVerticalAxis from './VerticalAxis'
-import AnimatedCurtainWrapper from '../containers/AnimatedCurtainWrapper'
 
 /*
 Since we have multiple lines that we want to generate, this function will handle rendering them
@@ -19,14 +20,14 @@ const buildArea = (data, view, xScale, yScale) => {
     .x(d => xScale(d.time))
     .y0(yScale(0))
     .y1(d => yScale(d.height))
-    .curve(d3.curveCatmullRom)
+    .curve(d3.curveCatmullRom.alpha(0))
 
   // Create a line to go along the edge of the area we draw on the graph
   const line = d3
     .line()
     .x(d => xScale(d.time))
     .y(d => yScale(d.height))
-    .curve(d3.curveCatmullRom)
+    .curve(d3.curveCatmullRom.alpha(0))
 
   const area = (
     <path
@@ -65,8 +66,7 @@ class AreaChart extends PureComponent {
   static defaultProps: Object
 
   render() {
-    const { size, margins, data, lineChartCurtain, view, } = this.props
-
+    const { size, margins, data, view, } = this.props
     // Create view box for SVG and then consider margins for graph size
     const viewBox = `0 0 ${size[0]} ${size[1]}`
 
@@ -81,14 +81,24 @@ class AreaChart extends PureComponent {
     */
     // Get the max number of tests ran to create the y scale for the graph
     const yMax = d3.max(data, d => d.height)
+    const yMin = d3.min(data, d => d.height) - 1
+
     const yScale = d3
       .scaleLinear()
-      .domain([-7, yMax])
+      .domain([yMin, yMax])
       .range([view[1], 0])
     const xScale = d3
       .scaleTime()
       .domain(d3.extent(data, d => d.time))
       .range([0, view[0]])
+
+    const numTicks = Math.round(yMax) - Math.floor(yMin)
+    const vertTickValues = yScale.ticks(numTicks)
+    const horizTickValues = data.map(dataPoint => dataPoint.time)
+
+    const tickFormat = time => moment(time).format('ha')
+    // Multiple the unix timestamp by 1000 to get the proper time
+    const labelFn = value => tickFormat(value * 1000)
 
     /*
     Create an SVG with the desired view box size (makes it responsive to browser resizing)
@@ -99,6 +109,7 @@ class AreaChart extends PureComponent {
     return (
       <svg className="nulti-line-chart-svg dashboard-graph" {...{ viewBox, }}>
         <g className="graph-and-axes" {...{ transform, }}>
+          <g className="lines">{buildArea(data, view, xScale, yScale)}</g>
           <g className="horizontal-axis">
             <HorizontalAxis
               {...{
@@ -106,16 +117,19 @@ class AreaChart extends PureComponent {
                 margins,
                 widthScale: xScale,
                 scale: xScale,
+                tickValues: horizTickValues,
+                labelFn,
               }}
             />
           </g>
-          <g className="vertical-axis">{buildVerticalAxis(view, margins, yScale)}</g>
-          <g className="lines">{buildArea(data, view, xScale, yScale)}</g>
+          <g className="vertical-axis">
+            {buildVerticalAxis(view, margins, yScale, vertTickValues)}
+          </g>
         </g>
         <g className="curtain-rect" {...{ transform, }}>
           {/* Adding 0.5 px to width and height of the rect to ensure it covers everything */}
           <rect
-            x={lineChartCurtain}
+            x={data[0].lineChartCurtain}
             y={0}
             width={view[0] + 0.5}
             height={view[1] + 0.5}
@@ -137,18 +151,12 @@ AreaChart.propTypes = {
       time: PropTypes.number.isRequired,
       type: PropTypes.string.isRequired,
       utctime: PropTypes.string.isRequired,
+      lineChartCurtain: PropTypes.number.isRequired,
     })
   ),
   size: PropTypes.arrayOf(PropTypes.number).isRequired,
   view: PropTypes.arrayOf(PropTypes.number).isRequired,
   margins: PropTypes.arrayOf(PropTypes.number).isRequired,
-  lineChartCurtain: PropTypes.number,
 }
 
-AreaChart.defaultProps = {
-  lineChartCurtain: 0,
-}
-
-const AnimatedAreaChart = AnimatedCurtainWrapper('lineChartCurtain', 'height')(AreaChart)
-
-export default AnimatedAreaChart
+export default AreaChart
