@@ -1,156 +1,319 @@
-// --------- IMPORTS ---------- */
-@import url('https://fonts.googleapis.com/css?family=Montserrat:200,300,400,600');
-// --------- GENERAL ----------
-.js-app {
-  font-family: Montserrat;
-}
+/* --------- VARIABLES ---------- */
 
-body {
-  padding-top: 50px;
-}
+$text-color: rgb(51, 51, 51);
 
-hr {
-  &.style-two {
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+/* --------- RESETS ----------- */
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+    margin: 0;
+    padding: 0;
     border: 0;
-    height: 1.1px;
-  }
+    font-size: 100%;
+    vertical-align: baseline;
+    outline: 0 none;
 }
 
-// --------- FORECAST HEADER STYLING ---------- */
+
+/* --------- DEFAULTS ---------- */
+
+h1,
+h2,
+h3,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h5,
+.h6,
+.page-title,
+.section-title,
+.article-title,
+.sub-header,
+.section-header {
+    font-family: Gotham Light, "M Hei PRC W45", "M Hei HK W42", "M Hei HK W40", "HelveticaNeue-Regular", "Helvetica Neue Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+}
+
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6 {
+    font-size: 24px;
+    line-height: 24px;
+    color: #000;
+}
+
+h3,
+.h3,
+.section-header {
+    font-size: 18px;
+}
+
+p {
+    color: #666;
+    font-family: "HeiS ASC Simplified Chinese", "HeiS ASC Simplified Chinese_n5", "HeiT ASC Traditional Chinese", "HelveticaNeue-Regular", "Helvetica Neue Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1;
+    font-size: 15px;
+    font-weight: normal;
+}
+
+.section-gray-background {
+    background-color: #efefef;
+}
+
+.section-title {
+    font-family: Gotham Light, "M Hei PRC W45", "M Hei HK W42", "M Hei HK W40", "HelveticaNeue-Regular", "Helvetica Neue Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    font-size: 40px;
+}
+
+.section-subtitle {
+    color: #666;
+    font-family: "HeiS ASC Simplified Chinese", "HeiS ASC Simplified Chinese_n5", "HeiT ASC Traditional Chinese", "HelveticaNeue-Regular", "Helvetica Neue Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1;
+    font-size: 16px;
+    font-weight: 300;
+}
+
+.subsection-icon {
+    width: 72px;
+    height: 72px;
+    background-size: 72px 72px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    margin-bottom: 14px;
+}
+
+.other-icon {
+    width: 50px;
+    height: 50px;
+    background-size: 50px 50px;
+    background-repeat: no-repeat;
+    display: inline-block;
+}
+
+.copy-text {
+    line-height: 20px;
+    max-width: 625px;
+}
+
+.dropdown-item {
+    color: #666;
+}
+
+[disabled] {
+    >* {
+        opacity: .5;
+    }
+}
+
+.full-width {
+    width: 100%;
+}
+
+
+/* --------- FORECAST HEADER STYLING ---------- */
+
 .forecast-header {
-  height: 500px;
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.forecast-header-content {
-  display: table-cell;
-  vertical-align: middle;
-  float: none;
-}
-
-.dropdown-selector {
-  padding-bottom: 5px;
+    height: 500px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #forecast-selectors ul {
-  font-size: 25px;
+    font-size: 25px;
 }
 
 .dropdown-menu {
-  left: 50%;
-  right: auto;
-  text-align: center;
-  transform: translate(-50%, 0);
+    left: 50%;
+    right: auto;
+    text-align: center;
+    transform: translate(-50%, 0);
 }
 
-// --------- FORECAST CONTAINER STYLING ---------- */
+
+/* --------- FORECAST CONTAINER STYLING ---------- */
+
 .forecast-container {
-  display: flex;
-  justify-content: center;
-  vertical-align: center;
+    display: flex;
+    justify-content: center;
+    vertical-align: center;
 }
 
 .day-date-title {
-  padding: 15px 0px 0px 0px;
+    padding: 15px 0px 0px 0px;
 }
 
 .graphs {
-  background-color: lightgrey;
+    background-color: lightgrey;
 }
 
 .charts-wrapper {
-  padding-top: 10px;
-  .recharts-responsive-container {
-    background-color: lightgrey;
-    border-bottom-right-radius: 15px;
-    border-bottom-left-radius: 15px;
-  }
-  .surf-forecast-title {
-    h3 {
-      margin: 0;
+    padding-top: 10px;
+    .recharts-responsive-container {
+        background-color: lightgrey;
+        border-bottom-right-radius: 15px;
+        border-bottom-left-radius: 15px;
     }
-    background-color: grey;
-    border-top-right-radius:15px;
-    border-top-left-radius:15px;
-  }
-  .tide-forecast-title {
-    h3 {
-      margin: 0;
+    .surf-forecast-title {
+        h3 {
+            margin: 0;
+        }
+        background-color: grey;
+        border-top-right-radius:15px;
+        border-top-left-radius:15px;
     }
-    background-color: grey;
-    border-top-right-radius:15px;
-    border-top-left-radius:15px;
-  }
-  .recharts-cartesian-axis-line {
-    stroke-width: 5px;
-  }
-}
-
-.recharts-responsive-container {
-  margin: 0 auto;
-}
-
-// --------- BUTTON HOVER EFFECT ---------- */
-.hover-effect {
-  font-size: 2vw;
-  letter-spacing: 0.1em;
-  color: #e8e8e8;
-  border: none;
-  border-radius: 10px;
-  background: linear-gradient(45deg, #d350db, teal, #d350db);
-  background-size: 400% 400%;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  &:hover {
-    animation: gradient 10s ease infinite;
-    font-size: 2.05vw;
-  }
-}
-
-@keyframes gradient {
-  50% {
-    background-position: 100% 0;
-  }
+    .tide-forecast-title {
+        h3 {
+            margin: 0;
+        }
+        background-color: grey;
+        border-top-right-radius:15px;
+        border-top-left-radius:15px;
+    }
+    .recharts-cartesian-axis-line {
+        stroke-width: 5px;
+    }
 }
 
 //******* WAVE LOADER *********/
 .wave-wrapper {
-  width: 500px;
-  height: 500px;
-  border-radius: 5px;
-  top: 40%;
-  background-image: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);
-  overflow: hidden;
+    width: 500px;
+    height: 500px;
+    border-radius: 5px;
+    top: 40%;
+    background-image: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);
+    overflow: hidden;
 }
 
 .loading-text {
-  margin-top: 40%;
-  z-index: 2;
-  color: black;
-  position: relative;
+    margin-top: 40%;
+    z-index: 2;
+    color: black;
+    position: relative;
 }
 
 .wave {
-  z-index: -2;
-  width: 1000px;
-  height: 1025px;
-  margin-left: -281px;
-  margin-top: -900px;
-  border-radius: 35%;
-  background: rgba(255, 255, 255, .75);
-  animation: wave 15s infinite linear;
+    z-index: -2;
+    width: 1000px;
+    height: 1025px;
+    margin-left: -281px;
+    margin-top: -900px;
+    border-radius: 35%;
+    background: rgba(255, 255, 255, .75);
+    animation: wave 15s infinite linear;
 }
 
 @keyframes wave {
-  from {
-    transform: rotate(0deg);
-  }
-  from {
-    transform: rotate(360deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
+    from {
+        transform: rotate(360deg);
+    }
+}
+
+
+/********* CLOSE BUTTON **********/
+
+.close-btn {
+    color: #666;
+    font: 20px/100% arial, sans-serif;
+    text-decoration: none;
+    text-decoration-line: none;
+    text-decoration-style: initial;
+    text-decoration-color: initial;
+    text-shadow: 0 1px 0 #fff;
+    cursor: pointer;
 }

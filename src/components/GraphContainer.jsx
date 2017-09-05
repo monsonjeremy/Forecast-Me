@@ -3,77 +3,45 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import StackedBarChart from './stacked_bar_chart/StackedBarChart'
+import AreaChart from './AreaChart'
+import ParentResize from '../containers/ParentResize'
+
+import '../stylesheets/GraphContainer.css'
 
 type Props = {
-  data: Array<Object>,
-  width: number,
-  height: number,
-  axisMargin: number,
-  topMargin: number,
-  bottomMargin: number,
-  yMax: number,
-  keys: Array<String>,
+  dataSets: Object,
 }
 
-const GraphContainer = ({
-  data,
-  width,
-  height,
-  axisMargin,
-  topMargin,
-  bottomMargin,
-  yMax,
-  keys,
-}: Props) => {
-  // Full width of the SVG Element containing the graph
-  const props = {
-    data,
-    width,
-    height,
-    axisMargin,
-    topMargin,
-    bottomMargin,
-    yMax,
-    keys,
-  }
-  const graphFullWidth = 500
+const GraphContainer = ({ dataSets, }: Props) => {
+  const { tide, surf, } = dataSets
 
+  // Make the graphs responsive
+  // const ResponsiveStackedBarChart = ParentResize(StackedBarChart)
+  const ResponsiveTideChart = ParentResize(AreaChart)
   return (
-    <div className="charts-wrapper row">
-      <div className="surf-forecast-day col-xs-12 col-md-4 text-center">
+    <div className="graphs-container charts-wrapper">
+      <div className="surf-forecast full-width">
         {/* TODO: Remove these style tags and move to Sass */}
-        <div className="surf-forecast-title" style={{ width: '100%', margin: 'auto', }}>
+        <div className="surf-forecast-title text-center" style={{ width: '100%', margin: 'auto', }}>
           <h3>SURF</h3>
         </div>
-        <div>
-          <svg
-            width={'100%'}
-            height={'100%'}
-            viewBox={`-100 150 ${graphFullWidth} ${String(height)}`}
-          >
-            <StackedBarChart {...props} />
-          </svg>
+        <div style={{ width: '35%', }}>
+          <StackedBarChart {...surf} />
         </div>
       </div>
-      <div className="tide-forecast-day col-xs-12 col-md-8 text-center">
+      <div className="tide-forecast full-width">
         {/* TODO: Remove these style tags and move to Sass */}
-        <div className="tide-forecast-title" style={{ width: '100%', margin: 'auto', }}>
+        <div className="tide-forecast-title text-center" style={{ width: '100%', margin: 'auto', }}>
           <h3>TIDE</h3>
         </div>
+        <ResponsiveTideChart {...tide} />
       </div>
     </div>
   )
 }
 
 GraphContainer.propTypes = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  axisMargin: PropTypes.number.isRequired,
-  topMargin: PropTypes.number.isRequired,
-  bottomMargin: PropTypes.number.isRequired,
-  yMax: PropTypes.number.isRequired,
-  data: PropTypes.instanceOf(Object).isRequired,
-  keys: PropTypes.arrayOf(String).isRequired,
+  dataSets: PropTypes.instanceOf(Object).isRequired,
 }
 
 export default GraphContainer

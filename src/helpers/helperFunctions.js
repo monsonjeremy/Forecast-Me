@@ -54,12 +54,17 @@ export default {
 
   roundUpMaxSurfHeight: (maxSurfHeight: number) => Math.ceil(maxSurfHeight / 5) * 5,
 
-  filterTideData: (dayToGraph: string, tideForecast: Array<Object>) =>
+  prepTideData: (dayToGraph: string, tideForecast: Array<Object>, width: number) =>
     tideForecast.filter((tideObject) => {
       const printTime = moment(tideObject.Rawtime, 'MMMM DD, YYYY HH:mm:ss').format('h A')
+      const dateOfEntry = moment(tideObject.Rawtime, 'MMMM DD, YYYY HH:mm:ss').format('ddd MMMM Do')
       tideObject.printtime = printTime
-      return (
-        printTime === dayToGraph && tideObject.type !== 'Sunset' && tideObject.type !== 'Sunrise'
-      )
+      tideObject.lineChartCurtain = width
+      return dateOfEntry === dayToGraph && tideObject.type === 'NORMAL'
     }),
+
+  mapNewStateToOldState: (oldState: Object, newState: Object) => {
+    Object.keys(oldState).forEach(key => Object.assign(oldState[key], newState[key]))
+    return oldState
+  },
 }

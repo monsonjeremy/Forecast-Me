@@ -4,44 +4,66 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import GraphContainer from './GraphContainer'
-import '../stylesheets/daycontainer.css'
+import DataInterpolationWrapper from '../containers/DataInterpolationWrapper'
+import helpers from '../helpers/helperFunctions'
+import '../stylesheets/DayContainer.css'
 
 type Props = {
-  date: Array<String>,
+  date: Array<string>,
   forecast: Array<Object>,
   maxSurf: number,
-  dataKeys: Array<String>,
+  dataKeys: Array<string>,
+  tide: Array<Object>,
 }
 
-const DayContainer = ({ date, forecast, maxSurf, dataKeys, }: Props) => {
+// Add the wrapper for the animated graph container
+const AnimatedDataGraphContainer = DataInterpolationWrapper()(GraphContainer)
+
+const DayContainer = ({ date, forecast, maxSurf, dataKeys, tide, }: Props) => {
   // Format the date in the Title section of the container ('Wed June 21st')
   const dateTitle = moment(date[0], 'MMMM DD, YYYY HH:mm:ss').format('ddd MMMM Do')
+  const formattedTideData = helpers.prepTideData(dateTitle, tide, 500)
 
-  // This could maybe be moved to a different component
-  // Keeping it here until other graphs are finished in case graphs within the same day container
-  // need to know each others information
-  const params = {
-    data: forecast,
-    width: 300,
-    height: 500,
-    axisMargin: 83,
-    topMargin: 10,
-    bottomMargin: 5,
-    yMax: maxSurf,
-    keys: dataKeys,
+  // Tide graph props
+  const size = [350, 150]
+  const margins = [15, 15, 15, 15]
+  const vwidth = size[0] - margins[1] - margins[3]
+  const vheight = size[1] - margins[0] - margins[2]
+  const view = [vwidth, vheight]
+
+  const props = {
+    dataSets: {
+      surf: {
+        data: forecast,
+        keysToInterp: dataKeys,
+        keys: dataKeys,
+        width: 500,
+        height: 500,
+        axisMargin: 83,
+        topMargin: 10,
+        bottomMargin: 5,
+        yMax: maxSurf,
+      },
+      tide: {
+        data: formattedTideData,
+        mountInterpKeys: ['lineChartCurtain'],
+        keysToInterp: ['height'],
+        view,
+        size,
+        margins,
+      },
+    },
   }
 
   return (
-    <div className="days row">
-      <div className="day-date-title col-xs-12 col-md-12 text-center">
-        <h2>
-          {dateTitle}
-        </h2>
+    <div className="day-container">
+      <div className="day-date-title full-width text-center">
+        <h2>{dateTitle}</h2>
         <hr className="style-two" />
       </div>
       <br />
-      <div className="cols-xs-12 col-md-12 text-center">
-        <GraphContainer {...params} />
+      <div className="text-center full-width">
+        <AnimatedDataGraphContainer {...props} />
       </div>
     </div>
   )
@@ -52,6 +74,16 @@ DayContainer.propTypes = {
   forecast: PropTypes.arrayOf(Object).isRequired,
   maxSurf: PropTypes.number.isRequired,
   dataKeys: PropTypes.instanceOf(Array).isRequired,
+  tide: PropTypes.arrayOf(
+    PropTypes.shape({
+      Localtime: PropTypes.string.isRequired,
+      Rawtime: PropTypes.string.isRequired,
+      height: PropTypes.number.isRequired,
+      time: PropTypes.number.isRequired,
+      type: PropTypes.string.isRequired,
+      utctime: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 }
 
 export default DayContainer
