@@ -53,11 +53,8 @@ class HorizontalAxis extends PureComponent {
       true and pass in a secondary scale.
       */
       useWidthScaleForTicks ? (xPos = widthScale(tickValue)) : (xPos = scale(tickValue))
-      if (key !== 0) {
+      if (useWidthScaleForTicks) {
         xPos += tickOffset
-        if (key === tickValues.length - 1) {
-          xPos += tickOffset
-        }
       }
 
       let tickLength = margins[1] / 6

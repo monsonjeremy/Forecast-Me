@@ -15,6 +15,7 @@ type Props = {
   activeDay: number,
   incrementDay: Function,
   decrementDay: Function,
+  spotName: string,
 }
 /*
 Simple stateless functional componentthat renders the navbar in the top level of the app so
@@ -29,11 +30,12 @@ const ForecastPresentation = ({
   activeDay,
   incrementDay,
   decrementDay,
+  spotName,
 }: Props) => {
   const date = surf.dateStamp[activeDay]
   const numDays = surf.dateStamp.length
   const forecast = helpers.formatSurflineData(date, surf, activeDay, isSpot)
-  const maxSurf = helpers.roundUpMaxSurfHeight(surf.surf_max_maximum) + 3
+  const maxSurf = helpers.roundUpMaxSurfHeight(surf.surf_max_maximum)
 
   const forecastProps = {
     date,
@@ -42,6 +44,7 @@ const ForecastPresentation = ({
     tide: tide.dataPoints,
     numDays,
     dataKeys,
+    spotName,
   }
   return (
     <div className="forecast-container container">

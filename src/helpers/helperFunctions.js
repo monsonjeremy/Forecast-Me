@@ -30,6 +30,9 @@ export default {
           aggSurfMin: forecastObject.agg_surf_min[forecastDay][index],
           aggHeight: forecastObject.agg_height1[forecastDay][index],
           aggPeriod: forecastObject.agg_period1[forecastDay][index],
+          label: `${Math.round(forecastObject.agg_surf_min[forecastDay][index])}-${Math.round(
+            forecastObject.agg_surf_max[forecastDay][index]
+          )}ft`,
         })
       } else {
         formattedData.push({
@@ -46,6 +49,9 @@ export default {
             forecastObject.surf_max[forecastDay][index] -
             forecastObject.surf_min[forecastDay][index],
           surfMin: forecastObject.surf_min[forecastDay][index],
+          label: `${Math.round(forecastObject.surf_min[forecastDay][index])}-${Math.round(
+            forecastObject.surf_max[forecastDay][index]
+          )}ft`,
         })
       }
     })

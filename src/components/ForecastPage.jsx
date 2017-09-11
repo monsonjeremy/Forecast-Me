@@ -20,6 +20,8 @@ type Props = {
     forecastIsLoading: boolean,
   },
   appState: {
+    selectedRegion: Object,
+    selectedSpot: Object,
     isSpot: boolean,
     activeDay: number,
     forecastFetched: boolean,
@@ -31,6 +33,7 @@ class ForecastPage extends Component {
     super(props)
 
     this.getDataKeys = this.getDataKeys.bind(this)
+    this.getCurrentSpotName = this.getCurrentSpotName.bind(this)
     this.renderForecast = this.renderForecast.bind(this)
   }
 
@@ -48,6 +51,15 @@ class ForecastPage extends Component {
     return [bottomBarDataKey, topBarDataKey]
   }
 
+  getCurrentSpotName: Function
+
+  getCurrentSpotName() {
+    if (this.props.appState.isSpot) {
+      return this.props.appState.selectedSpot.name
+    }
+    return this.props.appState.selectedRegion.name
+  }
+
   renderForecast: Function
 
   renderForecast() {
@@ -59,6 +71,7 @@ class ForecastPage extends Component {
       activeDay: this.props.appState.activeDay,
       incrementDay: this.props.incrementDay,
       decrementDay: this.props.decrementDay,
+      spotName: this.getCurrentSpotName(),
     }
 
     return <ForecastPresentation {...props} />
@@ -96,6 +109,14 @@ ForecastPage.propTypes = {
     forecastIsLoading: PropTypes.bool,
   }).isRequired,
   appState: PropTypes.shape({
+    selectedRegion: PropTypes.shape({
+      name: PropTypes.string,
+      id: PropTypes.number,
+    }),
+    selectedSpot: PropTypes.shape({
+      name: PropTypes.string,
+      id: PropTypes.number,
+    }),
     isSpot: PropTypes.bool,
     activeDay: PropTypes.number,
     forecastFetched: PropTypes.bool,
