@@ -1,0 +1,18 @@
+FROM node:6.10.0-alpine
+LABEL name="React Forecast-Me Dev Container"
+LABEL version="1.0"
+
+ENV NPM_CONFIG_LOGLEVEL warn
+
+RUN mkdir -p /app
+WORKDIR /app
+
+COPY ./package.json /app
+COPY ./.eslintrc.json /app
+RUN npm install
+
+RUN mkdir /app/client
+COPY ./client/ /app/client
+
+EXPOSE 3005
+CMD ["npm", "start"]
