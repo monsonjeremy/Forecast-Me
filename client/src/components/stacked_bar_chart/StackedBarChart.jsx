@@ -5,7 +5,14 @@ import PropTypes from 'prop-types'
 import * as d3 from 'd3'
 import StackedBarChartBars from './StackedBarChartBars'
 
-class StackedBarChart extends Component {
+type Props = {
+  topMargin: number,
+  data: Object,
+  keys: Array<string>,
+  width: number,
+  height: number,
+}
+class StackedBarChart extends Component<Props> {
   constructor(props: Object) {
     super(props)
 

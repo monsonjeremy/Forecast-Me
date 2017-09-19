@@ -16,7 +16,7 @@ type Props = {
   tickOffset?: number,
 }
 
-class HorizontalAxis extends PureComponent {
+class HorizontalAxis extends PureComponent<Props> {
   static defaultProps: Object
   static orientation = {
     BOTTOM: 'horizontal-axis-bottom',

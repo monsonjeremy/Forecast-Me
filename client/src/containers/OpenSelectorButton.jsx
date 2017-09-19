@@ -19,7 +19,7 @@ class OpenSelectorButton extends Component {
   renderOpenSelectorButton() {
     return (
       <div className="open-selector-btn">
-        <Button text={'Open Spot Selector'} onClick={() => this.props.toggleSelector()} />
+        <Button onClick={() => this.props.toggleSelector()}>Open Spot Selector</Button>
       </div>
     )
   }

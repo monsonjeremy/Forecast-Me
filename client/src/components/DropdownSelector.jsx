@@ -5,14 +5,18 @@ import PropTypes from 'prop-types'
 import { Collapse } from 'react-collapse'
 
 type Props = {
-  options: ?Object,
+  options?: Array<Object> | null,
   title: string,
   type: string,
   isDisabled: boolean,
   itemClick: Function,
 }
 
-class DropdownSelector extends PureComponent {
+type State = {
+  dropdownOpen: boolean,
+}
+
+class DropdownSelector extends PureComponent<Props, State> {
   static defaultProps: {
     isDisabled: boolean,
   }
@@ -25,10 +29,6 @@ class DropdownSelector extends PureComponent {
 
     this.renderDropdown = this.renderDropdown.bind(this)
     this.toggleDropdown = this.toggleDropdown.bind(this)
-  }
-
-  state: {
-    dropdownOpen: boolean,
   }
 
   toggleDropdown: Function

@@ -23,4 +23,4 @@ services:
       - ../server/:/src/server/
     ports:
       - "3001:3001"
-      - "5858:5858"
+      - "5050:5050"
