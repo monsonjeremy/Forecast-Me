@@ -13,7 +13,7 @@ type Props = {
   view: Array<number>,
 }
 
-class VerticalAxis extends PureComponent {
+class VerticalAxis extends PureComponent<Props> {
   static propTypes = {
     labelFn: React.PropTypes.func.isRequired,
     orientation: React.PropTypes.string.isRequired,

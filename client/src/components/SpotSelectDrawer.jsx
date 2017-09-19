@@ -7,7 +7,32 @@ import DropdownSelector from './DropdownSelector'
 
 import '../stylesheets/SpotSelectDrawer.css'
 
-class SpotSelectDrawer extends PureComponent {
+type Spot = {
+  id: string,
+  name: string,
+}
+
+type Region = {
+  id: string,
+  name: string,
+  spots: Array<Spot>,
+}
+
+type Props = {
+  options: Array<Spot> | Array<Region> | null,
+  appState: {
+    selectedRegion: Region,
+  },
+  burgerMenu: {
+    isOpen: boolean,
+  },
+  fetchRegion: Function,
+  fetchSpot: Function,
+  pageWrapId: string,
+  outerContainerId: string,
+}
+
+class SpotSelectDrawer extends PureComponent<Props> {
   render() {
     if (document.body) {
       this.props.burgerMenu.isOpen

@@ -28,7 +28,7 @@ type Props = {
   },
 }
 
-class ForecastPage extends Component {
+class ForecastPage extends Component<Props> {
   constructor(props: Props) {
     super(props)
 

@@ -8,6 +8,22 @@ import moment from 'moment'
 import HorizontalAxis from './HorizontalAxis'
 import buildVerticalAxis from './VerticalAxis'
 
+type Data = {
+  Localtime: string,
+  Rawtime: string,
+  height: number,
+  printtime: string,
+  time: number,
+  type: string,
+  utctime: string,
+  lineChartCurtain: number,
+}
+type Props = {
+  data: Array<Data>,
+  size: Array<number>,
+  view: Array<number>,
+  margins: Array<number>,
+}
 /*
 Since we have multiple lines that we want to generate, this function will handle rendering them
 For each data key that we want to render a line for it will take the data points for each data key
@@ -62,7 +78,7 @@ const buildArea = (data, view, xScale, yScale) => {
 /*
 
 */
-class AreaChart extends PureComponent {
+class AreaChart extends PureComponent<Props> {
   static defaultProps: Object
 
   render() {

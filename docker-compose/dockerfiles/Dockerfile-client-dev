@@ -2,13 +2,17 @@ FROM node:6.10.0-alpine
 LABEL name="React Forecast-Me Dev Container"
 LABEL version="1.0"
 
-ENV NPM_CONFIG_LOGLEVEL warn
-
+# Create app directory
 RUN mkdir -p /app
 WORKDIR /app
 
-COPY ./package.json /app
+# Copy Config Files
 COPY ./.eslintrc.json /app
+COPY ./.eslintignore /app
+COPY ./.flowconfig /app
+
+# Copy dependencies and install
+COPY ./package.json /app
 RUN npm install
 
 RUN mkdir /app/client

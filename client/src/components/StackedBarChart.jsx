@@ -7,6 +7,14 @@ import moment from 'moment'
 
 import HorizontalAxis from './HorizontalAxis'
 
+type Props = {
+  data: Object,
+  size: Array<number>,
+  view: Array<number>,
+  margins: Array<number>,
+  yMax: number,
+  keys: Array<string>,
+}
 /*
 Since we have multiple lines that we want to generate, this function will handle rendering them
 For each data key that we want to render a line for it will take the data points for each data key
@@ -59,7 +67,7 @@ const buildBars = (data, view, xScale, yScale, keys) => {
 /*
 
 */
-class StackedBarChart extends PureComponent {
+class StackedBarChart extends PureComponent<Props> {
   static defaultProps: Object
 
   render() {
