@@ -90,8 +90,8 @@ const createInterpolatorDataProp = (dataSet, nextDataSet) => {
   data set object, mountKeyIsInData should be set to false
 
   For the time being this HOC will be quite opinionated on the structure of the data,
-  since it's not an open source animation handler that other projects are using. I 
-  think it would be valuable to make it more extensible however, like being able to pass 
+  since it's not an open source animation handler that other projects are using. I
+  think it would be valuable to make it more extensible however, like being able to pass
   data keys as a string instead of an array of 1 string. It's not a priority however due
   to the fact that this project strucutres the data the same way.
 */
@@ -215,7 +215,7 @@ const DataInterpolationWrapper = (transitionDuration = 300) => (ComposedComponen
     }
   }
 
-  /* 
+  /*
   The structure of the object is kind of ambiguous and can change
   It makes more sense to make sure it's an object. If it's not
   then there is a pretty frickin big problem...

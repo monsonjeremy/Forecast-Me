@@ -1,3 +1,5 @@
-config/
-scripts/
-src/registerServiceWorker.js
+client/config/
+client/scripts/
+client/src/registerServiceWorker.js
+server/server.js
+node_modules/

@@ -9,6 +9,12 @@ import '../stylesheets/SpotSelectDrawer.css'
 
 class SpotSelectDrawer extends PureComponent {
   render() {
+    if (document.body) {
+      this.props.burgerMenu.isOpen
+        ? (document.body.style.overflow = 'hidden')
+        : (document.body.style.overflow = '')
+    }
+
     const selectedRegion = this.props.appState.selectedRegion
 
     const regionDropdownProps = {
@@ -31,7 +37,6 @@ class SpotSelectDrawer extends PureComponent {
       itemClick: this.props.fetchSpot,
       options: spotOptions,
     }
-
     return (
       <ReduxBurgerMenu
         pageWrapId={this.props.pageWrapId}

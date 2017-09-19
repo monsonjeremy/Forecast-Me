@@ -32,7 +32,9 @@ class OpenSelectorButton extends Component {
 const mapStateToProps = state => state
 
 const mapDispatchToProps = dispatch => ({
-  toggleSelector: () => dispatch(toggleSelector(true)),
+  toggleSelector: () => {
+    dispatch(toggleSelector(true))
+  },
 })
 
 OpenSelectorButton.propTypes = {

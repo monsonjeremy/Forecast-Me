@@ -1,0 +1,23 @@
+.navbar {
+  font-family: Gotham Medium, 'M Hei PRC W45', 'M Hei HK W42', 'M Hei HK W40', 'HelveticaNeue-Regular', 'Helvetica Neue Regular', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  border-bottom: 1px solid gray;
+  color: #fff;
+  background-color: #222;
+  font-size: 18px;
+  font-weight: normal;
+  margin-bottom: 0;
+  z-index: 1; }
+  .navbar .navbar-brand {
+    color: white;
+    font-size: 30px;
+    font-weight: 900; }
+
+.navbar-brand,
+.navbar-nav li a {
+  color: #fff;
+  line-height: 60px;
+  height: 60px;
+  padding-top: 0; }
+
+.nav.navbar-nav.navbar-right li a {
+  color: #fff; }

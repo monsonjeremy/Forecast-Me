@@ -58,14 +58,14 @@ class ForecastPageContainer extends Component {
 
   renderForecastPage() {
     return (
-      <div className="forecast-page">
+      <div id="outer-container" className="forecast-page-container">
         <SpotSelectDrawer
-          pageWrapId={'forecast-page'}
-          outerContainerId={'forecast-page'}
+          pageWrapId={'page-wrap'}
+          outerContainerId={'outer-container'}
           options={this.regions}
           {...this.props}
         />
-        <div className="forecast-page">
+        <div id="page-wrap" className={'forecast-page full-width'}>
           <Navbar />
           <ForecastPage {...this.props} />
         </div>

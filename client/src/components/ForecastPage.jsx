@@ -96,8 +96,6 @@ class ForecastPage extends Component {
 }
 
 ForecastPage.propTypes = {
-  // fetchSpot: PropTypes.func.isRequired,
-  // fetchRegion: PropTypes.func.isRequired,
   incrementDay: PropTypes.func.isRequired,
   decrementDay: PropTypes.func.isRequired,
   appData: PropTypes.shape({
@@ -111,11 +109,11 @@ ForecastPage.propTypes = {
   appState: PropTypes.shape({
     selectedRegion: PropTypes.shape({
       name: PropTypes.string,
-      id: PropTypes.number,
+      id: PropTypes.string,
     }),
     selectedSpot: PropTypes.shape({
       name: PropTypes.string,
-      id: PropTypes.number,
+      id: PropTypes.string,
     }),
     isSpot: PropTypes.bool,
     activeDay: PropTypes.number,

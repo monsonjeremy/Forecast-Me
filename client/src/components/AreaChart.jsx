@@ -153,7 +153,7 @@ AreaChart.propTypes = {
       utctime: PropTypes.string.isRequired,
       lineChartCurtain: PropTypes.number.isRequired,
     })
-  ),
+  ).isRequired,
   size: PropTypes.arrayOf(PropTypes.number).isRequired,
   view: PropTypes.arrayOf(PropTypes.number).isRequired,
   margins: PropTypes.arrayOf(PropTypes.number).isRequired,

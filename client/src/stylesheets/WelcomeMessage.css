@@ -1,0 +1,45 @@
+.welcome-message {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 100px; }
+
+.welcome-title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 40px; }
+
+.welcome-title {
+  -webkit-margin-before: 0.83em;
+  -webkit-margin-after: 0.83em;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px;
+  -webkit-font-smoothing: antialiased; }
+
+.welcome-content-container {
+  display: flex;
+  margin: 0 auto;
+  width: 100%; }
+
+.triple-col {
+  width: 33.33%;
+  float: left;
+  padding: 0 33px;
+  border-left: 1px solid #666; }
+
+.content-subsection {
+  margin: 22px 0; }
+
+.triple-col:first-child {
+  border: none; }
+
+.close-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 15px; }
