@@ -1,0 +1,20 @@
+FROM node:6.10.0-alpine
+LABEL name="Forecast Me API Container"
+LABEL version="1.0"
+
+ENV NPM_CONFIG_LOGLEVEL warn
+
+# Setup working directory for the server container
+RUN mkdir /src
+WORKDIR /src
+
+# Copy over server package.json and install dependencies
+COPY ./package.json ./
+RUN npm install
+
+# Copy server files over and install dependencies
+RUN mkdir /server
+COPY ./server/ ./server
+
+EXPOSE 3001
+CMD ["npm", "run", "start:server:dev"]

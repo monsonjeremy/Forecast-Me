@@ -1,0 +1,15 @@
+.get-started-container {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 30px;
+  padding-bottom: 15px; }
+
+.get-started-title {
+  padding-top: 10px;
+  padding-bottom: 30px; }
+
+.get-started-copy {
+  padding-bottom: 15px; }

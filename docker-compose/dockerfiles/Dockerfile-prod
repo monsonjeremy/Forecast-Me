@@ -1,0 +1,22 @@
+FROM node:argon
+LABEL name="QA Automation Web App"
+LABEL version="1.0"
+
+# Setup working directory for the server container
+RUN mkdir /app
+WORKDIR /app
+
+# Copy over server package.json and install dependencies
+COPY ./package.json /app/
+RUN npm install
+
+# Copy server files over and install dependencies
+RUN mkdir /server
+COPY ./server/ /app/server
+
+# Copy build directory for express to serve the React App
+RUN mkdir /build
+COPY ./build/ /app/build
+
+EXPOSE 3001
+CMD ["npm", "run", "start:server:prod"]
