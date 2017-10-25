@@ -96,28 +96,26 @@
   "scripts": {
     "start-js": "node client/scripts/start.js",
     "start": "npm-run-all -p watch-css start-js",
-    "start:server:dev": "./node_modules/.bin/forever ./node_modules/.bin/nodemon -L --debug=5050 --watch ./server/ --exec ./node_modules/.bin/babel-node ./server/server.js",
-    "start:server:prod": "./node_modules/.bin/forever ./node_modules/.bin/nodemon -L --watch ./server/ --exec ./node_modules/.bin/babel-node ./server/server.js",
+    "start:server:dev":
+      "./node_modules/.bin/forever ./node_modules/.bin/nodemon -L --debug=5050 --watch ./server/ --exec ./node_modules/.bin/babel-node ./server/server.js",
+    "start:server:prod":
+      "./node_modules/.bin/forever ./node_modules/.bin/nodemon -L --watch ./server/ --exec ./node_modules/.bin/babel-node ./server/server.js",
     "build": "npm run build-css && node client/scripts/build.js",
     "test": "eslint client/src && flow",
     "flow": "flow",
     "precommit": "yarn test",
     "prepush": "yarn test",
-    "build-css": "node-sass-chokidar --include-path ./client/src --include-path ./node_modules client/src/ -o client/src/",
-    "watch-css": "npm run build-css && node-sass-chokidar --include-path ./client/src --include-path ./node_modules client/src/ -o client/src/ --watch --recursive",
+    "build-css":
+      "node-sass-chokidar --include-path ./client/src --include-path ./node_modules client/src/ -o client/src/",
+    "watch-css":
+      "npm run build-css && node-sass-chokidar --include-path ./client/src --include-path ./node_modules client/src/ -o client/src/ --watch --recursive",
     "docker:build:local": "docker-compose -f ./docker-compose/local.yml -p forecast-me up --build",
     "docker:build:prod": "npm run build && docker-compose -f ./docker-compose/prod.yml up --build"
   },
-  "browserslist": [
-    "> 1%"
-  ],
+  "browserslist": ["> 1%"],
   "jest": {
-    "collectCoverageFrom": [
-      "client/src/**/*.{js,jsx}"
-    ],
-    "setupFiles": [
-      "<rootDir>client/config/polyfills.js"
-    ],
+    "collectCoverageFrom": ["client/src/**/*.{js,jsx}"],
+    "setupFiles": ["<rootDir>client/config/polyfills.js"],
     "testMatch": [
       "<rootDir>/client/src/**/__tests__/**/*.js?(x)",
       "<rootDir>/client/src/**/?(*.)(spec|test).js?(x)"
@@ -129,16 +127,12 @@
       "^.+\\.css$": "<rootDir>/client/config/jest/cssTransform.js",
       "^(?!.*\\.(js|jsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
-    ],
+    "transformIgnorePatterns": ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"],
     "moduleNameMapper": {
       "^react-native$": "react-native-web"
     }
   },
   "babel": {
-    "presets": [
-      "react-app"
-    ]
+    "presets": ["react-app"]
   }
 }
