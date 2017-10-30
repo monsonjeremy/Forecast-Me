@@ -1,5 +1,5 @@
 client/config/
 client/scripts/
 client/src/registerServiceWorker.js
-server/server.js
+server/bin/www
 node_modules/

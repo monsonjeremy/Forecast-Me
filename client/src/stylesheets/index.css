@@ -1,3 +1,5 @@
+/* --------- IMPORTS ------------ */
+@import url("https://fonts.googleapis.com/css?family=Montserrat:300");
 /* --------- VARIABLES ---------- */
 /* --------- RESETS ----------- */
 html,
@@ -103,7 +105,7 @@ h6,
 .article-title,
 .sub-header,
 .section-header {
-  font-family: Gotham Light, "M Hei PRC W45", "M Hei HK W42", "M Hei HK W40", "HelveticaNeue-Regular", "Helvetica Neue Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 300; }
 
 h1,
@@ -129,7 +131,7 @@ h3,
 
 p {
   color: #666;
-  font-family: "HeiS ASC Simplified Chinese", "HeiS ASC Simplified Chinese_n5", "HeiT ASC Traditional Chinese", "HelveticaNeue-Regular", "Helvetica Neue Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat', sans-serif;
   line-height: 1;
   font-size: 15px;
   font-weight: normal; }
@@ -138,13 +140,13 @@ p {
   background-color: #efefef; }
 
 .section-title {
-  font-family: Gotham Light, "M Hei PRC W45", "M Hei HK W42", "M Hei HK W40", "HelveticaNeue-Regular", "Helvetica Neue Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 300;
   font-size: 40px; }
 
 .section-subtitle {
   color: #666;
-  font-family: "HeiS ASC Simplified Chinese", "HeiS ASC Simplified Chinese_n5", "HeiT ASC Traditional Chinese", "HelveticaNeue-Regular", "Helvetica Neue Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat', sans-serif;
   line-height: 1;
   font-size: 16px;
   font-weight: 300; }

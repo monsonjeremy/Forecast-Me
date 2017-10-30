@@ -10,12 +10,11 @@
   },
   "rules": {
     "semi": [2, "never"],
-    "no-unexpected-multiline": 2,
-    "no-unused-expressions": [2, { "allowTernary": true }],
     "compat/compat": 2,
     "no-param-reassign": 0,
     "jsx-a11y/interactive-supports-focus": 0,
     "flowtype/define-flow-type": 2,
+    "import/prefer-default-export": 1,
     "comma-dangle": [
       "error",
       {

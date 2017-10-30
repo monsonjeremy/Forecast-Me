@@ -15,14 +15,14 @@ type Props = {
 
 class VerticalAxis extends PureComponent<Props> {
   static propTypes = {
-    labelFn: React.PropTypes.func.isRequired,
-    orientation: React.PropTypes.string.isRequired,
-    scale: React.PropTypes.func.isRequired,
-    tickValues: React.PropTypes.arrayOf(
+    labelFn: PropTypes.func.isRequired,
+    orientation: PropTypes.string.isRequired,
+    scale: PropTypes.func.isRequired,
+    tickValues: PropTypes.arrayOf(
       PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)])
     ).isRequired,
-    margins: React.PropTypes.arrayOf(PropTypes.number).isRequired,
-    view: React.PropTypes.arrayOf(PropTypes.number).isRequired,
+    margins: PropTypes.arrayOf(PropTypes.number).isRequired,
+    view: PropTypes.arrayOf(PropTypes.number).isRequired,
   }
 
   static orientation = {

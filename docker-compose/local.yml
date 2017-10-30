@@ -1,24 +1,24 @@
-version: "2"
+version: "3"
 
 services:
   forecast-me-react:
     build:
       context: ../
       dockerfile: docker-compose/dockerfiles/Dockerfile-client-dev
-    environment:
-      - NODE_ENV=development
+    env_file:
+      - ./local.env
     volumes:
       - ../client/:/app/client/
     ports:
-      - "3005:3005"
+      - "3000:3000"
     links:
       - forecast-me-server
   forecast-me-server:
     build:
       context: ../
       dockerfile: docker-compose/dockerfiles/Dockerfile-server-dev
-    environment:
-      - NODE_ENV=development
+    env_file:
+      - ./local.env
     volumes:
       - ../server/:/src/server/
     ports:

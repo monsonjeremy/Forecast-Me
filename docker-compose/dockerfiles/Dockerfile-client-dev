@@ -1,22 +1,15 @@
-FROM node:6.10.0-alpine
+FROM node:8.8.1-alpine
 LABEL name="React Forecast-Me Dev Container"
 LABEL version="1.0"
 
+ENV NPM_CONFIG_LOGLEVEL info
 # Create app directory
-RUN mkdir -p /app
-WORKDIR /app
-
-# Copy Config Files
-COPY ./.eslintrc.json /app
-COPY ./.eslintignore /app
-COPY ./.flowconfig /app
+RUN mkdir -p /src
+WORKDIR /src
 
 # Copy dependencies and install
-COPY ./package.json /app
+COPY ./client/ ./
 RUN npm install
 
-RUN mkdir /app/client
-COPY ./client/ /app/client
-
-EXPOSE 3005
+EXPOSE 3000
 CMD ["npm", "start"]

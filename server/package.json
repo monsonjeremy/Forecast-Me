@@ -1,0 +1,31 @@
+{
+  "name": "forecast-me-server",
+  "version": "0.0.1-beta-forecastme-api",
+  "license": "MIT",
+  "description": "Source code for the server side code of Forecast-Me",
+  "repository": "https://github.com/monsonjeremy/Forecast-Me",
+  "private": false,
+  "scripts": {
+    "start": "node ./bin/www",
+    "start:server:dev":
+      "./node_modules/.bin/forever ./node_modules/.bin/nodemon -L --inspect=5050 --watch ./ --exec ./node_modules/.bin/babel-node ./bin/www",
+    "start:server:prod": "./node_modules/.bin/forever ./bin/www"
+  },
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "body-parser": "~1.18.2",
+    "cookie-parser": "~1.4.3",
+    "cors": "^2.8.4",
+    "debug": "~2.6.9",
+    "express": "~4.15.5",
+    "morgan": "~1.9.0"
+  },
+  "devDependencies": {
+    "forever": "^0.15.3",
+    "nodemon": "^1.12.1"
+  },
+  "babel": {
+    "presets": ["env"]
+  }
+}
