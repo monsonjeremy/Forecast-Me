@@ -8,11 +8,15 @@ services:
     env_file:
       - ./local.env
     volumes:
-      - ../client/:/app/client/
+      - ../client/src:/src/src/
+      - ../client/config:/src/config/
+      - ../client/public:/src/public/
     ports:
-      - "3000:3000"
+      - "3005:3005"
     links:
       - forecast-me-server
+  redis:
+    image: redis:4.0.2-alpine
   forecast-me-server:
     build:
       context: ../
@@ -20,7 +24,12 @@ services:
     env_file:
       - ./local.env
     volumes:
-      - ../server/:/src/server/
+      - ../server/bin:/server/bin/
+      - ../server/controllers:/server/controllers/
+      - ../server/models:/server/models/
+      - ../server/helpers:/server/helpers/
+      - ../server/routes:/server/routes/
+      - ../server/services:/server/services/
     ports:
-      - "3001:3001"
+      - "3006:3006"
       - "5050:5050"

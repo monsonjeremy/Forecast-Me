@@ -4,6 +4,8 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { Collapse } from 'react-collapse'
 
+import '../stylesheets/DropdownSelector.css'
+
 type Props = {
   options?: Array<Object> | null,
   title: string,
@@ -46,7 +48,7 @@ class DropdownSelector extends PureComponent<Props, State> {
 
   renderDropdown() {
     return (
-      <div className="dropdown-selector">
+      <div key={`${this.props.type}-dropdown`} className="dropdown-selector">
         <DropdownTitle
           isOpen={this.state.dropdownOpen}
           title={this.props.title}
@@ -85,14 +87,16 @@ const DropdownTitle = ({ title, type, isDisabled, toggleFunc, isOpen, }) => (
     disabled={isDisabled}
     onClick={() => toggleFunc(isDisabled)}
   >
-    <h2 className={`dropdown-${type}-title`}>{title}</h2>
-    <figure className={`dropdown-arrow dropdown-icon ${isOpen ? 'open' : ''}`} />
+    <div className="dropdown-title-content-container">
+      <h2 className={`dropdown-${type}-title dropdown-title-text`}>{title}</h2>
+      <figure className={`dropdown-arrow dropdown-icon ${isOpen ? 'open' : ''}`} />
+    </div>
   </div>
 )
 
 const DropdownItem = ({ title, clickFunc, }) => (
   <div className={`dropdown-item-${title} dropdown-item`} role="button" onClick={clickFunc}>
-    <h3>{title}</h3>
+    <h3 className={'dropdown-item-title'}>{title}</h3>
   </div>
 )
 

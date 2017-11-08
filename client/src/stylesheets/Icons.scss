@@ -3,7 +3,19 @@
 }
 
 .surfer-icon {
-  background-image: url(../assets/surfer-icon.svg)
+  background-color: black;
+  mask-image: url(../assets/surfer-icon.svg);
+  mask-size: 100% 100%;
+  mask-position: center;
+  mask-repeat: no-repeat;
+}
+
+.search-icon {
+  background-color: black;
+  mask-image: url(../assets/search-icon.svg);
+  mask-size: 100% 100%;
+  mask-position: center;
+  mask-repeat: no-repeat;
 }
 
 .thumbsup-icon {
@@ -11,7 +23,10 @@
 }
 
 .dropdown-arrow {
-  background-image: url(../assets/dropdown-arrow.svg)
+  background-color: black;
+  mask-image: url(../assets/dropdown-arrow.svg);
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
 }
 
 .right-arrow {

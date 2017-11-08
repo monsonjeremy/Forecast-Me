@@ -8,13 +8,13 @@ import _ from 'lodash'
   when the prop to interpolate is found in the data array
 */
 const createMountInterpolatorDataProp = dataSet =>
-  dataSet.data.map((datum) => {
+  dataSet.data.map(datum => {
     // Use the data key(s) given for the data set to create interpolators
     // If they aren't defined, use the keys given in keysToInterp
     if (dataSet.mountInterpKeys === undefined) {
       dataSet.mountInterpKeys = dataSet.keysToInterp
     }
-    return dataSet.mountInterpKeys.map((key) => {
+    return dataSet.mountInterpKeys.map(key => {
       // Create the interpolator and associate it to the accessor key
       const interpolator = d3.interpolateNumber(0, datum[key])
       return { key, interpolator, }
@@ -31,7 +31,7 @@ const createInterpolatorDataProp = (dataSet, nextDataSet) => {
     // Map data set as normal
     return dataSet.data.map((datum, datumIndex) =>
       dataSet.keysToInterp
-        .map((key) => {
+        .map(key => {
           // If the next dataset doesn't have data at index just return null
           if (nextDataSet.data[datumIndex] !== undefined) {
             return {
@@ -48,22 +48,26 @@ const createInterpolatorDataProp = (dataSet, nextDataSet) => {
   if (dataSet.data.length < nextDataSet.data.length) {
     // Map next data since it has more items
     return nextDataSet.data.map((datum, datumIndex) =>
-      dataSet.keysToInterp.map((key) => {
+      dataSet.keysToInterp.map(key => {
         // If the old dataset doesn't have data at index, create a static interpolator
         if (dataSet.data[datumIndex] === undefined) {
           // this will just return the same value at every elapsed time point
-          return { key, interpolator: d3.interpolateNumber(datum[key], datum[key]), }
+          return {
+            key,
+            interpolator: d3.interpolateNumber(datum[key], datum[key]),
+          }
         }
         // Else return interpolator as normal
+        const interpolator = d3.interpolateNumber(dataSet.data[datumIndex][key], datum[key])
         return {
           key,
-          interpolator: d3.interpolateNumber(dataSet.data[datumIndex][key], datum[key]),
+          interpolator,
         }
       })
     )
   }
   return dataSet.data.map((datum, datumIndex) =>
-    dataSet.keysToInterp.map((key) => {
+    dataSet.keysToInterp.map(key => {
       // Create the interpolator and associate it to the accessor key
       const interpolator = d3.interpolateNumber(datum[key], nextDataSet.data[datumIndex][key])
       return { key, interpolator, }
@@ -95,7 +99,7 @@ const createInterpolatorDataProp = (dataSet, nextDataSet) => {
   data keys as a string instead of an array of 1 string. It's not a priority however due
   to the fact that this project strucutres the data the same way.
 */
-const DataInterpolationWrapper = (transitionDuration = 300) => (ComposedComponent) => {
+const DataInterpolationWrapper = (transitionDuration = 300) => ComposedComponent => {
   class Composed extends Component {
     constructor(props) {
       super(props)
@@ -146,7 +150,13 @@ const DataInterpolationWrapper = (transitionDuration = 300) => (ComposedComponen
             }))
             // Map returns array of objects, use reduce to merge objects into single object
             // This makes it easier to merge the new values with old ones later :D
-            .reduce((accumulator, currentObject) => ({ ...accumulator, ...currentObject, }), {})
+            .reduce(
+              (accumulator, currentObject) => ({
+                ...accumulator,
+                ...currentObject,
+              }),
+              {}
+            )
         )
       )
       const oldState = this.state
@@ -208,6 +218,7 @@ const DataInterpolationWrapper = (transitionDuration = 300) => (ComposedComponen
         ...props,
         dataSets: state,
       }
+
       // const newData = Object.keys(state).map(val => state[val])
       // const newDataProps = { ...{ [dataProp]: newData, }, }
       // const newProps = { ...props, ...newDataProps, }

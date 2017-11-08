@@ -4,3 +4,6 @@
   border: none; }
   .arrow-btn[disabled] {
     opacity: .3; }
+
+.arrow-wrapper {
+  margin: 5px; }

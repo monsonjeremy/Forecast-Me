@@ -47,7 +47,6 @@ const appStateReducer = (
         selectedRegion: action.payload,
         isSpot: false,
         activeDay: 0,
-        showWelcomeMessage: false,
       }
     case INC_ACTIVE_DAY:
       return {

@@ -106,7 +106,7 @@ h6,
 .sub-header,
 .section-header {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 300; }
+  font-weight: 400; }
 
 h1,
 .h1,
@@ -129,6 +129,13 @@ h3,
 .section-header {
   font-size: 18px; }
 
+a {
+  color: #0058b0;
+  text-decoration: none; }
+  a:visited {
+    text-decoration: none;
+    color: #048; }
+
 p {
   color: #666;
   font-family: 'Montserrat', sans-serif;
@@ -136,16 +143,41 @@ p {
   font-size: 15px;
   font-weight: normal; }
 
+.text-center {
+  text-align: center; }
+
+.container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto; }
+  @media (min-width: 1200px) {
+    .container {
+      width: 1170px; } }
+  @media (min-width: 992px) {
+    .container {
+      width: 970px; } }
+  @media (min-width: 768px) {
+    .container {
+      width: 750px; } }
+
+.container-fluid {
+  padding-right: 30px;
+  padding-left: 30px;
+  margin-right: auto;
+  margin-left: auto; }
+
 .section-gray-background {
   background-color: #efefef; }
 
 .section-title {
+  color: inherit;
   font-family: 'Montserrat', sans-serif;
   font-weight: 300;
   font-size: 40px; }
 
 .section-subtitle {
-  color: #666;
+  color: inherit;
   font-family: 'Montserrat', sans-serif;
   line-height: 1;
   font-size: 16px;
@@ -174,13 +206,22 @@ p {
   color: #666; }
 
 [disabled] > * {
-  opacity: .5; }
+  opacity: 0.5; }
 
 .full-width {
   width: 100%; }
 
 .fixed {
   position: fixed; }
+
+.btn-hover-animation {
+  background-image: linear-gradient(#efefef, #efefef);
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: 0% 100%;
+  transition: background-size .5s ease; }
+  .btn-hover-animation:hover {
+    background-size: 100% 100%; }
 
 /* --------- FORECAST HEADER STYLING ---------- */
 .forecast-header {

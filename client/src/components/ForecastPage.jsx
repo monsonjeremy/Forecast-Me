@@ -4,11 +4,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import LoadingAnimation from './LoadingAnimation'
 import GetStarted from './GetStarted'
-import OpenSelectorButton from '../containers/OpenSelectorButton'
 import WelcomeContainer from '../containers/WelcomeMessageContainer'
 import ForecastPresentation from './ForecastPresentation'
 
 type Props = {
+  renderWelcomeMessage: boolean,
   incrementDay: Function,
   decrementDay: Function,
   appData: {
@@ -79,23 +79,23 @@ class ForecastPage extends Component<Props> {
 
   render() {
     return (
-      <div>
-        <WelcomeContainer />
+      <div className="page-container">
+        {this.props.renderWelcomeMessage && <WelcomeContainer />}
         {!this.props.appData.forecastFetched && <GetStarted />}
-        <OpenSelectorButton />
         {/* If the forecast is fetched and is not loading, render it */
-          this.props.appData.forecastFetched &&
+        this.props.appData.forecastFetched &&
           !this.props.appData.forecastIsLoading &&
           this.renderForecast()}
         {/* If the forecast is loading, render loading animation */
-          this.props.appData.forecastFetched &&
-        this.props.appData.forecastIsLoading && <LoadingAnimation />}
+        this.props.appData.forecastFetched &&
+          this.props.appData.forecastIsLoading && <LoadingAnimation />}
       </div>
     )
   }
 }
 
 ForecastPage.propTypes = {
+  renderWelcomeMessage: PropTypes.bool.isRequired,
   incrementDay: PropTypes.func.isRequired,
   decrementDay: PropTypes.func.isRequired,
   appData: PropTypes.shape({

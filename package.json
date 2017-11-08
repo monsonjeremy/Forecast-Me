@@ -10,16 +10,20 @@
     "babel-eslint": "^8.0.1",
     "eslint": "^4.7.1",
     "eslint-config-airbnb": "^15.1.0",
+    "eslint-config-prettier": "^2.6.0",
     "eslint-config-react-app": "1.0.5",
     "eslint-loader": "1.9.0",
     "eslint-plugin-compat": "^1.0.4",
     "eslint-plugin-flowtype": "^2.39.1",
     "eslint-plugin-import": "^2.6.1",
     "eslint-plugin-jsx-a11y": "5.1.1",
+    "eslint-plugin-prettier": "^2.3.1",
     "eslint-plugin-react": "^7.1.0",
     "flow-bin": "^0.54.1",
     "husky": "^0.14.3",
-    "jest": "21.1.0"
+    "jest": "21.1.0",
+    "lint-staged": "^4.3.0",
+    "prettier": "^1.7.4"
   },
   "scripts": {
     "start:client:dev": "cd client && npm start",
@@ -33,6 +37,14 @@
       "docker-compose -f ./docker-compose/local.yml -p forecast-me-dev up --force-recreate --build",
     "docker:build:prod":
       "npm run build && docker-compose -f ./docker-compose/prod.yml -p forecast-me-prod up --force-recreate --build"
+  },
+  "lint-staged": {
+    "*.{js,jsx,json}": [
+      "./node_modules/.bin/prettier --write",
+      "./node_modules/.bin/eslint --fix",
+      "git add"
+    ],
+    "*.{scss,css}": ["./node_modules/.bin/prettier --write", "git add"]
   },
   "jest": {
     "collectCoverageFrom": ["client/src/**/*.{js,jsx}"],

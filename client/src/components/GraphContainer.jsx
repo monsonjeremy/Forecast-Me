@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import StackedBarChart from './StackedBarChart'
 import AreaChart from './AreaChart'
 import ParentResize from '../containers/ParentResize'
+import { DataInterpolationWrapper } from '../containers'
 
 import '../stylesheets/GraphContainer.css'
 
@@ -13,7 +14,7 @@ type Props = {
   dataSets: Object,
 }
 
-const GraphContainer = ({ dataSets, }: Props) => {
+export const GraphContainer = ({ dataSets, }: Props) => {
   const { tide, surf, } = dataSets
 
   // Make the graphs responsive
@@ -45,4 +46,4 @@ GraphContainer.propTypes = {
   dataSets: PropTypes.instanceOf(Object).isRequired,
 }
 
-export default GraphContainer
+export default DataInterpolationWrapper()(GraphContainer)

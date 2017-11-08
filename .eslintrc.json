@@ -1,7 +1,9 @@
 {
-  "extends": ["airbnb", "plugin:flowtype/recommended"],
-  "plugins": ["flowtype", "compat"],
+  "extends": ["airbnb", "plugin:flowtype/recommended", "prettier"],
+  "plugins": ["flowtype", "compat", "prettier"],
   "env": {
+    "es6": true,
+    "node": true,
     "browser": true,
     "jest": true
   },

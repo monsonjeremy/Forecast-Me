@@ -2,7 +2,6 @@ FROM node:8.8.1-alpine
 LABEL name="React Forecast-Me Dev Container"
 LABEL version="1.0"
 
-ENV NPM_CONFIG_LOGLEVEL info
 # Create app directory
 RUN mkdir -p /src
 WORKDIR /src
@@ -11,5 +10,5 @@ WORKDIR /src
 COPY ./client/ ./
 RUN npm install
 
-EXPOSE 3000
+EXPOSE 3006
 CMD ["npm", "start"]
