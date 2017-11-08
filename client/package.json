@@ -57,6 +57,7 @@
     "redux-actions": "^2.2.1",
     "redux-burger-menu": "^0.2.2",
     "redux-devtools": "^3.4.0",
+    "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "resolve-url-loader": "^2.1.0",
     "sass-loader": "^6.0.6",
