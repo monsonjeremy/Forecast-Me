@@ -4,6 +4,8 @@
  * Module dependencies.
  */
 
+import { cacheBuoyDataJob, testParsing } from '../redis/redis'
+
 const app = require('../routes/index')
 const debug = require('debug')('server:server')
 const http = require('http')
@@ -84,3 +86,6 @@ function onListening() {
   const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`
   console.log(`Listening on ${bind}`)
 }
+
+cacheBuoyDataJob.start()
+console.log('Is cacheBuoyDataJob running: ', cacheBuoyDataJob.running)
