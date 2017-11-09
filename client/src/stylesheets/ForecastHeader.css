@@ -1,0 +1,25 @@
+.day-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%; }
+  .day-container .day-header {
+    background-color: #0058b0;
+    color: white;
+    width: 100%;
+    padding: 40px; }
+  .day-container .day-data-header-container {
+    color: white;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    margin-top: 15px; }
+    .day-container .day-data-header-container .data-header-item {
+      width: 33%; }
+
+.spot-name {
+  padding-bottom: 15px; }

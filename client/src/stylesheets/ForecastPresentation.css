@@ -10,3 +10,9 @@
 
 .hide-arrow {
   opacity: 0; }
+
+.day-graphs {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center; }
