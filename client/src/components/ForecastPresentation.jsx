@@ -5,13 +5,14 @@ import moment from 'moment'
 import ArrowButton from './ArrowButton'
 import { formatSurflineData, roundUpMaxSurfHeight, prepTideData } from '../helpers/helperFunctions'
 // import DataInterpolationWrapper from '../containers/DataInterpolationWrapper'
-import { DayContainer, AnimatedDataGraphContainer } from './'
+import { ForecastHeader, AnimatedDataGraphContainer } from './'
 
 import '../stylesheets/ForecastPresentation.css'
 
 type Props = {
   surf: Object,
   tide: Object,
+  buoy: Object,
   isSpot: boolean,
   dataKeys: Array<string>,
   activeDay: number,
@@ -29,6 +30,7 @@ class ForecastPresentation extends PureComponent<Props> {
   render() {
     const {
       surf,
+      buoy,
       activeDay,
       isSpot,
       tide,
@@ -87,7 +89,9 @@ class ForecastPresentation extends PureComponent<Props> {
       <div className="forecast-container">
         <div className="forecast-box">
           <div className="forecast">
-            <DayContainer date={dayDateArray} spotName={spotName}>
+            <ForecastHeader date={dayDateArray} spotName={spotName} buoy={buoy} />
+            <br />
+            <div className="day-graphs text-center full-width">
               <div className="arrow-wrapper">
                 <ArrowButton
                   orientation={'left'}
@@ -103,7 +107,7 @@ class ForecastPresentation extends PureComponent<Props> {
                   onClick={() => incrementDay(activeDay)}
                 />
               </div>
-            </DayContainer>
+            </div>
           </div>
         </div>
       </div>

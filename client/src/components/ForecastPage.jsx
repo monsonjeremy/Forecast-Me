@@ -15,6 +15,7 @@ type Props = {
     forecast: {
       Surf: Object,
       Tide: Object,
+      Buoy: Object,
     },
     forecastFetched: boolean,
     forecastIsLoading: boolean,
@@ -66,6 +67,7 @@ class ForecastPage extends Component<Props> {
     const props = {
       surf: this.props.appData.forecast.Surf,
       tide: this.props.appData.forecast.Tide,
+      buoy: this.props.appData.forecast.Buoy,
       isSpot: this.props.appState.isSpot,
       dataKeys: this.getDataKeys(),
       activeDay: this.props.appState.activeDay,
@@ -102,6 +104,7 @@ ForecastPage.propTypes = {
     forecast: PropTypes.shape({
       Surf: PropTypes.instanceOf(Object),
       Tide: PropTypes.instanceOf(Object),
+      Buoy: PropTypes.instanceOf(Object),
     }),
     forecastFetched: PropTypes.bool,
     forecastIsLoading: PropTypes.bool,
