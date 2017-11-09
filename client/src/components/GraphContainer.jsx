@@ -27,9 +27,7 @@ export const GraphContainer = ({ dataSets, }: Props) => {
         <div className="surf-forecast-title text-center" style={{ width: '100%', margin: 'auto', }}>
           <h3>SURF</h3>
         </div>
-        <div style={{ width: '100%', }}>
-          <ResponsiveStackedBarChart {...surf} />
-        </div>
+        <div style={{ width: '100%', }}>{<ResponsiveStackedBarChart {...surf} />}</div>
       </div>
       <div className="tide-forecast full-width">
         {/* TODO: Remove these style tags and move to Sass */}
