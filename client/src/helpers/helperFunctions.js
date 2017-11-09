@@ -88,3 +88,5 @@ export const getCookie = (cname: string) => {
   }
   return ''
 }
+
+export const convertMetersToFeet = (meters: number) => meters * 3.28084
