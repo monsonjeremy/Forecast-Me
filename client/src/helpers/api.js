@@ -17,10 +17,6 @@ export const newAPI = () => {
 }
 
 export const getBuoyData = (buoyId: string) => {
-  const encodedURI = window.encodeURI(`http://www.ndbc.noaa.gov/data/realtime2/${buoyId}.spec`)
-  return axios.get(encodedURI, {
-    Accept: 'text/plain',
-    'Access-Control-Allow-Origin': '*',
-    'Content-Type': 'text/plain',
-  })
+  const encodedURI = window.encodeURI(`api/buoys/v1/GetData/${buoyId}`)
+  return axios.get(encodedURI)
 }
