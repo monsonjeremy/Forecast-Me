@@ -1,5 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
+export * from './buoys'
+
 export const controllerHandler = (promise, params) => async (req, res) => {
   const boundParams = params ? params(req, res) : []
   try {

@@ -1,5 +1,6 @@
 import express from 'express'
 import path from 'path'
+import buoysApi from './buoys'
 
 const logger = require('morgan')
 const cors = require('cors')
@@ -21,6 +22,9 @@ app.use(cookieParser())
 app.get('/__status__/node', (req, res) => {
   res.sendStatus(200)
 })
+
+// Create endpoint for redis API
+app.use('/api/buoys/v1', buoysApi)
 
 if (!isLocalDev) {
   // Serve bundle on root URL
