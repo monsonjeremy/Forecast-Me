@@ -37,7 +37,7 @@ const buildBars = (data, view, xScale, yScale, keys) => {
   // Use the stack generator to create the data
   const stackData = stack(data)
   const bars = stackData.map((datum, datumIndex) =>
-    datum.map((d) => {
+    datum.map(d => {
       const x = xScale(new Date(d.data.dateTime))
       const y = yScale(d[1])
       const height = yScale(d[0]) - yScale(d[1])
@@ -45,7 +45,7 @@ const buildBars = (data, view, xScale, yScale, keys) => {
       const barMiddle = width / 2
       if (datumIndex === stackData.length - 1) {
         return (
-          <g>
+          <g key={`${d.data.dateTime}`}>
             <rect x={x} y={y} height={height} width={width} fill={colorScale(datum.key)} />
             <text x={x + barMiddle} y={y - 3} style={{ fontSize: '4px', }} textAnchor={'middle'}>
               {d.data.label}
@@ -53,7 +53,16 @@ const buildBars = (data, view, xScale, yScale, keys) => {
           </g>
         )
       }
-      return <rect x={x} y={y} height={height} width={width} fill={colorScale(datum.key)} />
+      return (
+        <rect
+          x={x}
+          y={y}
+          key={`rect-${x}-${y}`}
+          height={height}
+          width={width}
+          fill={colorScale(datum.key)}
+        />
+      )
     })
   )
   // Return all the lines to be rendered in a grouping
@@ -107,8 +116,10 @@ class StackedBarChart extends PureComponent<Props> {
     return (
       <svg className="nulti-line-chart-svg dashboard-graph" {...{ viewBox, }}>
         <g className="graph-and-axes" {...{ transform, }}>
-          <g className="lines">{buildBars(data, view, xScale, yScale, keys)}</g>
-          <g className="horizontal-axis">
+          <g className="bars" key="bars">
+            {buildBars(data, view, xScale, yScale, keys)}
+          </g>
+          <g className="horizontal-axis" key="barchart-x-axis">
             <HorizontalAxis
               {...{
                 view,
