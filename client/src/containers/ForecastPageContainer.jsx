@@ -63,7 +63,7 @@ class ForecastPageContainer extends Component {
   }
 
   componentWillMount() {
-    newAPI().then(data => console.log(data))
+    newAPI().then(data => console.log(data.data))
   }
 
   componentDidMount() {
@@ -95,7 +95,7 @@ class ForecastPageContainer extends Component {
       isDisabled: selectedRegion === null,
       title: 'Spot Selector',
       type: 'spot',
-      itemClick: this.props.fetchSpot,
+      itemClick: spot => this.props.fetchSpot(spot, selectedRegion),
       options: spotOptions,
     }
 
@@ -159,6 +159,8 @@ const mapDispatchToProps = dispatch => ({
 
     // Get the forecast for the region and its buoy then add buoy data to region forecast
     const regionForecast = await fetchSpotAPI(region.id)
+    const buoyData = await getBuoyData(region.buoy.buoyId)
+    regionForecast.data.Buoy = buoyData.data
 
     dispatch(setForecast(regionForecast.data, false))
   },
@@ -176,19 +178,23 @@ const mapDispatchToProps = dispatch => ({
 
     // Get the forecast for the spot and its buoy then add buoy data to region forecast
     const spotForecast = await fetchSpotAPI(spot.id)
+    const buoyData = await getBuoyData(region.buoy.buoyId)
+    spotForecast.data.Buoy = buoyData.data
 
     dispatch(setForecast(spotForecast.data, false))
   },
-  fetchSpot: spot => {
+  fetchSpot: async (spot, region) => {
     // Reset the app data so that the flag "forecastFetched" is back to false
     dispatch(resetAppData())
     // Dispatch an action to update the selected spot
     dispatch(setSpot(spot))
     dispatch(fetchForecast())
     // Dispatch a Thunk to fetch the response of the API call and update the QA analysis
-    return fetchSpotAPI(spot.id).then(response => {
-      dispatch(setForecast(response.data, false))
-    })
+    const spotForecast = await fetchSpotAPI(spot.id)
+    const buoyData = await getBuoyData(region.buoy.buoyId)
+    spotForecast.data.Buoy = buoyData.data
+
+    dispatch(setForecast(spotForecast.data, false))
   },
 })
 
