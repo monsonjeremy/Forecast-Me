@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { convertMetersToFeet } from '../helpers/helperFunctions'
 
 import '../stylesheets/ForecastHeader.css'
@@ -14,8 +14,17 @@ type Props = {
 }
 
 const ForecastHeader = ({ date, spotName, buoy, }: Props) => {
+  const userTimezone = moment.tz.guess()
+  const buoyTimeUTC = moment.utc(
+    `${buoy['#YY'].data}/${buoy.MM.data}/${buoy.DD.data} ${buoy.hh.data}:${buoy.mm.data}`,
+    'YYYY-MM-DD HH:mm'
+  )
+
+  const buoyTimeLocal = moment.tz(buoyTimeUTC, userTimezone).format('L LT z')
+
   // Format the date in the Title section of the container ('Wed June 21st')
   const dateTitle = moment(date[0], 'MMMM DD, YYYY HH:mm:ss').format('ddd MMMM Do')
+
   return (
     <div className="day-container">
       <div className="day-header">
@@ -36,10 +45,11 @@ const ForecastHeader = ({ date, spotName, buoy, }: Props) => {
             </h3>
           </div>
           <div className="data-header-item">
-            <h3>
-              Buoy Swell Direction: {buoy.MWD.data} {buoy.MWD.units}
-            </h3>
+            <h3>Buoy Swell Direction: {buoy.MWD.data}&#176;</h3>
           </div>
+        </div>
+        <div className="buoy-last-updated">
+          <p>Buoy data last updated: {buoyTimeLocal}</p>
         </div>
       </div>
     </div>

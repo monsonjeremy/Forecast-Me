@@ -136,7 +136,7 @@ a {
     color: #048; }
 
 p {
-  color: #666;
+  color: inherit;
   font-family: 'Montserrat', sans-serif;
   line-height: 1;
   font-size: 15px;
@@ -245,9 +245,6 @@ p {
   display: flex;
   justify-content: center;
   vertical-align: center; }
-
-.day-date-title {
-  padding: 15px 0px 0px 0px; }
 
 .graphs {
   background-color: lightgrey; }
