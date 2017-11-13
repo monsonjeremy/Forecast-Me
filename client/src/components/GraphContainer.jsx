@@ -81,81 +81,116 @@ type Props = {
 }
 
 class GraphContainer extends PureComponent<Props> {
-  render() {
-    const {
-      surf,
-      activeDay,
-      dayDateArray,
-      date,
-      isSpot,
-      tide,
-      dataKeys,
-      decrementDay,
-      incrementDay,
-    } = this.props
+  constructor(props: Props) {
+    super(props)
 
-    const numDays = surf.dateStamp.length
+    this.createSurfProps = this.createSurfProps.bind(this)
+    this.createTideProps = this.createTideProps.bind(this)
+  }
+
+  createSurfProps = (margins: Array<number>) => {
+    const { surf, activeDay, dayDateArray, isSpot, dataKeys, } = this.props
 
     // Massage ze data
-    const forecast = formatSurflineData(dayDateArray, surf, activeDay, isSpot)
-    const maxSurf = roundUpMaxSurfHeight(surf.surf_max_maximum)
-    const formattedTideData = prepTideData(date, tide.dataPoints, 500)
+    const data = formatSurflineData(dayDateArray, surf, activeDay, isSpot)
+    const yMax = roundUpMaxSurfHeight(surf.surf_max_maximum)
+
+    // Surf graph props
+    const size = [100, 70]
+    const vWidth = size[0] - margins[1] - margins[3]
+    const vHeight = size[1] - margins[0] - margins[2]
+    const view = [vWidth, vHeight]
+    const xScaleKey = 'date'
+    const labelFn = (tick: string) => moment(tick).format('hA')
+    const keyColors = ['#1a1aff', '#66a3ff']
+
+    const xScale = d3
+      .scaleBand()
+      // Creates a domain containing the 4 hours to graph
+      .domain(data.map(d => d.date))
+      .rangeRound([0, view[0]], 0.05) // Range of the X axis scale
+      .paddingInner(0.05) // .05 padding between bars
+    const yScale = d3
+      .scaleLinear() // Creates a yScale to calculate Y position of the bar
+      .domain([0, yMax]) // Sets the domain to be 0 to surfMax value pulled from API
+      .range([view[1], 0])
+    const tickValues = xScale.domain()
+    const tickOffset = xScale.bandwidth() / 2
+
+    return {
+      data,
+      view,
+      size,
+      keysToInterp: dataKeys,
+      keys: dataKeys,
+      keyColors,
+      xScaleKey,
+      yMax,
+      xScale,
+      yScale,
+      labelFn,
+      tickValues,
+      tickOffset,
+      margins,
+    }
+  }
+
+  createTideProps = (margins: Array<number>) => {
+    const { date, tide, } = this.props
+    // Massage ze data
+    const data = prepTideData(date, tide.dataPoints, 500)
+
+    // Tide graph props
+    const size = [500, 200]
+    const vWidth = size[0] - margins[1] - margins[3]
+    const vHeight = size[1] - margins[0] - margins[2]
+    const view = [vWidth, vHeight]
+    const yMax = d3.max(data, d => d.height)
+    const yMin = d3.min(data, d => d.height) - 1
+    const xScaleKey = 'time'
+    const yScaleKey = 'height'
+
+    const yScale = d3
+      .scaleLinear()
+      .domain([yMin, yMax])
+      .range([view[1], 0])
+    const xScale = d3
+      .scaleTime()
+      .domain(d3.extent(data, d => d[xScaleKey]))
+      .range([0, view[0]])
+    const numTicks = Math.round(yMax) - Math.floor(yMin)
+    const vertTickValues = yScale.ticks(numTicks)
+    const horizTickValues = data.map(dataPoint => dataPoint[xScaleKey])
+    const labelFn = (time: number) => moment(time * 1000).format('ha')
+
+    return {
+      data,
+      mountInterpKeys: ['lineChartCurtain'],
+      keysToInterp: ['height'],
+      view,
+      size,
+      xScale,
+      xScaleKey,
+      yScale,
+      yScaleKey,
+      vertTickValues,
+      horizTickValues,
+      margins,
+      labelFn,
+    }
+  }
+
+  render() {
+    const { surf, activeDay, decrementDay, incrementDay, } = this.props
+
+    const numDays = surf.dateStamp.length
 
     // Margins for the axes of the graphs
     const margins = [15, 15, 15, 15]
 
-    // Surf graph props
-    const surfSize = [100, 70]
-    const surfVWidth = surfSize[0] - margins[1] - margins[3]
-    const surfVHeight = surfSize[1] - margins[0] - margins[2]
-    const surfView = [surfVWidth, surfVHeight]
-    const surfXScale = d3
-      .scaleBand()
-      // Creates a domain containing the 4 hours to graph
-      .domain(forecast.map(d => d.date))
-      .rangeRound([0, surfView[0]], 0.05) // Range of the X axis scale
-      .paddingInner(0.05) // .05 padding between bars
-    const surfYScale = d3
-      .scaleLinear() // Creates a yScale to calculate Y position of the bar
-      .domain([0, maxSurf]) // Sets the domain to be 0 to surfMax value pulled from API
-      .range([surfView[1], 0])
-    const surfXScaleKey = 'date'
-    const surfLabelFn = tick => moment(tick).format('hA')
-    const surfTickValues = surfXScale.domain()
-    const surfTickOffset = surfXScale.bandwidth() / 2
-    const surfKeyColors = ['#1a1aff', '#66a3ff']
-
-    // Tide graph props
-    const tideSize = [500, 200]
-    const tideVWidth = tideSize[0] - margins[1] - margins[3]
-    const tideVHeight = tideSize[1] - margins[0] - margins[2]
-    const tideView = [tideVWidth, tideVHeight]
-
     const dataSets = {
-      surf: {
-        data: forecast,
-        view: surfView,
-        size: surfSize,
-        keysToInterp: dataKeys,
-        keys: dataKeys,
-        keyColors: surfKeyColors,
-        xScaleKey: surfXScaleKey,
-        yMax: maxSurf,
-        xScale: surfXScale,
-        yScale: surfYScale,
-        labelFn: surfLabelFn,
-        tickValues: surfTickValues,
-        tickOffset: surfTickOffset,
-        margins,
-      },
-      tide: {
-        data: formattedTideData,
-        mountInterpKeys: ['lineChartCurtain'],
-        keysToInterp: ['height'],
-        view: tideView,
-        size: tideSize,
-        margins,
-      },
+      surf: this.createSurfProps(margins),
+      tide: this.createTideProps(margins),
     }
 
     return <GraphPresentation {...{ dataSets, numDays, incrementDay, decrementDay, activeDay, }} />
