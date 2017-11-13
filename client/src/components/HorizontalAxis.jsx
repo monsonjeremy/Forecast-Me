@@ -40,7 +40,7 @@ class HorizontalAxis extends PureComponent<Props> {
     } = this.props
     let { tickValues, } = this.props
     if (tickValues.length === 0) {
-      tickValues = scale.ticks(5)
+      tickValues = scale.ticks()
     }
 
     return tickValues.map((tickValue, key) => {

@@ -2,6 +2,14 @@
 
 import moment from 'moment'
 
+/**
+ * Massages the surf forecast data and returns a properly formatted array of objects
+ * 
+ * @param {Array<string>} dateTimeArray 
+ * @param {Object} forecastObject 
+ * @param {number} forecastDay 
+ * @param {boolean} isSpot 
+ */
 export const formatSurflineData = (
   dateTimeArray: Array<string>,
   forecastObject: Object,
@@ -12,6 +20,7 @@ export const formatSurflineData = (
     if (isSpot === false) {
       return {
         dateTime: date,
+        date: new Date(date),
         anindex: index,
         hour: moment(date, 'MMMM DD, YYYY HH:mm:ss').format('h A'),
         swellHeight1: forecastObject.swell_height1[forecastDay][index],
@@ -35,6 +44,7 @@ export const formatSurflineData = (
     }
     return {
       dateTime: date,
+      date: new Date(date),
       anindex: index,
       hour: moment(date, 'MMMM DD, YYYY HH:mm:ss').format('h A'),
       swellHeight1: forecastObject.swell_height1[forecastDay][index],
@@ -51,6 +61,7 @@ export const formatSurflineData = (
       )}ft`,
     }
   })
+
 export const roundUpMaxSurfHeight = (maxSurfHeight: number) => Math.ceil(maxSurfHeight / 5) * 5
 
 export const prepTideData = (dayToGraph: string, tideForecast: Array<Object>, width: number) =>

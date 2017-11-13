@@ -2,6 +2,8 @@
 
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
+import * as d3 from 'd3'
+import moment from 'moment'
 
 import { formatSurflineData, roundUpMaxSurfHeight, prepTideData } from '../helpers/helperFunctions'
 import { GraphPresentation } from './'
@@ -107,6 +109,21 @@ class GraphContainer extends PureComponent<Props> {
     const surfVWidth = surfSize[0] - margins[1] - margins[3]
     const surfVHeight = surfSize[1] - margins[0] - margins[2]
     const surfView = [surfVWidth, surfVHeight]
+    const surfXScale = d3
+      .scaleBand()
+      // Creates a domain containing the 4 hours to graph
+      .domain(forecast.map(d => d.date))
+      .rangeRound([0, surfView[0]], 0.05) // Range of the X axis scale
+      .paddingInner(0.05) // .05 padding between bars
+    const surfYScale = d3
+      .scaleLinear() // Creates a yScale to calculate Y position of the bar
+      .domain([0, maxSurf]) // Sets the domain to be 0 to surfMax value pulled from API
+      .range([surfView[1], 0])
+    const surfXScaleKey = 'date'
+    const surfLabelFn = tick => moment(tick).format('hA')
+    const surfTickValues = surfXScale.domain()
+    const surfTickOffset = surfXScale.bandwidth() / 2
+    const surfKeyColors = ['#1a1aff', '#66a3ff']
 
     // Tide graph props
     const tideSize = [500, 200]
@@ -121,7 +138,14 @@ class GraphContainer extends PureComponent<Props> {
         size: surfSize,
         keysToInterp: dataKeys,
         keys: dataKeys,
+        keyColors: surfKeyColors,
+        xScaleKey: surfXScaleKey,
         yMax: maxSurf,
+        xScale: surfXScale,
+        yScale: surfYScale,
+        labelFn: surfLabelFn,
+        tickValues: surfTickValues,
+        tickOffset: surfTickOffset,
         margins,
       },
       tide: {
