@@ -1,8 +1,9 @@
+/* eslint-disable import/prefer-default-export */
+
 import { redisClient } from '../redis/redis'
 
 import {} from '../models'
 
-export const test = 'test'
 /**
  * Service to retrieve buoy data from Redis
  * @param {string} buoyId The given buoyId to get data for

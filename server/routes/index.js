@@ -1,6 +1,7 @@
 import express from 'express'
 import path from 'path'
 import buoysApi from './buoys'
+import surfApi from './surf'
 
 const logger = require('morgan')
 const cors = require('cors')
@@ -25,6 +26,9 @@ app.get('/__status__/node', (req, res) => {
 
 // Create endpoint for redis API
 app.use('/api/buoys/v1', buoysApi)
+
+// Create endpoint for redis API
+app.use('/api/surf/v1', surfApi)
 
 if (!isLocalDev) {
   // Serve bundle on root URL

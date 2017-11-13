@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-import { cacheBuoyDataJob, testParsing } from '../redis/redis'
+import { cacheBuoyDataJob, cacheSurflineDataJob } from '../helpers/jobs'
 
 const app = require('../routes/index')
 const debug = require('debug')('server:server')
@@ -13,7 +13,6 @@ const http = require('http')
 /**
  * Get port from environment and store in Express.
  */
-console.log(process.env.SERVER_PORT)
 const port = normalizePort(process.env.SERVER_PORT || '3006')
 app.set('port', port)
 
@@ -87,5 +86,8 @@ function onListening() {
   console.log(`Listening on ${bind}`)
 }
 
-cacheBuoyDataJob.start()
-console.log('Is cacheBuoyDataJob running: ', cacheBuoyDataJob.running)
+// cacheBuoyDataJob().start()
+// console.log('cacheBuoyDataJob running: ', cacheBuoyDataJob.running)
+
+cacheSurflineDataJob().start()
+console.log('cacheBuoyDataJob running: ', cacheSurflineDataJob.running)
