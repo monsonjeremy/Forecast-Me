@@ -29,6 +29,14 @@
   mask-repeat: no-repeat;
 }
 
+.gone-surfing-icon {
+  background-color: black;
+  mask-image: url(../assets/gone-surfing.svg);
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+}
+
+
 .right-arrow {
   background-image: url(../assets/arrow-icon-right.svg)
 }
