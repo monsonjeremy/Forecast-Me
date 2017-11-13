@@ -7,7 +7,7 @@ import jjfclip from '../assets/jjfclip.mp4'
 import '../stylesheets/GetStarted.css'
 
 const GetStarted = () => (
-  <section className="get-started-section container-fluid">
+  <section className="get-started-section">
     <video className="homepage-video" muted autoPlay loop src={jjfclip} type="video/mp4" />
     <div className="get-started-container container">
       <h1 className="section-title get-started-title">Select A Spot To Get Started</h1>
