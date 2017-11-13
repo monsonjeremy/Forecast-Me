@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import * as d3 from 'd3'
-import _ from '../helpers/helperFunctions'
+import { mapInterpStateToOldState } from '../helpers/helperFunctions'
 
-const AnimatedDataWrapper = (dataProp, transitionDuration = 1200) => (ComposedComponent) => {
+const AnimatedDataWrapper = (dataProp, transitionDuration = 1200) => ComposedComponent => {
   class Composed extends Component {
     constructor(props) {
       super(props)
@@ -23,18 +23,18 @@ const AnimatedDataWrapper = (dataProp, transitionDuration = 1200) => (ComposedCo
         .tween('attr.scale', () => {
           const barInterpolators = data.map((...args) => {
             const index = args[1]
-            return dataKeys.map((key) => {
+            return dataKeys.map(key => {
               const interpolator = d3.interpolateNumber(0, this.state[index][key])
               return { key, interpolator, }
             })
           })
-          return (t) => {
+          return t => {
             const newState = barInterpolators
               .map(bar =>
                 bar
                   .map(({ key, interpolator, }) => ({ [key]: interpolator(t), }))
                   .reduce((result, currentObject) => {
-                    Object.keys(currentObject).map((key) => {
+                    Object.keys(currentObject).map(key => {
                       if (Object.prototype.hasOwnProperty.call(currentObject, key)) {
                         result[key] = currentObject[key]
                       }
@@ -48,7 +48,7 @@ const AnimatedDataWrapper = (dataProp, transitionDuration = 1200) => (ComposedCo
                 return newObject
               }, {})
             const oldState = this.state
-            const updatedState = _.mapNewStateToOldState(oldState, newState)
+            const updatedState = mapInterpStateToOldState(oldState, newState)
             this.setState(updatedState)
           }
         })
@@ -69,7 +69,7 @@ const AnimatedDataWrapper = (dataProp, transitionDuration = 1200) => (ComposedCo
         .tween('attr.scale', () => {
           const barInterpolators = data.map((...args) => {
             const index = args[1]
-            return dataKeys.map((key) => {
+            return dataKeys.map(key => {
               const interpolator = d3.interpolateNumber(
                 this.state[index][key],
                 nextData[index][key]
@@ -77,13 +77,13 @@ const AnimatedDataWrapper = (dataProp, transitionDuration = 1200) => (ComposedCo
               return { key, interpolator, }
             })
           })
-          return (t) => {
+          return t => {
             const newState = barInterpolators
               .map(bar =>
                 bar
                   .map(({ key, interpolator, }) => ({ [key]: interpolator(t), }))
                   .reduce((result, currentObject) => {
-                    Object.keys(currentObject).map((key) => {
+                    Object.keys(currentObject).map(key => {
                       if (Object.prototype.hasOwnProperty.call(currentObject, key)) {
                         result[key] = currentObject[key]
                       }
