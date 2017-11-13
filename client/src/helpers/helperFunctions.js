@@ -62,7 +62,7 @@ export const prepTideData = (dayToGraph: string, tideForecast: Array<Object>, wi
     return dateOfEntry === dayToGraph && tideObject.type === 'NORMAL'
   })
 
-export const mapNewStateToOldState = (oldState: Object, newState: Object) => {
+export const mapInterpStateToOldState = (oldState: Object, newState: Object) => {
   Object.keys(oldState).forEach(key => Object.assign(oldState[key], newState[key]))
   return oldState
 }
@@ -90,3 +90,11 @@ export const getCookie = (cname: string) => {
 }
 
 export const convertMetersToFeet = (meters: number) => meters * 3.28084
+
+export const setVisitedCookie = () => {
+  // Set a cookie if the user clicks the close button
+  const hasVisited = getCookie('has-visited')
+  if (hasVisited !== 'true') {
+    setCookie('has-visited', 'true', 365)
+  }
+}
