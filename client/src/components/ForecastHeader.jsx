@@ -22,15 +22,12 @@ const ForecastHeader = ({ date, spotName, buoy, }: Props) => {
 
   const buoyTimeLocal = moment.tz(buoyTimeUTC, userTimezone).format('L LT z')
 
-  // Format the date in the Title section of the container ('Wed June 21st')
-  const dateTitle = moment(date[0], 'MMMM DD, YYYY HH:mm:ss').format('ddd MMMM Do')
-
   return (
     <div className="day-container">
       <div className="day-header">
         <div className="day-date-title full-width text-center">
           <h1 className="section-title spot-name">{spotName}</h1>
-          <h2 className="section-subtitle forecast-date">{dateTitle}</h2>
+          <h2 className="section-subtitle forecast-date">{date}</h2>
         </div>
         <div className="day-data-header-container">
           <div className="data-header-item">
@@ -58,7 +55,7 @@ const ForecastHeader = ({ date, spotName, buoy, }: Props) => {
 
 ForecastHeader.propTypes = {
   spotName: PropTypes.string.isRequired,
-  date: PropTypes.instanceOf(Array).isRequired,
+  date: PropTypes.string.isRequired,
   buoy: PropTypes.instanceOf(Object).isRequired,
 }
 
