@@ -42,7 +42,9 @@ const ForecastHeader = ({ date, spotName, buoy, }: Props) => {
             </h3>
           </div>
           <div className="data-header-item">
-            <h3>Buoy Swell Direction: {buoy.MWD.data}&#176;</h3>
+            <h3>
+              Buoy Swell Direction: {buoy.SwD.data} - {buoy.MWD.data}&#176;
+            </h3>
           </div>
         </div>
         <div className="buoy-last-updated">
