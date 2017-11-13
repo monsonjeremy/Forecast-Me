@@ -1,4 +1,4 @@
-.forecast-box {
+.forecast-container {
   display: flex;
   width: 100%;
   justify-content: center;
@@ -8,13 +8,18 @@
 
 .forecast {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .hide-arrow {
   opacity: 0;
 }
 
-.day-graphs {
+.forecast-graphs {
+  width: 90%;
   display: flex;
   flex-direction: row;
   justify-content: center;
