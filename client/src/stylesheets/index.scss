@@ -93,6 +93,8 @@ video {
   font-size: 100%;
   vertical-align: baseline;
   outline: 0 none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* --------- DEFAULTS ---------- */
@@ -167,13 +169,13 @@ p {
 
 .container {
     @media (min-width: 1200px) {
-      width: 1170px;
+      width: 1400px;
     }
     @media (min-width: 992px) {
-      width: 970px;
+      width: 1200px;
     }
     @media (min-width: 768px) {
-          width: 750px;
+          width: 1000px;
     }
     padding-right: 15px;
     padding-left: 15px;
