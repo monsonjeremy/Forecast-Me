@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { UnmountClosed } from 'react-collapse'
 
 import { viewedWelcomeMessage } from '../actions/appState'
+import { setVisitedCookie } from '../helpers/helperFunctions'
 
 import WelcomeMessage from '../components/WelcomeMessage'
 
@@ -20,7 +21,9 @@ class WelcomeContainer extends Component {
 
   renderWelcomeMessage() {
     return (
-      <UnmountClosed isOpened={this.props.appState.showWelcomeMessage}>
+      <UnmountClosed
+        isOpened={this.props.renderWelcomeMessage && this.props.appState.showWelcomeMessage}
+      >
         <WelcomeMessage closeClick={this.props.closeClick} />
       </UnmountClosed>
     )
@@ -34,7 +37,10 @@ class WelcomeContainer extends Component {
 const mapStateToProps = state => state
 
 const mapDispatchToProps = dispatch => ({
-  closeClick: () => dispatch(viewedWelcomeMessage()),
+  closeClick: () => {
+    dispatch(viewedWelcomeMessage())
+    setVisitedCookie()
+  },
 })
 
 WelcomeContainer.propTypes = {
@@ -42,6 +48,7 @@ WelcomeContainer.propTypes = {
     showWelcomeMessage: PropTypes.bool.isRequired,
   }).isRequired,
   closeClick: PropTypes.func.isRequired,
+  renderWelcomeMessage: PropTypes.bool.isRequired,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(WelcomeContainer)
