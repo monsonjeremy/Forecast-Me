@@ -2,128 +2,138 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { action as toggleSelector } from 'redux-burger-menu'
-
-import { ForecastPage, SideNav, DropdownSelector } from '../components'
-import { fetchSpot as fetchSpotAPI, newAPI, getBuoyData } from '../helpers/api'
-import { getCookie, setCookie } from '../helpers/helperFunctions'
-
-import { fetchForecast, setForecast, resetAppData } from '../actions/data'
+import { WelcomeContainer } from './'
+import { SideNav, ForecastPagePresentation, Loader, GetStarted } from '../components'
 import {
-  resetAppState,
+  fetchSpot as fetchSpotAPI,
+  getBuoyData,
+  getRegions,
+  getCookie,
+  setVisitedCookie
+} from '../helpers'
+import {
+  fetchForecast,
+  fetchSpotList,
+  setForecast,
+  setSpotList,
   setRegion,
   setSpot,
   incrementDay,
   decrementDay,
   viewedWelcomeMessage
-} from '../actions/appState'
-
-const regions = [
-  {
-    name: 'Santa Cruz',
-    id: '2958',
-    buoy: {
-      buoyId: '46012',
-      buoyName: 'Monterey Bay',
-    },
-    spots: [
-      { name: 'Steamer Lane', id: '4188', },
-      { name: 'Four Mile', id: '5023', },
-      { name: 'Waddell Creek', id: '5021', },
-      { name: "Mitchell's Cove", id: '5028', },
-      { name: '26th Ave', id: '5030', },
-      { name: 'Scott Creek', id: '5022', },
-      { name: 'Davenport', id: '5024', },
-      { name: 'Natural Bridges', id: '5028', },
-      { name: 'Cowells', id: '4189', },
-      { name: 'The Harbor', id: '5031', },
-      { name: 'Pleasure Point', id: '4190', },
-      { name: '38th Ave', id: '4191', },
-      { name: 'Capitola', id: '10763', },
-      { name: 'Manresa', id: '5036', },
-      { name: 'The Hook', id: '108024', }
-    ],
-  },
-  {
-    name: 'North Orange Country',
-    id: '2143',
-    buoy: {
-      buoyId: '46012',
-      buoyName: 'Monterey Bay',
-    },
-    spots: [{ name: 'Newport', id: '1241', }, { name: 'HB', id: '3421', }],
-  }
-]
+} from '../actions'
 
 class ForecastPageContainer extends Component {
   constructor(props) {
     super(props)
 
-    this.regions = regions
-    this.renderForecastPage = this.renderForecastPage.bind(this)
+    this.renderForecast = this.renderForecast.bind(this)
+    this.renderGetStarted = this.renderGetStarted.bind(this)
+    this.renderLoader = this.renderLoader.bind(this)
+    this.renderWelcomeMessage = this.renderWelcomeMessage.bind(this)
+    this.renderSideNav = this.renderSideNav.bind(this)
   }
 
-  componentWillMount() {
-    newAPI().then(data => console.log(data.data))
+  renderForecast() {
+    const forecastIsLoaded = this.props.appData.forecast
+    if (forecastIsLoaded) {
+      let dataKeys = []
+      let spotName = ''
+      let topBarDataKey = 'aggSurfMax'
+      let bottomBarDataKey = 'aggSurfMin'
+
+      if (this.props.appState.isSpot) {
+        topBarDataKey = 'surfMax'
+        bottomBarDataKey = 'surfMin'
+      }
+
+      dataKeys = [bottomBarDataKey, topBarDataKey]
+
+      if (this.props.appState.isSpot) {
+        spotName = this.props.appState.selectedSpot.name
+      }
+      spotName = this.props.appState.selectedRegion.name
+
+      const props = {
+        surf: this.props.appData.forecast.Surf,
+        tide: this.props.appData.forecast.Tide,
+        buoy: this.props.appData.forecast.Buoy,
+        isSpot: this.props.appState.isSpot,
+        activeDay: this.props.appState.activeDay,
+        incrementDay: this.props.incrementDay,
+        decrementDay: this.props.decrementDay,
+        appState: this.props.appState,
+        spotName,
+        dataKeys,
+      }
+
+      return <ForecastPagePresentation {...props} />
+    }
+    return null
   }
 
-  componentDidMount() {
-    // Set a cookie if a user visits the site
-    const hasVisited = getCookie('has-visited')
-    if (hasVisited !== 'true') {
-      setCookie('has-visited', 'true', 365)
+  renderLoader() {
+    const forecastIsLoading =
+      this.props.appData.forecastFetched && this.props.appData.forecastIsLoading
+    if (forecastIsLoading) {
+      return <Loader />
     }
+    return null
   }
 
-  renderForecastPage() {
-    const renderWelcomeMessage = getCookie('has-visited') !== 'true'
-    const selectedRegion = this.props.appState.selectedRegion
+  renderGetStarted() {
+    const showLandingPage = !this.props.appData.forecastFetched
 
-    const regionDropdownProps = {
-      options: this.regions,
-      title: 'Region Selector',
-      type: 'region',
-      itemClick: this.props.fetchRegion,
+    if (showLandingPage) {
+      return <GetStarted />
     }
+    return null
+  }
 
-    let spotOptions = null
+  renderWelcomeMessage() {
+    const renderWelcomeMessage =
+      getCookie('has-visited') !== 'true' && this.props.appState.showWelcomeMessage
 
-    if (selectedRegion !== null) {
-      spotOptions = selectedRegion.spots
+    return <WelcomeContainer renderWelcomeMessage={renderWelcomeMessage} />
+  }
+
+  renderSideNav() {
+    const sideNavProps = {
+      regions: this.props.appData.spotList,
+      spotListIsLoading: this.props.appData.spotListIsLoading,
+      setSpot: this.props.fetchSpot,
+      setSpotWithRegion: this.props.setSpotWithRegion,
+      setRegion: this.props.fetchRegion,
+      fetchSpotList: this.props.fetchSpotList,
+      selectedRegion: this.props.appState.selectedRegion,
+      selectedSpot: this.props.appState.selectedRegion,
+      spotList: this.props.appData.spotList,
     }
-
-    const spotDropdownProps = {
-      isDisabled: selectedRegion === null,
-      title: 'Spot Selector',
-      type: 'spot',
-      itemClick: spot => this.props.fetchSpot(spot, selectedRegion),
-      options: spotOptions,
-    }
-
-    return [
-      <SideNav
-        key="side-nav-forecast-page"
-        regions={regions}
-        setSpot={this.props.fetchSpot}
-        setSpotWithRegion={this.props.setSpotWithRegion}
-        setRegion={this.props.fetchRegion}
-      >
-        <DropdownSelector key={'region-dropdown'} {...regionDropdownProps} />
-        <DropdownSelector key={'spot-dropdown'} {...spotDropdownProps} />
-      </SideNav>,
-      <ForecastPage key="forecast-page" {...{ ...this.props, renderWelcomeMessage, }} />
-    ]
+    return <SideNav key="forecast-page-sidenav" {...sideNavProps} />
   }
 
   render() {
-    return this.renderForecastPage()
+    return [
+      this.renderSideNav(),
+      <div className="page-container" key="forecast-page-container">
+        {this.renderLoader()}
+        {this.renderWelcomeMessage()}
+        {this.renderGetStarted()}
+        {this.renderForecast()}
+      </div>
+    ]
   }
 }
 
 ForecastPageContainer.propTypes = {
   fetchSpot: PropTypes.func.isRequired,
   fetchRegion: PropTypes.func.isRequired,
+  fetchSpotList: PropTypes.func.isRequired,
+  incrementDay: PropTypes.func.isRequired,
+  decrementDay: PropTypes.func.isRequired,
   setSpotWithRegion: PropTypes.func.isRequired,
   appState: PropTypes.shape({
+    showWelcomeMessage: PropTypes.bool.isRequired,
     selectedRegion: PropTypes.shape({
       name: PropTypes.string,
       id: PropTypes.string,
@@ -136,23 +146,53 @@ ForecastPageContainer.propTypes = {
     activeDay: PropTypes.number,
     forecastFetched: PropTypes.bool,
   }).isRequired,
+  appData: PropTypes.shape({
+    spotList: PropTypes.arrayOf(
+      PropTypes.shape({
+        region: PropTypes.shape({
+          id: PropTypes.string.isRequired,
+          name: PropTypes.string.isRequired,
+          buoy: PropTypes.shape({
+            buoyId: PropTypes.string.isRequired,
+            buoyName: PropTypes.string.isRequired,
+          }),
+          spots: PropTypes.arrayOf(
+            PropTypes.shape({
+              id: PropTypes.string.isRequired,
+              name: PropTypes.string.isRequired,
+            }).isRequired
+          ).isRequired,
+        }),
+      })
+    ),
+    forecast: PropTypes.shape({
+      Surf: PropTypes.instanceOf(Object),
+      Tide: PropTypes.instanceOf(Object),
+      Buoy: PropTypes.instanceOf(Object),
+    }),
+    forecastFetched: PropTypes.bool,
+    forecastIsLoading: PropTypes.bool,
+    spotListIsLoading: PropTypes.bool,
+  }).isRequired,
 }
 
 const mapStateToProps = state => state
 
 const mapDispatchToProps = dispatch => ({
-  resetAppState: () => dispatch(resetAppState()),
   incrementDay: activeDay => dispatch(incrementDay(activeDay)),
   decrementDay: activeDay => dispatch(decrementDay(activeDay)),
   toggleSelector: () => dispatch(toggleSelector(true)),
-  closeClick: () => dispatch(viewedWelcomeMessage()),
+  fetchSpotList: async () => {
+    // Dispatch an action to set the loader state
+    dispatch(fetchSpotList())
+    // Hit that API
+    const spotList = await getRegions()
+    dispatch(setSpotList(spotList))
+  },
   fetchRegion: async region => {
     // User interacted with page, no need to show welcome message again
     dispatch(viewedWelcomeMessage())
-    // Reset the App State since selecting a new region changes the spots available
-    dispatch(resetAppState())
-    // Reset the app data so that the flag "forecastFetched" is back to false
-    dispatch(resetAppData())
+    setVisitedCookie()
     // Dispatch an action to update the selected region
     dispatch(setRegion(region))
     dispatch(fetchForecast())
@@ -163,14 +203,12 @@ const mapDispatchToProps = dispatch => ({
     regionForecast.data.Buoy = buoyData.data
 
     dispatch(setForecast(regionForecast.data, false))
+    // dispatch(forecastLoaded())
   },
   setSpotWithRegion: async (region, spot) => {
     // User interacted with page, no need to show welcome message again
     dispatch(viewedWelcomeMessage())
-    // Reset the App State since selecting a new region changes the spots available
-    dispatch(resetAppState())
-    // Reset the app data so that the flag "forecastFetched" is back to false
-    dispatch(resetAppData())
+    setVisitedCookie()
     // Dispatch an action to update the selected spot
     dispatch(setRegion(region))
     dispatch(setSpot(spot))
@@ -184,8 +222,6 @@ const mapDispatchToProps = dispatch => ({
     dispatch(setForecast(spotForecast.data, false))
   },
   fetchSpot: async (spot, region) => {
-    // Reset the app data so that the flag "forecastFetched" is back to false
-    dispatch(resetAppData())
     // Dispatch an action to update the selected spot
     dispatch(setSpot(spot))
     dispatch(fetchForecast())
