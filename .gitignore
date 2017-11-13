@@ -11,7 +11,7 @@
 /build
 
 # CSS files (exclude build files)
-src/**/*.css
+client/src/**/*.css
 
 # misc
 .vscode/

@@ -4,6 +4,8 @@
  * Module dependencies.
  */
 
+import { cacheBuoyDataJob, cacheSurflineDataJob } from '../helpers/jobs'
+
 const app = require('../routes/index')
 const debug = require('debug')('server:server')
 const http = require('http')
@@ -11,7 +13,6 @@ const http = require('http')
 /**
  * Get port from environment and store in Express.
  */
-console.log(process.env.SERVER_PORT)
 const port = normalizePort(process.env.SERVER_PORT || '3006')
 app.set('port', port)
 
@@ -84,3 +85,9 @@ function onListening() {
   const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`
   console.log(`Listening on ${bind}`)
 }
+
+// cacheBuoyDataJob().start()
+// console.log('cacheBuoyDataJob running: ', cacheBuoyDataJob.running)
+
+cacheSurflineDataJob().start()
+console.log('cacheBuoyDataJob running: ', cacheSurflineDataJob.running)

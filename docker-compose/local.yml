@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  forecast-me-react:
+  react:
     build:
       context: ../
       dockerfile: docker-compose/dockerfiles/Dockerfile-client-dev
@@ -9,15 +9,20 @@ services:
       - ./local.env
     volumes:
       - ../client/src:/src/src/
+      - ../client/src/components:/src/src/components/
       - ../client/config:/src/config/
       - ../client/public:/src/public/
     ports:
       - "3005:3005"
     links:
-      - forecast-me-server
+      - server
+    depends_on:
+      - server
   redis:
     image: redis:4.0.2-alpine
-  forecast-me-server:
+    ports:
+      - "6379:6379"
+  server:
     build:
       context: ../
       dockerfile: docker-compose/dockerfiles/Dockerfile-server-dev
@@ -30,6 +35,11 @@ services:
       - ../server/helpers:/server/helpers/
       - ../server/routes:/server/routes/
       - ../server/services:/server/services/
+      - ../server/redis:/server/redis/
     ports:
       - "3006:3006"
       - "5050:5050"
+    links:
+      - redis
+    depends_on:
+      - redis

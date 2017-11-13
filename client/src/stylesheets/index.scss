@@ -107,6 +107,7 @@ h6,
 .h3,
 .h5,
 .h6,
+text,
 .page-title,
 .section-title,
 .article-title,
@@ -130,7 +131,6 @@ h6,
 .h6 {
   font-size: 24px;
   line-height: 24px;
-  color: #000;
 }
 
 h3,
@@ -140,15 +140,20 @@ h3,
 }
 
 a {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
   color: #0058b0;
   text-decoration: none;  
   &:visited {
     text-decoration: none;
     color: #048;
   }
+  &:hover {
+    color: black;
+  }
 }
 p {
-  color: #666;
+  color: inherit;
   font-family: 'Montserrat', sans-serif;
   line-height: 1;
   font-size: 15px;
@@ -209,6 +214,15 @@ p {
   background-repeat: no-repeat;
   display: inline-block;
   margin-bottom: 14px;
+}
+
+.lrg-icon {
+  width: 200px;
+  height: 200px;
+  background-size: 200px 200px;
+  background-repeat: no-repeat;
+  display: inline-block;
+  margin-bottom: 14px; 
 }
 
 .other-icon {
@@ -283,77 +297,12 @@ p {
   vertical-align: center;
 }
 
-.day-date-title {
-  padding: 15px 0px 0px 0px;
-}
-
 .graphs {
   background-color: lightgrey;
 }
 
 .charts-wrapper {
   padding-top: 10px;
-  .recharts-responsive-container {
-    background-color: lightgrey;
-    border-bottom-right-radius: 15px;
-    border-bottom-left-radius: 15px;
-  }
-  .surf-forecast-title {
-    h3 {
-      margin: 0;
-    }
-    background-color: grey;
-    border-top-right-radius: 15px;
-    border-top-left-radius: 15px;
-  }
-  .tide-forecast-title {
-    h3 {
-      margin: 0;
-    }
-    background-color: grey;
-    border-top-right-radius: 15px;
-    border-top-left-radius: 15px;
-  }
-  .recharts-cartesian-axis-line {
-    stroke-width: 5px;
-  }
-}
-
-//******* WAVE LOADER *********/
-.wave-wrapper {
-  width: 500px;
-  height: 500px;
-  border-radius: 5px;
-  top: 40%;
-  background-image: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);
-  overflow: hidden;
-}
-
-.loading-text {
-  margin-top: 40%;
-  z-index: 2;
-  color: black;
-  position: relative;
-}
-
-.wave {
-  z-index: -2;
-  width: 1000px;
-  height: 1025px;
-  margin-left: -281px;
-  margin-top: -900px;
-  border-radius: 35%;
-  background: rgba(255, 255, 255, 0.75);
-  animation: wave 15s infinite linear;
-}
-
-@keyframes wave {
-  from {
-    transform: rotate(0deg);
-  }
-  from {
-    transform: rotate(360deg);
-  }
 }
 
 /********* CLOSE BUTTON **********/

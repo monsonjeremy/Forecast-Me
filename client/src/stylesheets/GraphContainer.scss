@@ -4,6 +4,23 @@
   justify-content: center;
   align-items: center;
   width: 96%;
+
+  .graph-box-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: grey;
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
+  }
+
+  .tide-chart {
+    width: 100%;
+  }
+  .surf-chart {
+    width: 50%;
+  }
 }
 
 [class*='-forecast'] {

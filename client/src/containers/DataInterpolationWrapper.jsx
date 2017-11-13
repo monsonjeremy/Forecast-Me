@@ -31,12 +31,17 @@ const createInterpolatorDataProp = (dataSet, nextDataSet) => {
     // Map data set as normal
     return dataSet.data.map((datum, datumIndex) =>
       dataSet.keysToInterp
-        .map(key => {
+        .map((key, index) => {
           // If the next dataset doesn't have data at index just return null
           if (nextDataSet.data[datumIndex] !== undefined) {
+            // In case the next data uses different keys, use those keys for interpolation
+            const nextPropsDataKey = nextDataSet.keysToInterp[index]
             return {
               key,
-              interpolator: d3.interpolateNumber(datum[key], nextDataSet.data[datumIndex][key]),
+              interpolator: d3.interpolateNumber(
+                datum[key],
+                nextDataSet.data[datumIndex][nextPropsDataKey]
+              ),
             }
           }
           // Else return interpolator as normal
@@ -48,17 +53,22 @@ const createInterpolatorDataProp = (dataSet, nextDataSet) => {
   if (dataSet.data.length < nextDataSet.data.length) {
     // Map next data since it has more items
     return nextDataSet.data.map((datum, datumIndex) =>
-      dataSet.keysToInterp.map(key => {
+      dataSet.keysToInterp.map((key, index) => {
+        // In case the next data uses different keys, use those keys for interpolation
+        const nextDataSetKey = nextDataSet.keysToInterp[index]
         // If the old dataset doesn't have data at index, create a static interpolator
         if (dataSet.data[datumIndex] === undefined) {
           // this will just return the same value at every elapsed time point
           return {
             key,
-            interpolator: d3.interpolateNumber(datum[key], datum[key]),
+            interpolator: d3.interpolateNumber(datum[nextDataSetKey], datum[nextDataSetKey]),
           }
         }
         // Else return interpolator as normal
-        const interpolator = d3.interpolateNumber(dataSet.data[datumIndex][key], datum[key])
+        const interpolator = d3.interpolateNumber(
+          dataSet.data[datumIndex][key],
+          datum[nextDataSetKey]
+        )
         return {
           key,
           interpolator,
@@ -67,9 +77,14 @@ const createInterpolatorDataProp = (dataSet, nextDataSet) => {
     )
   }
   return dataSet.data.map((datum, datumIndex) =>
-    dataSet.keysToInterp.map(key => {
+    dataSet.keysToInterp.map((key, index) => {
+      // In case the next data uses different keys, use those keys for interpolation
+      const nextDataSetKey = nextDataSet.keysToInterp[index]
       // Create the interpolator and associate it to the accessor key
-      const interpolator = d3.interpolateNumber(datum[key], nextDataSet.data[datumIndex][key])
+      const interpolator = d3.interpolateNumber(
+        datum[key],
+        nextDataSet.data[datumIndex][nextDataSetKey]
+      )
       return { key, interpolator, }
     })
   )
@@ -99,7 +114,7 @@ const createInterpolatorDataProp = (dataSet, nextDataSet) => {
   data keys as a string instead of an array of 1 string. It's not a priority however due
   to the fact that this project strucutres the data the same way.
 */
-const DataInterpolationWrapper = (transitionDuration = 300) => ComposedComponent => {
+const DataInterpolationWrapper = (transitionDuration = 200) => ComposedComponent => {
   class Composed extends Component {
     constructor(props) {
       super(props)
@@ -159,6 +174,7 @@ const DataInterpolationWrapper = (transitionDuration = 300) => ComposedComponent
             )
         )
       )
+
       const oldState = this.state
       const updatedState = Object.keys(oldState)
         .map((dataSetKey, dataSetIndex) => {
@@ -177,14 +193,22 @@ const DataInterpolationWrapper = (transitionDuration = 300) => ComposedComponent
             })
             .filter(dataEntry => !_.isEmpty(dataEntry))
 
-          const newObj = {
+          if (nextProps !== null) {
+            return {
+              key: dataSetKey,
+              newDataSetObject: {
+                ...nextProps[dataSetKey],
+                data: newDataSetData,
+              },
+            }
+          }
+          return {
             key: dataSetKey,
             newDataSetObject: {
               ...oldState[dataSetKey],
               data: newDataSetData,
             },
           }
-          return newObj
         })
         .reduce((newObject, currentValue) => {
           const { key, newDataSetObject, } = currentValue

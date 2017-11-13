@@ -75,9 +75,12 @@ const buildArea = (data, view, xScale, yScale) => {
   )
 }
 
-/*
-
-*/
+/**
+ * Area Chart component for passing in props to create an area chart
+ * 
+ * @class AreaChart
+ * @extends {PureComponent<Props>}
+ */
 class AreaChart extends PureComponent<Props> {
   static defaultProps: Object
 

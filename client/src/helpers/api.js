@@ -3,10 +3,13 @@
 import axios from 'axios'
 
 export const fetchSpot = (spotId: number) => {
-  const encodedURI = window.encodeURI(
-    `http://api.surfline.com/v1/forecasts/${spotId}?resources=surf,tide&days=10&getAllSpots=false&units=e&interpolate=false&showOptimal=false`
-  )
+  const encodedURI = window.encodeURI(`/api/surf/v1/GetSurf/${spotId}`)
   return axios.get(encodedURI)
+}
+
+export const getRegions = () => {
+  const encodedURI = window.encodeURI(`/api/surf/v1/GetRegions`)
+  return axios.get(encodedURI).then(response => response.data)
 }
 
 export const newAPI = () => {
@@ -17,10 +20,6 @@ export const newAPI = () => {
 }
 
 export const getBuoyData = (buoyId: string) => {
-  const encodedURI = window.encodeURI(`http://www.ndbc.noaa.gov/data/realtime2/${buoyId}.spec`)
-  return axios.get(encodedURI, {
-    Accept: 'text/plain',
-    'Access-Control-Allow-Origin': '*',
-    'Content-Type': 'text/plain',
-  })
+  const encodedURI = window.encodeURI(`api/buoys/v1/GetData/${buoyId}`)
+  return axios.get(encodedURI)
 }

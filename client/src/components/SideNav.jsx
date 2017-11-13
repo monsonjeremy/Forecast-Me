@@ -1,56 +1,101 @@
 /* @flow */
 
-import * as React from 'react'
+import React, { PureComponent } from 'react'
+import type { Node } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import { childPropType } from '../types/proptypes'
-import { SpotSearch } from './'
+import { SpotSearch, DropdownSelector, Loader } from './'
 
 import '../stylesheets/SideNav.css'
 
 type Props = {
-  children: React.Node,
+  children: Node,
+  fetchSpotList: Function,
   regions: Array<Object>,
   setRegion: Function,
   setSpotWithRegion: Function,
+  setSpot: Function,
+  selectedRegion: Object,
+  spotList: Object,
+  spotListIsLoading: boolean,
 }
-/*
-Simple stateless functional componentthat renders the navbar in the top level of the app so
-that it is present in every section of the app.
-It is connected to react-router, since that's what we use for routing.
-*/
-const SideNav = ({ children, regions, setRegion, setSpotWithRegion, }: Props) => (
-  <section className="sidenav-container">
-    <aside className="sidenav-aside">
-      <div className="sidenav-title-container">
-        <figure className="surfer-icon sidenav-title-icon" />
-        <h1 className="sidenav-title">Forecast.it</h1>
-      </div>
-      <div className="sidenav-links-container">
-        <div className="sidenav-links forecast-link">
-          <Link className="sidenav-link" to="/forecast">
-            FORECAST
-          </Link>
-        </div>
-        <div className="sidenav-links info-link">
-          <Link className="sidenav-link" to="/info">
-            INFO
-          </Link>{' '}
-        </div>
-      </div>
-      <SpotSearch
-        placeholder="Search for a spot or region..."
-        regions={regions}
-        setRegion={setRegion}
-        setSpotWithRegion={setSpotWithRegion}
-      />
-      <section className="sidenav-container-items">{children}</section>
-    </aside>
-  </section>
-)
+
+class SideNav extends PureComponent<Props> {
+  static defaultProps: Object
+
+  componentWillMount() {
+    this.props.fetchSpotList()
+  }
+  render() {
+    const {
+      regions,
+      setRegion,
+      setSpotWithRegion,
+      selectedRegion,
+      spotList,
+      setSpot,
+      spotListIsLoading,
+    } = this.props
+
+    const regionDropdownProps = {
+      options: spotList,
+      title: 'Region Selector',
+      type: 'region',
+      itemClick: setRegion,
+    }
+
+    let spotOptions = null
+
+    if (selectedRegion !== null) {
+      spotOptions = selectedRegion.spots
+    }
+
+    const spotDropdownProps = {
+      isDisabled: selectedRegion === null,
+      title: 'Spot Selector',
+      type: 'spot',
+      itemClick: spot => setSpot(spot, selectedRegion),
+      options: spotOptions,
+    }
+
+    return (
+      <section className="sidenav-container">
+        {spotListIsLoading && <Loader />}
+        <aside className="sidenav-aside">
+          <div className="sidenav-title-container">
+            <figure className="surfer-icon sidenav-title-icon" />
+            <h1 className="sidenav-title">Forecast.it</h1>
+          </div>
+          <div className="sidenav-links-container">
+            <div className="sidenav-links forecast-link">
+              <Link className="sidenav-link" to="/forecast">
+                Forecast
+              </Link>
+            </div>
+            <div className="sidenav-links info-link">
+              <Link className="sidenav-link" to="/info">
+                Info
+              </Link>{' '}
+            </div>
+          </div>
+          <SpotSearch
+            placeholder="Search for a spot or region..."
+            regions={regions}
+            setRegion={setRegion}
+            setSpotWithRegion={setSpotWithRegion}
+          />
+          <section className="sidenav-container-items">
+            <DropdownSelector key={'region-dropdown'} {...regionDropdownProps} />
+            <DropdownSelector key={'spot-dropdown'} {...spotDropdownProps} />
+          </section>
+        </aside>
+      </section>
+    )
+  }
+}
 
 SideNav.propTypes = {
-  children: childPropType,
+  fetchSpotList: PropTypes.func.isRequired,
   regions: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string.isRequired,
@@ -63,13 +108,37 @@ SideNav.propTypes = {
       ).isRequired,
     })
   ).isRequired,
-  setSpot: PropTypes.func.isRequired,
   setRegion: PropTypes.func.isRequired,
+  setSpot: PropTypes.func.isRequired,
   setSpotWithRegion: PropTypes.func.isRequired,
+  selectedRegion: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    spots: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        id: PropTypes.string.isRequired,
+      })
+    ).isRequired,
+  }),
+  spotList: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
+      spots: PropTypes.arrayOf(
+        PropTypes.shape({
+          name: PropTypes.string.isRequired,
+          id: PropTypes.string.isRequired,
+        })
+      ).isRequired,
+    })
+  ).isRequired,
+  spotListIsLoading: PropTypes.bool,
 }
 
 SideNav.defaultProps = {
-  children: null,
+  selectedRegion: null,
+  spotListIsLoading: true,
 }
 
 export default SideNav

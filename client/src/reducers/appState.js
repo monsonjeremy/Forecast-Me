@@ -1,7 +1,6 @@
 // @flow
 
 import {
-  RESET_APP_STATE,
   SET_SPOT,
   SET_REGION,
   INC_ACTIVE_DAY,
@@ -15,6 +14,7 @@ const initialState = {
   selectedSpot: null,
   showWelcomeMessage: true,
   selectorOpen: false,
+  forecastIsLoading: false,
 }
 
 const appStateReducer = (
@@ -25,21 +25,13 @@ const appStateReducer = (
   }
 ) => {
   switch (action.type) {
-    case RESET_APP_STATE:
-      return {
-        ...state,
-        selectedSpot: null,
-        selectedRegion: null,
-        activeDay: 0,
-        isSpot: false,
-        showWelcomeMessage: false,
-      }
     case SET_SPOT:
       return {
         ...state,
         selectedSpot: action.payload,
         isSpot: true,
         activeDay: 0,
+        forecastIsLoading: true,
       }
     case SET_REGION:
       return {
@@ -47,7 +39,9 @@ const appStateReducer = (
         selectedRegion: action.payload,
         isSpot: false,
         activeDay: 0,
+        forecastIsLoading: true,
       }
+
     case INC_ACTIVE_DAY:
       return {
         ...state,
