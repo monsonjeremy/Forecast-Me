@@ -9,18 +9,24 @@ type Props = {
   orientation: string,
   onClick: Function,
   disabled: boolean,
+  className: string,
 }
 
-const ArrowButton = ({ orientation, onClick, disabled, }: Props) => {
+const ArrowButton = ({ orientation, onClick, disabled, className, }: Props) => {
   if (orientation === 'left') {
     return (
-      <div className="previous_btn" title="Previous" onClick={() => onClick()} role="button">
+      <div
+        className={`previous_btn ${className}`}
+        title="Previous"
+        onClick={() => onClick()}
+        role="button"
+      >
         <button disabled={disabled} className="left-arrow arrow-btn other-icon" />
       </div>
     )
   }
   return (
-    <div className="next_btn" title="Next" onClick={() => onClick()} role="button">
+    <div className={`next_btn ${className}`} title="Next" onClick={() => onClick()} role="button">
       <button disabled={disabled} className="right-arrow arrow-btn other-icon" />
     </div>
   )
@@ -29,6 +35,8 @@ const ArrowButton = ({ orientation, onClick, disabled, }: Props) => {
 ArrowButton.PropTypes = {
   orientation: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  className: PropTypes.string.isRequired,
 }
 
 export default ArrowButton
