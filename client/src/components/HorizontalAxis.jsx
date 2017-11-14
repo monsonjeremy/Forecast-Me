@@ -3,6 +3,7 @@
 
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
+import { AnimatedScaleWrapper } from '../containers'
 
 type Props = {
   scale: Function,
@@ -52,9 +53,12 @@ class HorizontalAxis extends PureComponent<Props> {
       use a scaleBand or some other sort of scale. Set the widthScaleForTicks prop to
       true and pass in a secondary scale.
       */
-      useWidthScaleForTicks ? (xPos = widthScale(tickValue)) : (xPos = scale(tickValue))
+
       if (useWidthScaleForTicks) {
+        xPos = widthScale(tickValue)
         xPos += tickOffset
+      } else {
+        xPos = scale(tickValue)
       }
 
       let tickLength = margins[1] / 6
@@ -135,4 +139,4 @@ HorizontalAxis.propTypes = {
   orientation: PropTypes.string,
 }
 
-export default HorizontalAxis
+export default AnimatedScaleWrapper(['scale', 'widthScale'])(HorizontalAxis)

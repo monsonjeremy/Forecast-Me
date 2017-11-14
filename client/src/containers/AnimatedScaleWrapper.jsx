@@ -6,7 +6,7 @@ const AnimatedScaleWrapper = (scaleProps = [], transitionDuration = 300) => Comp
     constructor(props) {
       super(props)
       this.state = scaleProps
-        .map((scaleProp) => {
+        .map(scaleProp => {
           const scale = this.props[scaleProp]
           const [domainMin, domainMax] = scale.domain()
           return {
@@ -19,7 +19,7 @@ const AnimatedScaleWrapper = (scaleProps = [], transitionDuration = 300) => Comp
 
     componentWillReceiveProps(nextProps) {
       const scalesUnchanged = scaleProps
-        .map((scaleProp) => {
+        .map(scaleProp => {
           const [nextDomainMin, nextDomainMax] = nextProps[scaleProp].domain()
           const [domainMin, domainMax] = this.props[scaleProp].domain()
           return nextDomainMin === domainMin && nextDomainMax === domainMax
@@ -28,14 +28,17 @@ const AnimatedScaleWrapper = (scaleProps = [], transitionDuration = 300) => Comp
       if (scalesUnchanged) {
         return
       }
-      d3.select(this).transition().tween('attr.scale', null)
+      d3
+        .select(this)
+        .transition()
+        .tween('attr.scale', null)
       d3
         .select(this)
         .transition()
         .duration(transitionDuration)
         .ease(d3.easeLinear)
         .tween('attr.scale', () => {
-          const interpolators = scaleProps.map((scaleProp) => {
+          const interpolators = scaleProps.map(scaleProp => {
             const [nextDomainMin, nextDomainMax] = nextProps[scaleProp].domain()
             const minInterpolator = d3.interpolateNumber(
               this.state[`${scaleProp}Min`],
@@ -47,7 +50,7 @@ const AnimatedScaleWrapper = (scaleProps = [], transitionDuration = 300) => Comp
             )
             return { scaleProp, minInterpolator, maxInterpolator, }
           })
-          return (t) => {
+          return t => {
             const newState = interpolators
               .map(({ scaleProp, minInterpolator, maxInterpolator, }) => ({
                 [`${scaleProp}Min`]: minInterpolator(t),
@@ -62,7 +65,7 @@ const AnimatedScaleWrapper = (scaleProps = [], transitionDuration = 300) => Comp
     render() {
       const { props, state, } = this
       const newScaleProps = scaleProps
-        .map((scaleProp) => {
+        .map(scaleProp => {
           const scale = props[scaleProp]
           const domainMin = state[`${scaleProp}Min`]
           const domainMax = state[`${scaleProp}Max`]

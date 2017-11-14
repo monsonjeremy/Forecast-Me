@@ -20,6 +20,14 @@ type Props = {
   tickValues: Array<any>,
   tickOffset: number,
 }
+type BarProps = {
+  data: Object,
+  xScale: Function,
+  yScale: Function,
+  keys: Array<string>,
+  keyColors: Array<string>,
+  xScaleKey: string,
+}
 
 /**
  * Since we have multiple lines that we want to generate, this function will handle rendering them
@@ -32,9 +40,9 @@ type Props = {
  * @param {Function} yScale 
  * @param {Array<string>} keys 
  * @param {Array<string>} keyColors 
- * @returns 
+ * @returns SVG rect
  */
-const buildBars = (data, xScale, xScaleKey, yScale, keys, keyColors) => {
+const Bars = ({ data, xScale, xScaleKey, yScale, keys, keyColors, }: BarProps) => {
   // Creates a color scale based on data keys
   const colorScale = d3
     .scaleOrdinal()
@@ -123,7 +131,7 @@ class StackedBarChart extends PureComponent<Props> {
       <svg className="stacked-bar-chart-svg" {...{ viewBox, }}>
         <g className="graph-and-axes" {...{ transform, }}>
           <g className="bars" key="bars">
-            {buildBars(data, xScale, xScaleKey, yScale, keys, keyColors)}
+            <Bars {...{ data, xScale, xScaleKey, yScale, keys, keyColors, }} />
           </g>
           <g className="horizontal-axis" key="stached-bar-chart-x-axis">
             <HorizontalAxis

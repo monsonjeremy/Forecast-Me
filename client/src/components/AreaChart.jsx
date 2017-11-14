@@ -4,8 +4,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import * as d3 from 'd3'
 
-import HorizontalAxis from './HorizontalAxis'
-import buildVerticalAxis from './VerticalAxis'
+import { HorizontalAxis, VerticalAxis } from './'
 
 type Props = {
   data: Array<{
@@ -30,12 +29,29 @@ type Props = {
   labelFn: Function,
 }
 
+type AreaProps = {
+  data: Array<{
+    Localtime: string,
+    Rawtime: string,
+    height: number,
+    printtime: string,
+    time: number,
+    type: string,
+    utctime: string,
+    lineChartCurtain: number,
+  }>,
+  xScale: Function,
+  xScaleKey: string,
+  yScaleKey: string,
+  yScale: Function,
+}
+
 /*
 Since we have multiple lines that we want to generate, this function will handle rendering them
 For each data key that we want to render a line for it will take the data points for each data key
 and do all the math using D3, and then create the SVG elements
 */
-const buildArea = (data, view, xScale, xScaleKey, yScale, yScaleKey) => {
+const BuildArea = ({ data, xScale, xScaleKey, yScale, yScaleKey, }: AreaProps) => {
   // Create an D3 Area instance to use to format the data
   const lineArea = d3
     .area()
@@ -120,7 +136,9 @@ class AreaChart extends PureComponent<Props> {
     return (
       <svg className="area-chart-svg" {...{ viewBox, }}>
         <g className="graph-and-axes" {...{ transform, }}>
-          <g className="area">{buildArea(data, view, xScale, xScaleKey, yScale, yScaleKey)}</g>
+          <g className="area">
+            <BuildArea {...{ data, xScale, xScaleKey, yScale, yScaleKey, }} />
+          </g>
           <g className="horizontal-axis">
             <HorizontalAxis
               {...{
@@ -134,7 +152,7 @@ class AreaChart extends PureComponent<Props> {
             />
           </g>
           <g className="vertical-axis">
-            {buildVerticalAxis(view, margins, yScale, vertTickValues)}
+            <VerticalAxis {...{ scale: yScale, view, margins, vertTickValues, }} />
           </g>
         </g>
         <g className="curtain-rect" {...{ transform, }}>

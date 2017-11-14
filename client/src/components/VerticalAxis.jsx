@@ -14,16 +14,7 @@ type Props = {
 }
 
 class VerticalAxis extends PureComponent<Props> {
-  static propTypes = {
-    labelFn: PropTypes.func.isRequired,
-    orientation: PropTypes.string.isRequired,
-    scale: PropTypes.func.isRequired,
-    tickValues: PropTypes.arrayOf(
-      PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)])
-    ).isRequired,
-    margins: PropTypes.arrayOf(PropTypes.number).isRequired,
-    view: PropTypes.arrayOf(PropTypes.number).isRequired,
-  }
+  static defaultProps: Object
 
   static orientation = {
     LEFT: 'horizontal-axis-left',
@@ -37,7 +28,13 @@ class VerticalAxis extends PureComponent<Props> {
   }
 
   buildTicks = () => {
-    const { scale, margins, labelFn, tickValues, orientation, } = this.props
+    const { scale, margins, labelFn, orientation, } = this.props
+    let { tickValues, } = this.props
+
+    if (tickValues.length === 0) {
+      tickValues = scale.ticks()
+    }
+
     return tickValues.map((tickValue, key) => {
       const tickLength = margins[0] / 6
       const yPos = scale(tickValue)
@@ -101,20 +98,21 @@ class VerticalAxis extends PureComponent<Props> {
   }
 }
 
-const AnimatedVerticalAxis = AnimatedScaleWrapper(['scale'])(VerticalAxis)
-
-const buildVerticalAxis = (
-  view: Array<number>,
-  margins: Array<number>,
-  scale: Function,
-  tickValues: any = null
-) => {
-  const orientation = VerticalAxis.orientation.LEFT
-  if (tickValues === null) {
-    tickValues = scale.ticks()
-  }
-  const labelFn = value => value
-  return <AnimatedVerticalAxis {...{ scale, margins, view, tickValues, orientation, labelFn, }} />
+VerticalAxis.propTypes = {
+  view: PropTypes.arrayOf(PropTypes.number).isRequired,
+  margins: PropTypes.arrayOf(PropTypes.number).isRequired,
+  scale: PropTypes.func.isRequired,
+  labelFn: PropTypes.func,
+  orientation: PropTypes.string.isRequired,
+  tickValues: PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)])
+  ).isRequired,
 }
 
-export default buildVerticalAxis
+VerticalAxis.defaultProps = {
+  tickValues: [],
+  orientation: VerticalAxis.orientation.LEFT,
+  labelFn: value => value,
+}
+
+export default AnimatedScaleWrapper(['scale'])(VerticalAxis)
