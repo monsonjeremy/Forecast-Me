@@ -1,5 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
+import moment from 'moment'
 /**
    * Source: https://gist.github.com/mikelehen/3596a30bd69384624c11#file-generate-pushid-js-L13
    * Fancy ID generator that creates 20-character string identifiers with the following properties:
@@ -65,3 +66,114 @@ export const generatePushID = (() => {
     return id
   }
 })()
+
+/**
+ * Massages the surf forecast data and returns a properly formatted array of objects
+ * 
+ * @param {Object} data 
+ * @param {boolean} isSpot 
+ */
+export const formatSurfData = (data, isSpot) =>
+  data.dateStamp.map((day, forecastDay) =>
+    day.map((date, index) => {
+      const surfData = {
+        dateTime: date,
+        date,
+        anindex: index,
+        hour: moment(date, 'MMMM DD, YYYY HH:mm:ss').format('h A'),
+        swellHeight1: data.swell_height1[forecastDay][index],
+        swellHeight2: data.swell_height2[forecastDay][index],
+        swellHeight3: data.swell_height3[forecastDay][index],
+        swellPeriod1: data.swell_period1[forecastDay][index],
+        swellPeriod2: data.swell_period2[forecastDay][index],
+        swellPeriod3: data.swell_period3[forecastDay][index],
+        swellDirection1: data.swell_direction1[forecastDay][index],
+        swellDirection2: data.swell_direction2[forecastDay][index],
+        swellDirection3: data.swell_direction3[forecastDay][index],
+        surfMaxMaximum: data.surf_max_maximum,
+      }
+      if (isSpot === false) {
+        return {
+          ...surfData,
+          surfMax: data.agg_surf_max[forecastDay][index] - data.agg_surf_min[forecastDay][index],
+          surfMin: data.agg_surf_min[forecastDay][index],
+          label: `${Math.round(data.agg_surf_min[forecastDay][index])}-${Math.round(
+            data.agg_surf_max[forecastDay][index]
+          )}ft`,
+        }
+      }
+      return {
+        ...surfData,
+        surfMax: data.surf_max[forecastDay][index] - data.surf_min[forecastDay][index],
+        surfMin: data.surf_min[forecastDay][index],
+        label: `${Math.round(data.surf_min[forecastDay][index])}-${Math.round(
+          data.surf_max[forecastDay][index]
+        )}ft`,
+      }
+    })
+  )
+
+/**
+ * Massages the tide and sunrise/sunset forecast data 
+ * and returns a properly formatted array of objects
+ * 
+ * @param {Object} tideData 
+ */
+
+export const formatTideAndSunData = tideData => {
+  const next10Days = []
+  const formattedTideData = []
+  const formattedSunData = []
+  for (let i = 0; i < 10; i += 1) {
+    next10Days.push({
+      dayStart: moment()
+        .startOf('day')
+        .add(i, 'days')
+        .local(),
+      dayEnd: moment()
+        .endOf('day')
+        .add(i, 'days')
+        .local(),
+    })
+  }
+  next10Days.forEach(day => {
+    const currDayTideData = tideData.dataPoints.filter(tideEntry => {
+      tideEntry.lineChartCurtain = 500
+      return (
+        moment(tideEntry.Localtime).isBetween(day.dayStart, day.dayEnd, '[]') &&
+        (tideEntry.type === 'NORMAL' || tideEntry.type === 'Low' || tideEntry.type === 'High')
+      )
+    })
+    const currDaySundData = tideData.SunPoints.filter(sunEntry =>
+      moment(sunEntry.Localtime).isBetween(day.dayStart, day.dayEnd, '[]')
+    )
+    const mergeSunData = {}
+    currDaySundData.forEach(data => {
+      if (data.type === 'Sunrise') {
+        mergeSunData.sunriseLocaltime = data.Localtime
+        mergeSunData.sunrise = data.time
+      } else {
+        mergeSunData.sunsetLocaltime = data.Localtime
+        mergeSunData.sunset = data.time
+      }
+    })
+    formattedTideData.push(currDayTideData)
+    formattedSunData.push(mergeSunData)
+  })
+
+  return {
+    Tide: formattedTideData,
+    Sun: formattedSunData,
+  }
+}
+
+export const massageSurflineData = (data, isSpot) => {
+  const surfData = data.Surf
+  const Surf = formatSurfData(surfData, isSpot)
+  const tideAndSun = formatTideAndSunData(data.Tide)
+
+  return {
+    Surf,
+    ...tideAndSun,
+  }
+}

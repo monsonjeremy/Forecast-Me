@@ -5,6 +5,7 @@
  */
 
 import { cacheBuoyDataJob, cacheSurflineDataJob } from '../helpers/jobs'
+import * as helpers from '../helpers/helpers.js'
 
 const app = require('../routes/index')
 const debug = require('debug')('server:server')
@@ -89,5 +90,6 @@ function onListening() {
 // cacheBuoyDataJob().start()
 // console.log('cacheBuoyDataJob running: ', cacheBuoyDataJob.running)
 
-cacheSurflineDataJob().start()
-console.log('cacheBuoyDataJob running: ', cacheSurflineDataJob.running)
+const cacheSurflineJob = cacheSurflineDataJob()
+cacheSurflineJob.start()
+console.log('cacheSurfDataJob running: ', cacheSurflineJob.running)

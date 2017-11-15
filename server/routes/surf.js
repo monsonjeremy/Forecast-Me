@@ -42,7 +42,7 @@ router.get('/GetRegions', (req, res) =>
         buoyId: '46221',
         buoyName: 'Santa Monica',
       },
-      spots: [{ name: 'Newport', id: '1241', }, { name: 'HB', id: '3421', }],
+      spots: [{ name: 'The Wedge', id: '4232', }, { name: 'HB Pier, Southside ', id: '4874', }],
     }
   ])
 )
