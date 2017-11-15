@@ -114,7 +114,7 @@ const createInterpolatorDataProp = (dataSet, nextDataSet) => {
   data keys as a string instead of an array of 1 string. It's not a priority however due
   to the fact that this project strucutres the data the same way.
 */
-const DataInterpolationWrapper = (transitionDuration = 200) => ComposedComponent => {
+const DataInterpolationWrapper = (transitionDuration = 400) => ComposedComponent => {
   class Composed extends Component {
     constructor(props) {
       super(props)

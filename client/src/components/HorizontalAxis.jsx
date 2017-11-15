@@ -139,4 +139,4 @@ HorizontalAxis.propTypes = {
   orientation: PropTypes.string,
 }
 
-export default AnimatedScaleWrapper(['scale', 'widthScale'])(HorizontalAxis)
+export default AnimatedScaleWrapper(['scale'])(HorizontalAxis)
