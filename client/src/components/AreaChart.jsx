@@ -176,7 +176,6 @@ AreaChart.propTypes = {
       Localtime: PropTypes.string.isRequired,
       Rawtime: PropTypes.string.isRequired,
       height: PropTypes.number.isRequired,
-      printtime: PropTypes.string.isRequired,
       time: PropTypes.number.isRequired,
       type: PropTypes.string.isRequired,
       utctime: PropTypes.string.isRequired,

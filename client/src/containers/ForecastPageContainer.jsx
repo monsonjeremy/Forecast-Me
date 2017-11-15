@@ -35,19 +35,10 @@ class ForecastPageContainer extends Component {
   }
 
   renderForecast() {
-    const forecastIsLoaded = this.props.appData.forecast
+    const forecastIsLoaded = this.props.appData.forecast && !this.props.appData.forecastIsLoading
     if (forecastIsLoaded) {
-      let dataKeys = []
+      const dataKeys = ['surfMin', 'surfMax']
       let spotName = ''
-      let topBarDataKey = 'aggSurfMax'
-      let bottomBarDataKey = 'aggSurfMin'
-
-      if (this.props.appState.isSpot) {
-        topBarDataKey = 'surfMax'
-        bottomBarDataKey = 'surfMin'
-      }
-
-      dataKeys = [bottomBarDataKey, topBarDataKey]
 
       if (this.props.appState.isSpot) {
         spotName = this.props.appState.selectedSpot.name
@@ -57,6 +48,7 @@ class ForecastPageContainer extends Component {
       const props = {
         surf: this.props.appData.forecast.Surf,
         tide: this.props.appData.forecast.Tide,
+        sun: this.props.appData.forecast.Sun,
         buoy: this.props.appData.forecast.Buoy,
         isSpot: this.props.appState.isSpot,
         activeDay: this.props.appState.activeDay,
@@ -169,6 +161,7 @@ ForecastPageContainer.propTypes = {
       Surf: PropTypes.instanceOf(Object),
       Tide: PropTypes.instanceOf(Object),
       Buoy: PropTypes.instanceOf(Object),
+      Sun: PropTypes.instanceOf(Object),
     }),
     forecastFetched: PropTypes.bool,
     forecastIsLoading: PropTypes.bool,

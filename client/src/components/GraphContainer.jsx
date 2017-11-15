@@ -5,43 +5,26 @@ import PropTypes from 'prop-types'
 import * as d3 from 'd3'
 import moment from 'moment'
 
-import { formatSurflineData, roundUpMaxSurfHeight, prepTideData } from '../helpers/helperFunctions'
+import { roundUpMaxSurfHeight } from '../helpers/helperFunctions'
 import { GraphPresentation } from './'
 
 type Props = {
-  surf: {
-    SwellSource: string,
-    agg_direction1: Array<number>,
-    agg_height1: Array<number>,
-    agg_location: Array<number>,
-    agg_period1: Array<number>,
-    agg_spread1: Array<number>,
-    agg_surf_max: Array<number>,
-    agg_surf_min: Array<number>,
-    dateStamp: Array<number>,
-    modelCode: Array<number>,
-    modelCodeDisplay: string,
-    modelRun: Array<number>,
-    modelRunDisplay: number,
-    periodSchedule: Array<number>,
-    startDate_GMT: number,
-    startDate_LOCAL: number,
-    startDate_pretty_GMT: string,
-    startDate_pretty_LOCAL: string,
-    surf_max: Array<number>,
-    surf_max_maximum: number,
-    surf_min: Array<number>,
-    swell_direction1: Array<number>,
-    swell_direction2: Array<number>,
-    swell_direction3: Array<number>,
-    swell_height1: Array<number>,
-    swell_height2: Array<number>,
-    swell_height3: Array<number>,
-    swell_period1: Array<number>,
-    swell_period2: Array<number>,
-    swell_period3: Array<number>,
-    units: string,
-  },
+  surf: Array<Array<{
+      date: string,
+      periodSchedule: Array<number>,
+      surfMax: Array<number>,
+      surfMaxMaximum: number,
+      surfMin: Array<number>,
+      swellDirection1: Array<number>,
+      swellDirection2: Array<number>,
+      swellDirection3: Array<number>,
+      swellHeight1: Array<number>,
+      swellHeight2: Array<number>,
+      swellHeight3: Array<number>,
+      swellPeriod1: Array<number>,
+      swellPeriod2: Array<number>,
+      swellPeriod3: Array<number>,
+    }>,>,
   tide: {
     DisplayTides: string,
     Error: string,
@@ -89,11 +72,11 @@ class GraphContainer extends PureComponent<Props> {
   }
 
   createSurfProps = (margins: Array<number>) => {
-    const { surf, activeDay, dayDateArray, isSpot, dataKeys, } = this.props
+    const { surf, activeDay, dataKeys, } = this.props
 
     // Massage ze data
-    const data = formatSurflineData(dayDateArray, surf, activeDay, isSpot)
-    const yMax = roundUpMaxSurfHeight(surf.surf_max_maximum)
+    const data = surf[activeDay]
+    const yMax = roundUpMaxSurfHeight(data[0].surfMaxMaximum)
 
     // Surf graph props
     const size = [100, 70]
@@ -101,7 +84,11 @@ class GraphContainer extends PureComponent<Props> {
     const vHeight = size[1] - margins[0] - margins[2]
     const view = [vWidth, vHeight]
     const xScaleKey = 'date'
-    const labelFn = (tick: string) => moment(tick).format('hA')
+    const labelFn = (tick: string) =>
+      moment(tick, 'MMMM DD, YYYY HH:mm:ss')
+        .utc()
+        .local()
+        .format('hA')
     const keyColors = ['#1a1aff', '#66a3ff']
 
     const xScale = d3
@@ -136,9 +123,9 @@ class GraphContainer extends PureComponent<Props> {
   }
 
   createTideProps = (margins: Array<number>) => {
-    const { date, tide, } = this.props
+    const { tide, activeDay, } = this.props
     // Massage ze data
-    const data = prepTideData(date, tide.dataPoints, 500)
+    const data = tide[activeDay]
 
     // Tide graph props
     const size = [500, 200]
@@ -162,7 +149,6 @@ class GraphContainer extends PureComponent<Props> {
     const vertTickValues = yScale.ticks(numTicks)
     const horizTickValues = data.map(dataPoint => dataPoint[xScaleKey])
     const labelFn = (time: number) => moment(time * 1000).format('ha')
-
     return {
       data,
       mountInterpKeys: ['lineChartCurtain'],
@@ -183,7 +169,7 @@ class GraphContainer extends PureComponent<Props> {
   render() {
     const { surf, activeDay, decrementDay, incrementDay, } = this.props
 
-    const numDays = surf.dateStamp.length
+    const numDays = surf.length
 
     // Margins for the axes of the graphs
     const margins = [15, 15, 15, 15]
@@ -199,60 +185,29 @@ class GraphContainer extends PureComponent<Props> {
 
 GraphContainer.propTypes = {
   activeDay: PropTypes.number.isRequired,
-  dayDateArray: PropTypes.arrayOf(PropTypes.string).isRequired,
-  date: PropTypes.string.isRequired,
   isSpot: PropTypes.bool.isRequired,
   dataKeys: PropTypes.arrayOf(PropTypes.string).isRequired,
   decrementDay: PropTypes.func.isRequired,
   incrementDay: PropTypes.func.isRequired,
-  surf: PropTypes.shape({
-    SwellSource: PropTypes.string.isRequired,
-    agg_direction1: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
-    agg_height1: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
-    agg_location: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
-    agg_period1: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
-    agg_spread1: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
-    agg_surf_max: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
-    agg_surf_min: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
-    dateStamp: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-    modelCode: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-    modelCodeDisplay: PropTypes.string.isRequired,
-    modelRun: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    modelRunDisplay: PropTypes.number.isRequired,
-    periodSchedule: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-    startDate_GMT: PropTypes.number.isRequired,
-    startDate_LOCAL: PropTypes.number.isRequired,
-    startDate_pretty_GMT: PropTypes.string.isRequired,
-    startDate_pretty_LOCAL: PropTypes.string.isRequired,
-    surf_max: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    surf_max_maximum: PropTypes.number.isRequired,
-    surf_min: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    swell_direction1: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    swell_direction2: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    swell_direction3: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    swell_height1: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    swell_height2: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    swell_height3: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    swell_period1: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    swell_period2: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    swell_period3: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    units: PropTypes.string.isRequired,
-  }).isRequired,
-  tide: PropTypes.shape({
-    DisplayTides: PropTypes.string.isRequired,
-    Error: PropTypes.string.isRequired,
-    SunPoints: PropTypes.arrayOf(
+  surf: PropTypes.arrayOf(
+    PropTypes.arrayOf(
       PropTypes.shape({
-        Localtime: PropTypes.string.isRequired,
-        Rawtime: PropTypes.string.isRequired,
-        time: PropTypes.number.isRequired,
-        type: PropTypes.string.isRequired,
-        utctime: PropTypes.string.isRequired,
+        surfMax: PropTypes.number.isRequired,
+        surfMin: PropTypes.number.isRequired,
+        swellDirection1: PropTypes.number.isRequired,
+        swellDirection2: PropTypes.number.isRequired,
+        swellDirection3: PropTypes.number.isRequired,
+        swellHeight1: PropTypes.number.isRequired,
+        swellHeight2: PropTypes.number.isRequired,
+        swellHeight3: PropTypes.number.isRequired,
+        swellPeriod1: PropTypes.number.isRequired,
+        swellPeriod2: PropTypes.number.isRequired,
+        swellPeriod3: PropTypes.number.isRequired,
       }).isRequired
-    ).isRequired,
-    TideStation: PropTypes.string.isRequired,
-    TideType: PropTypes.string.isRequired,
-    dataPoints: PropTypes.arrayOf(
+    ).isRequired
+  ).isRequired,
+  tide: PropTypes.arrayOf(
+    PropTypes.arrayOf(
       PropTypes.shape({
         Localtime: PropTypes.string.isRequired,
         Rawtime: PropTypes.string.isRequired,
@@ -260,15 +215,10 @@ GraphContainer.propTypes = {
         time: PropTypes.number.isRequired,
         type: PropTypes.string.isRequired,
         utctime: PropTypes.string.isRequired,
-      }).isRequired
-    ).isRequired,
-    startDate_GMT: PropTypes.number.isRequired,
-    startDate_LOCAL: PropTypes.number.isRequired,
-    startDate_pretty_GMT: PropTypes.string.isRequired,
-    startDate_pretty_LOCAL: PropTypes.string.isRequired,
-    timezone: PropTypes.number.isRequired,
-    units: PropTypes.string.isRequired,
-  }).isRequired,
+        lineChartCurtain: PropTypes.number.isRequired,
+      })
+    ).isRequired
+  ).isRequired,
 }
 
 export default GraphContainer
