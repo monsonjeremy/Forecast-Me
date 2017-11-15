@@ -8,7 +8,8 @@
 /coverage
 
 # production
-/build
+/client/build
+/server/dist
 
 # CSS files (exclude build files)
 client/src/**/*.css
