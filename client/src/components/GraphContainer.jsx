@@ -73,15 +73,15 @@ class GraphContainer extends PureComponent<Props> {
     this.createTideProps = this.createTideProps.bind(this)
   }
 
-  createSurfProps = (margins: Array<number>) => {
+  createSurfProps = () => {
     const { surf, activeDay, dataKeys, } = this.props
-
+    const margins = [5, 5, 5, 5]
     // Massage ze data
     const data = surf[activeDay]
     const yMax = roundUpMaxSurfHeight(data[0].surfMaxMaximum)
 
     // Surf graph props
-    const size = [110, 60]
+    const size = [70, 40]
     const vWidth = size[0] - margins[1] - margins[3]
     const vHeight = size[1] - margins[0] - margins[2]
     const view = [vWidth, vHeight]
@@ -106,6 +106,7 @@ class GraphContainer extends PureComponent<Props> {
 
     const tickValues = xScale.domain()
     const tickOffset = xScale.bandwidth() / 2
+    const tickLength = 1.5
 
     return {
       data,
@@ -121,23 +122,25 @@ class GraphContainer extends PureComponent<Props> {
       labelFn,
       tickValues,
       tickOffset,
+      tickLength,
       margins,
     }
   }
 
-  createTideProps = (margins: Array<number>) => {
+  createTideProps = () => {
     const { tide, activeDay, tideMin, tideMax, } = this.props
     // Massage ze data
     const data = tide[activeDay]
-
+    const margins = [10, 5, 10, 5]
     // Tide graph props
-    const size = [400, 150]
+    const size = [400, 130]
     const vWidth = size[0] - margins[1] - margins[3]
     const vHeight = size[1] - margins[0] - margins[2]
     const view = [vWidth, vHeight]
     const xScaleKey = 'time'
     const yScaleKey = 'height'
     const yScaleDomain = [Math.round(tideMin - 1), Math.round(tideMax + 1)]
+    const tideLowsHighs = data.filter(d => d.type === 'High' || d.type === 'Low')
 
     // Make the domain slightly larger
     yScaleDomain[0] -= 1
@@ -146,20 +149,26 @@ class GraphContainer extends PureComponent<Props> {
       .scaleBand()
       .domain(data.map(d => d.time))
       .range([0, view[0]]) // Range of the X axis scale
-      .paddingInner(0.1) // .05 padding between bars
+      .paddingInner(0.15) // .05 padding between bars
     const yScale = d3
       .scaleLinear() // Creates a yScale to calculate Y position of the bar
       .domain(yScaleDomain)
       .range([view[1], 0])
     const barLabelFn = (d: Object) => `${Math.round(10 * d.height) / 10}ft`
+    const tickLabelFn = (d: any) => moment(d * 1000).format('H:mm')
     const colorScale = (d: Object) => {
       if (d.height > 0) {
-        if (d.type === 'High' || d.type === 'Low') return '#1a1aff'
         return '#1a1aff'
       }
-      if (d.type === 'Low') return '#66a3ff'
       return '#66a3ff'
     }
+
+    const showTicks = true
+    const tickAnchor = 'middle'
+    const tickLength = 0
+    const tickValues = xScale.domain()
+    const tickPos = (scale: Function) => scale(scale.domain()[0])
+    const tickOffset = xScale.bandwidth() / 2
     return {
       data,
       mountInterpKeys: ['height'],
@@ -172,7 +181,15 @@ class GraphContainer extends PureComponent<Props> {
       yScaleKey,
       margins,
       barLabelFn,
+      tickLabelFn,
       colorScale,
+      tickLength,
+      tickPos,
+      showTicks,
+      tickValues,
+      tickAnchor,
+      tickOffset,
+      tideLowsHighs,
     }
   }
 
@@ -181,12 +198,9 @@ class GraphContainer extends PureComponent<Props> {
 
     const numDays = surf.length
 
-    // Margins for the axes of the graphs
-    const margins = [15, 15, 15, 15]
-
     const dataSets = {
-      surf: this.createSurfProps(margins),
-      tide: this.createTideProps(margins),
+      surf: this.createSurfProps(),
+      tide: this.createTideProps(),
     }
 
     return <GraphPresentation {...{ dataSets, numDays, incrementDay, decrementDay, activeDay, }} />

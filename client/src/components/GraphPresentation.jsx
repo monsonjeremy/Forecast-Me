@@ -3,6 +3,7 @@
 import React, { PureComponent } from 'react'
 import type { Node } from 'react'
 import * as d3 from 'd3'
+import moment from 'moment'
 import PropTypes from 'prop-types'
 import { DataInterpolationWrapper, ParentResize } from '../containers'
 import { ArrowButton, StackedBarChart, BarChart, HorizontalAxis } from './'
@@ -31,7 +32,7 @@ const GraphBox = ({ title, children, className, }: GraphBoxProps) => (
     <div className="graph-box-title">
       <h2>{title}</h2>
     </div>
-    <div>{children}</div>
+    {children}
   </div>
 )
 
@@ -53,25 +54,28 @@ class GraphPresentation extends PureComponent<Props> {
               <HorizontalAxis
                 widthScale={surf.xScale}
                 scale={surf.xScale}
-                yScale={surf.yScale}
                 useWidthScaleForTicks
-                view={surf.view}
-                margins={surf.margins}
-                tickValues={surf.tickValues}
-                tickOffset={surf.tickOffset}
-                labelFn={surf.labelFn}
+                {...surf}
               />
             </ResponsiveSurfChart>
           </GraphBox>
           <GraphBox className="tide-chart" title={'Tide'}>
+            <div className="tide-lows-highs">
+              {tide.tideLowsHighs.map(d => (
+                <div className="tide-point" key={d.time}>
+                  <h3>
+                    {d.type} @ {moment(d.time * 1000).format('h:mm a')}
+                  </h3>
+                </div>
+              ))}
+            </div>
             <ResponsiveTideChart {...tide}>
               <HorizontalAxis
-                showTicks={false}
-                margins={tide.margins}
-                scale={tide.xScale}
-                yScale={tide.yScale}
-                view={tide.view}
+                useWidthScaleForTicks
                 widthScale={tide.xScale}
+                scale={tide.xScale}
+                labelFn={tide.tickLabelFn}
+                {...tide}
               />
             </ResponsiveTideChart>
           </GraphBox>

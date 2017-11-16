@@ -79,7 +79,7 @@ const Bars = ({ data, xScale, xScaleKey, yScale, keys, keyColors, }: BarProps) =
               className="stacked-bar-chart-label"
               x={x + barMiddle}
               y={y - 3}
-              style={{ fontSize: '4px', }}
+              style={{ fontSize: '3px', }}
               textAnchor={'middle'}
             >
               {d.data.label}

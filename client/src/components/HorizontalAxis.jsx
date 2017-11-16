@@ -16,7 +16,10 @@ type Props = {
   labelFn: Function,
   orientation?: string,
   tickOffset?: number,
+  tickLength: number,
+  tickPos: number | Function,
   showTicks: true,
+  tickAnchor: string,
 }
 
 class HorizontalAxis extends PureComponent<Props> {
@@ -31,15 +34,16 @@ class HorizontalAxis extends PureComponent<Props> {
     this.buildTicks = this.buildTicks.bind(this)
   }
 
-  buildTicks = yPos => {
+  buildTicks = (yPos: number) => {
     const {
       scale,
-      margins,
       tickOffset,
       widthScale,
       useWidthScaleForTicks,
       orientation,
       labelFn,
+      tickLength,
+      tickAnchor,
     } = this.props
     let { tickValues, } = this.props
     if (tickValues.length === 0) {
@@ -63,29 +67,29 @@ class HorizontalAxis extends PureComponent<Props> {
         xPos = scale(tickValue)
       }
 
-      let tickLength = margins[1] / 6
       let y2 = yPos
       let y1 = y2 - tickLength
       if (orientation === HorizontalAxis.orientation.BOTTOM) {
-        tickLength = margins[3] / 9
         y2 = yPos + tickLength
         y1 = yPos
       }
       const transform = `translate(${xPos}, 0)`
       return (
         <g className="horizontal-axis-ticks-and-labels" {...{ transform, key, }}>
-          <line
-            {...{ y1, y2, }}
-            style={{ strokeWidth: '.5px', stroke: 'inherit', }}
-            className="horizontal-axis-tick"
-            x1={0}
-            x2={0}
-          />
+          {tickLength > 0 && (
+            <line
+              {...{ y1, y2, }}
+              style={{ strokeWidth: '.5px', stroke: 'inherit', }}
+              className="horizontal-axis-tick"
+              x1={0}
+              x2={0}
+            />
+          )}
           <text
             dy={'.5em'}
             className="horizontal-axis-tick-label"
-            style={{ fontSize: '4px', fill: 'inherit', }}
-            textAnchor={'middle'}
+            style={{ fontSize: 'inherit', fill: 'inherit', stroke: 'none', }}
+            textAnchor={tickAnchor}
             x={0}
             y={y2 + 1}
           >
@@ -97,9 +101,13 @@ class HorizontalAxis extends PureComponent<Props> {
   }
 
   render() {
-    const { view, showTicks, yScale, } = this.props
+    const { view, showTicks, yScale, tickPos, } = this.props
     const [width] = view
     const yPos = yScale(0)
+    let tickYPos
+    if (tickPos instanceof Function) tickYPos = tickPos(yScale)
+    else tickYPos = tickPos
+
     return (
       <g className="horizontal-axis">
         <line
@@ -110,7 +118,8 @@ class HorizontalAxis extends PureComponent<Props> {
           x2={width}
           y2={yPos}
         />
-        {showTicks && this.buildTicks(yPos)}
+        {/* flow-disable-next-line */}
+        {showTicks && this.buildTicks(tickYPos)}
       </g>
     )
   }
@@ -121,8 +130,11 @@ HorizontalAxis.defaultProps = {
   useWidthScaleForTicks: false,
   orientation: 'horizontal-axis-bottom',
   tickOffset: 0,
+  tickLength: 5,
   showTicks: true,
+  tickPos: yScale => yScale(0),
   labelFn: data => data,
+  tickAnchor: 'middle',
 }
 
 HorizontalAxis.propTypes = {
@@ -136,9 +148,12 @@ HorizontalAxis.propTypes = {
     PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)])
   ),
   tickOffset: PropTypes.number,
+  tickPos: PropTypes.oneOfType([PropTypes.func, PropTypes.number]),
   useWidthScaleForTicks: PropTypes.bool,
   orientation: PropTypes.string,
   showTicks: PropTypes.bool,
+  tickLength: PropTypes.number,
+  tickAnchor: PropTypes.string,
 }
 
 export default AnimatedScaleWrapper(['scale'])(HorizontalAxis)
