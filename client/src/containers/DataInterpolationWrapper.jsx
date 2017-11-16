@@ -178,34 +178,42 @@ const DataInterpolationWrapper = (transitionDuration = 400) => ComposedComponent
       const oldState = this.state
       const updatedState = Object.keys(oldState)
         .map((dataSetKey, dataSetIndex) => {
-          const newDataSetData = oldState[dataSetKey].data
-            .map((datum, dataIndex) => {
-              if (nextProps !== null) {
-                return {
-                  ...nextProps[dataSetKey].data[dataIndex],
-                  ...interpolatedState[dataSetIndex][dataIndex],
-                }
-              }
-              return {
+          if (nextProps === null) {
+            const newDataSetData = oldState[dataSetKey].data
+              .map((datum, dataIndex) => ({
                 ...datum,
                 ...interpolatedState[dataSetIndex][dataIndex],
-              }
-            })
-            .filter(dataEntry => !_.isEmpty(dataEntry))
-
-          if (nextProps !== null) {
+              }))
+              .filter(dataEntry => !_.isEmpty(dataEntry))
             return {
               key: dataSetKey,
               newDataSetObject: {
-                ...nextProps[dataSetKey],
+                ...oldState[dataSetKey],
                 data: newDataSetData,
               },
             }
           }
+          // If the data lengths don't match choose the longer one to iterate to make sure
+          // we dont lose some datapoints during the interpolation
+          const oldDataLength = oldState[dataSetKey].data.length
+          const newDataLength = nextProps[dataSetKey].data.length
+          let arrToMap
+          if (oldDataLength >= newDataLength) {
+            arrToMap = oldState[dataSetKey].data
+          } else {
+            arrToMap = nextProps[dataSetKey].data
+          }
+          const newDataSetData = arrToMap
+            .map((datum, dataIndex) => ({
+              ...nextProps[dataSetKey].data[dataIndex],
+              ...interpolatedState[dataSetIndex][dataIndex],
+            }))
+            .filter(dataEntry => !_.isEmpty(dataEntry))
+
           return {
             key: dataSetKey,
             newDataSetObject: {
-              ...oldState[dataSetKey],
+              ...nextProps[dataSetKey],
               data: newDataSetData,
             },
           }
