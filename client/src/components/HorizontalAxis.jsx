@@ -10,11 +10,13 @@ type Props = {
   margins: Array<number>,
   view: Array<number>,
   widthScale: Function,
+  yScale: Function,
   useWidthScaleForTicks?: boolean,
   tickValues: Array<Date | string | number>,
   labelFn: Function,
   orientation?: string,
   tickOffset?: number,
+  showTicks: true,
 }
 
 class HorizontalAxis extends PureComponent<Props> {
@@ -29,7 +31,7 @@ class HorizontalAxis extends PureComponent<Props> {
     this.buildTicks = this.buildTicks.bind(this)
   }
 
-  buildTicks = () => {
+  buildTicks = yPos => {
     const {
       scale,
       margins,
@@ -62,27 +64,27 @@ class HorizontalAxis extends PureComponent<Props> {
       }
 
       let tickLength = margins[1] / 6
-      let y2 = margins[1]
+      let y2 = yPos
       let y1 = y2 - tickLength
       if (orientation === HorizontalAxis.orientation.BOTTOM) {
         tickLength = margins[3] / 9
-        y2 = tickLength
-        y1 = 0
+        y2 = yPos + tickLength
+        y1 = yPos
       }
       const transform = `translate(${xPos}, 0)`
       return (
-        <g {...{ transform, key, }}>
+        <g className="horizontal-axis-ticks-and-labels" {...{ transform, key, }}>
           <line
             {...{ y1, y2, }}
-            style={{ strokeWidth: '.5px', stroke: 'black', }}
-            className="chart__axis-tick chart__axis-tick--horizontal"
+            style={{ strokeWidth: '.5px', stroke: 'inherit', }}
+            className="horizontal-axis-tick"
             x1={0}
             x2={0}
           />
           <text
             dy={'.5em'}
-            className="chart__axis-text chart__axis-text--horizontal"
-            style={{ fontSize: '4px', }}
+            className="horizontal-axis-tick-label"
+            style={{ fontSize: '4px', fill: 'inherit', }}
             textAnchor={'middle'}
             x={0}
             y={y2 + 1}
@@ -95,24 +97,20 @@ class HorizontalAxis extends PureComponent<Props> {
   }
 
   render() {
-    const { view, orientation, } = this.props
-    const [width, height] = view
-    let yPos = height
-    if (orientation === HorizontalAxis.orientation.TOP) {
-      yPos = 0
-    }
-    const transform = `translate(0, ${yPos})`
+    const { view, showTicks, yScale, } = this.props
+    const [width] = view
+    const yPos = yScale(0)
     return (
-      <g {...{ transform, }}>
+      <g className="horizontal-axis">
         <line
-          className="chart__axis-line chart__axis-line--horizontal"
-          style={{ strokeWidth: '.5px', stroke: 'black', }}
+          className="horizontal-axis-line"
+          style={{ strokeWidth: '.5px', stroke: 'inherit', }}
           x1={0}
-          y1={0}
+          y1={yPos}
           x2={width}
-          y2={0}
+          y2={yPos}
         />
-        {this.buildTicks()}
+        {showTicks && this.buildTicks(yPos)}
       </g>
     )
   }
@@ -123,20 +121,24 @@ HorizontalAxis.defaultProps = {
   useWidthScaleForTicks: false,
   orientation: 'horizontal-axis-bottom',
   tickOffset: 0,
+  showTicks: true,
+  labelFn: data => data,
 }
 
 HorizontalAxis.propTypes = {
   scale: PropTypes.func.isRequired,
+  yScale: PropTypes.func.isRequired,
+  widthScale: PropTypes.func.isRequired,
+  margins: PropTypes.arrayOf(PropTypes.number).isRequired,
+  view: PropTypes.arrayOf(PropTypes.number).isRequired,
+  labelFn: PropTypes.func,
   tickValues: PropTypes.arrayOf(
     PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)])
   ),
-  margins: PropTypes.arrayOf(PropTypes.number).isRequired,
-  view: PropTypes.arrayOf(PropTypes.number).isRequired,
   tickOffset: PropTypes.number,
-  widthScale: PropTypes.func.isRequired,
-  labelFn: PropTypes.func.isRequired,
   useWidthScaleForTicks: PropTypes.bool,
   orientation: PropTypes.string,
+  showTicks: PropTypes.bool,
 }
 
 export default AnimatedScaleWrapper(['scale'])(HorizontalAxis)
