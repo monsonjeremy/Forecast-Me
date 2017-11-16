@@ -55,6 +55,8 @@ type Props = {
     units: string,
   },
   activeDay: number,
+  tideMax: number,
+  tideMin: number,
   dayDateArray: Array<string>,
   date: string,
   isSpot: boolean,
@@ -79,7 +81,7 @@ class GraphContainer extends PureComponent<Props> {
     const yMax = roundUpMaxSurfHeight(data[0].surfMaxMaximum)
 
     // Surf graph props
-    const size = [100, 70]
+    const size = [110, 60]
     const vWidth = size[0] - margins[1] - margins[3]
     const vHeight = size[1] - margins[0] - margins[2]
     const view = [vWidth, vHeight]
@@ -101,6 +103,7 @@ class GraphContainer extends PureComponent<Props> {
       .scaleLinear() // Creates a yScale to calculate Y position of the bar
       .domain([0, yMax]) // Sets the domain to be 0 to surfMax value pulled from API
       .range([view[1], 0])
+
     const tickValues = xScale.domain()
     const tickOffset = xScale.bandwidth() / 2
 
@@ -123,35 +126,43 @@ class GraphContainer extends PureComponent<Props> {
   }
 
   createTideProps = (margins: Array<number>) => {
-    const { tide, activeDay, } = this.props
+    const { tide, activeDay, tideMin, tideMax, } = this.props
     // Massage ze data
     const data = tide[activeDay]
 
     // Tide graph props
-    const size = [500, 200]
+    const size = [400, 150]
     const vWidth = size[0] - margins[1] - margins[3]
     const vHeight = size[1] - margins[0] - margins[2]
     const view = [vWidth, vHeight]
-    const yMax = d3.max(data, d => d.height)
-    const yMin = d3.min(data, d => d.height) - 1
     const xScaleKey = 'time'
     const yScaleKey = 'height'
+    const yScaleDomain = [Math.round(tideMin - 1), Math.round(tideMax + 1)]
 
-    const yScale = d3
-      .scaleLinear()
-      .domain([yMin, yMax])
-      .range([view[1], 0])
+    // Make the domain slightly larger
+    yScaleDomain[0] -= 1
+    yScaleDomain[1] += 1
     const xScale = d3
-      .scaleTime()
-      .domain(d3.extent(data, d => d[xScaleKey]))
-      .range([0, view[0]])
-    const numTicks = Math.round(yMax) - Math.floor(yMin)
-    const vertTickValues = yScale.ticks(numTicks)
-    const horizTickValues = data.map(dataPoint => dataPoint[xScaleKey])
-    const labelFn = (time: number) => moment(time * 1000).format('ha')
+      .scaleBand()
+      .domain(data.map(d => d.time))
+      .range([0, view[0]]) // Range of the X axis scale
+      .paddingInner(0.1) // .05 padding between bars
+    const yScale = d3
+      .scaleLinear() // Creates a yScale to calculate Y position of the bar
+      .domain(yScaleDomain)
+      .range([view[1], 0])
+    const barLabelFn = (d: Object) => `${Math.round(10 * d.height) / 10}ft`
+    const colorScale = (d: Object) => {
+      if (d.height > 0) {
+        if (d.type === 'High' || d.type === 'Low') return '#1a1aff'
+        return '#1a1aff'
+      }
+      if (d.type === 'Low') return '#66a3ff'
+      return '#66a3ff'
+    }
     return {
       data,
-      mountInterpKeys: ['lineChartCurtain'],
+      mountInterpKeys: ['height'],
       keysToInterp: ['height'],
       view,
       size,
@@ -159,10 +170,9 @@ class GraphContainer extends PureComponent<Props> {
       xScaleKey,
       yScale,
       yScaleKey,
-      vertTickValues,
-      horizTickValues,
       margins,
-      labelFn,
+      barLabelFn,
+      colorScale,
     }
   }
 
@@ -185,6 +195,8 @@ class GraphContainer extends PureComponent<Props> {
 
 GraphContainer.propTypes = {
   activeDay: PropTypes.number.isRequired,
+  tideMax: PropTypes.number.isRequired,
+  tideMin: PropTypes.number.isRequired,
   isSpot: PropTypes.bool.isRequired,
   dataKeys: PropTypes.arrayOf(PropTypes.string).isRequired,
   decrementDay: PropTypes.func.isRequired,
@@ -215,7 +227,6 @@ GraphContainer.propTypes = {
         time: PropTypes.number.isRequired,
         type: PropTypes.string.isRequired,
         utctime: PropTypes.string.isRequired,
-        lineChartCurtain: PropTypes.number.isRequired,
       })
     ).isRequired
   ).isRequired,

@@ -2,9 +2,10 @@
 
 import React, { PureComponent } from 'react'
 import type { Node } from 'react'
+import * as d3 from 'd3'
 import PropTypes from 'prop-types'
 import { DataInterpolationWrapper, ParentResize } from '../containers'
-import { ArrowButton, StackedBarChart, AreaChart } from './'
+import { ArrowButton, StackedBarChart, BarChart, HorizontalAxis } from './'
 
 import '../stylesheets/GraphContainer.css'
 
@@ -23,12 +24,12 @@ type GraphBoxProps = {
 }
 
 const ResponsiveSurfChart = ParentResize(StackedBarChart)
-const ResponsiveTideChart = ParentResize(AreaChart)
+const ResponsiveTideChart = ParentResize(BarChart)
 
 const GraphBox = ({ title, children, className, }: GraphBoxProps) => (
   <div className={`graph-box ${className}`}>
     <div className="graph-box-title">
-      <h3>{title}</h3>
+      <h2>{title}</h2>
     </div>
     <div>{children}</div>
   </div>
@@ -37,6 +38,7 @@ const GraphBox = ({ title, children, className, }: GraphBoxProps) => (
 class GraphPresentation extends PureComponent<Props> {
   render() {
     const { dataSets, numDays, activeDay, decrementDay, incrementDay, } = this.props
+    const { surf, tide, } = dataSets
     return (
       <div className="forecast-graphs text-center">
         <ArrowButton
@@ -46,11 +48,32 @@ class GraphPresentation extends PureComponent<Props> {
           onClick={() => decrementDay(activeDay)}
         />
         <div className="graphs-container charts-wrapper" key="graph-container">
-          <GraphBox className="surf-chart" title={'Surf Forecast'}>
-            <ResponsiveSurfChart {...dataSets.surf} />
+          <GraphBox className="surf-chart" title={'Surf'}>
+            <ResponsiveSurfChart {...surf}>
+              <HorizontalAxis
+                widthScale={surf.xScale}
+                scale={surf.xScale}
+                yScale={surf.yScale}
+                useWidthScaleForTicks
+                view={surf.view}
+                margins={surf.margins}
+                tickValues={surf.tickValues}
+                tickOffset={surf.tickOffset}
+                labelFn={surf.labelFn}
+              />
+            </ResponsiveSurfChart>
           </GraphBox>
-          <GraphBox className="tide-chart" title={'Tide Forecast'}>
-            <ResponsiveTideChart {...dataSets.tide} />
+          <GraphBox className="tide-chart" title={'Tide'}>
+            <ResponsiveTideChart {...tide}>
+              <HorizontalAxis
+                showTicks={false}
+                margins={tide.margins}
+                scale={tide.xScale}
+                yScale={tide.yScale}
+                view={tide.view}
+                widthScale={tide.xScale}
+              />
+            </ResponsiveTideChart>
           </GraphBox>
         </div>
         <ArrowButton

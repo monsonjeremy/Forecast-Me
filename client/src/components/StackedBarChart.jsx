@@ -1,10 +1,12 @@
 // @flow
 
 import React, { PureComponent } from 'react'
+import type { Node } from 'react'
 import PropTypes from 'prop-types'
 import * as d3 from 'd3'
 
 import { HorizontalAxis } from './'
+import { roundedRect } from '../helpers/'
 
 type Props = {
   data: Object,
@@ -19,6 +21,7 @@ type Props = {
   labelFn: Function,
   tickValues: Array<any>,
   tickOffset: number,
+  children: Node,
 }
 type BarProps = {
   data: Object,
@@ -68,8 +71,17 @@ const Bars = ({ data, xScale, xScaleKey, yScale, keys, keyColors, }: BarProps) =
       if (datumIndex === stackData.length - 1) {
         return (
           <g key={`${datum.key}-${x}-${y}-${height}-${width}`}>
-            <rect x={x} y={y} height={height} width={width} fill={colorScale(datum.key)} />
-            <text x={x + barMiddle} y={y - 3} style={{ fontSize: '4px', }} textAnchor={'middle'}>
+            <path
+              d={roundedRect(x, y, width, height, 1.5, true, true, false, false)}
+              fill={colorScale(datum.key)}
+            />
+            <text
+              className="stacked-bar-chart-label"
+              x={x + barMiddle}
+              y={y - 3}
+              style={{ fontSize: '4px', }}
+              textAnchor={'middle'}
+            >
               {d.data.label}
             </text>
           </g>
@@ -101,20 +113,7 @@ class StackedBarChart extends PureComponent<Props> {
   static defaultProps: Object
 
   render() {
-    const {
-      size,
-      margins,
-      data,
-      view,
-      keys,
-      keyColors,
-      xScaleKey,
-      xScale,
-      yScale,
-      labelFn,
-      tickValues,
-      tickOffset,
-    } = this.props
+    const { size, margins, data, keys, keyColors, xScaleKey, xScale, yScale, children, } = this.props
     // Create view box for SVG and then consider margins for graph size
     const viewBox = `0 0 ${size[0]} ${size[1]}`
     const xCenter = margins[3] // Translate value to X center graph in SVG parent
@@ -133,20 +132,7 @@ class StackedBarChart extends PureComponent<Props> {
           <g className="bars" key="bars">
             <Bars {...{ data, xScale, xScaleKey, yScale, keys, keyColors, }} />
           </g>
-          <g className="horizontal-axis" key="stached-bar-chart-x-axis">
-            <HorizontalAxis
-              {...{
-                widthScale: xScale,
-                scale: xScale,
-                useWidthScaleForTicks: true,
-                view,
-                margins,
-                tickValues,
-                tickOffset,
-                labelFn,
-              }}
-            />
-          </g>
+          {children}
         </g>
       </svg>
     )
@@ -166,11 +152,13 @@ StackedBarChart.propTypes = {
   tickValues: PropTypes.arrayOf(PropTypes.any),
   tickOffset: PropTypes.number,
   xScaleKey: PropTypes.string.isRequired,
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
 }
 
 StackedBarChart.defaultProps = {
   labelFn: tick => tick,
   tickValues: [],
+  children: null,
   tickOffset: 0,
 }
 

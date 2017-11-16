@@ -1,6 +1,6 @@
 /* @flow */
 
-export const roundUpMaxSurfHeight = (maxSurfHeight: number) => Math.ceil(maxSurfHeight / 5) * 5
+export const roundUpMaxSurfHeight = (maxSurfHeight: number) => Math.ceil(maxSurfHeight)
 
 export const setCookie = (cname: string, cvalue: any, exdays: number = 365) => {
   const d = new Date()
@@ -32,4 +32,50 @@ export const setVisitedCookie = () => {
   if (hasVisited !== 'true') {
     setCookie('has-visited', 'true', 365)
   }
+}
+
+// Function for taking dimensions and return a path for border radius rectangles
+export const roundedRect = (
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  r: number,
+  tl: boolean,
+  tr: boolean,
+  bl: boolean,
+  br: boolean
+) => {
+  let retval
+  retval = `M${x + r},${y}`
+  retval += `h${w - 2 * r}`
+  if (tr) {
+    retval += `a${r},${r} 0 0 1 ${r},${r}`
+  } else {
+    retval += `h${r}`
+    retval += `v${r}`
+  }
+  retval += `v${h - 2 * r}`
+  if (br) {
+    retval += `a${r},${r} 0 0 1 ${-r},${r}`
+  } else {
+    retval += `v${r}`
+    retval += `h${-r}`
+  }
+  retval += `h${2 * r - w}`
+  if (bl) {
+    retval += `a${r},${r} 0 0 1 ${-r},${-r}`
+  } else {
+    retval += `h${-r}`
+    retval += `v${-r}`
+  }
+  retval += `v${2 * r - h}`
+  if (tl) {
+    retval += `a${r},${r} 0 0 1 ${r},${-r}`
+  } else {
+    retval += `v${-r}`
+    retval += `h${r}`
+  }
+  retval += 'z'
+  return retval
 }

@@ -48,6 +48,8 @@ class ForecastPageContainer extends Component {
       const props = {
         surf: this.props.appData.forecast.Surf,
         tide: this.props.appData.forecast.Tide,
+        tideMin: this.props.appData.forecast.tideMin,
+        tideMax: this.props.appData.forecast.tideMax,
         sun: this.props.appData.forecast.Sun,
         buoy: this.props.appData.forecast.Buoy,
         isSpot: this.props.appState.isSpot,
@@ -162,6 +164,8 @@ ForecastPageContainer.propTypes = {
       Tide: PropTypes.instanceOf(Object),
       Buoy: PropTypes.instanceOf(Object),
       Sun: PropTypes.instanceOf(Object),
+      tideMin: PropTypes.number.isRequired,
+      tideMax: PropTypes.number.isRequired,
     }),
     forecastFetched: PropTypes.bool,
     forecastIsLoading: PropTypes.bool,

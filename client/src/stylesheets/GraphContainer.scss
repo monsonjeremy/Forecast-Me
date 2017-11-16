@@ -4,22 +4,52 @@
   justify-content: center;
   align-items: center;
   width: 96%;
+  margin: 15px;
 
   .graph-box-title {
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    background-color: grey;
-    border-top-right-radius: 15px;
-    border-top-left-radius: 15px;
+    padding: 15px;
+    font-size: 25px;
+    background-color: rgb(38, 48, 63);
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
   }
 
   .tide-chart {
+    background-color: #313E51;
     width: 100%;
+    color: white;
+    border-radius: 20px;
+    .bar-chart-bar-label {
+      fill: white;
+    }
+    .horizontal-axis {
+      stroke: white;
+      fill: white;
+    }
   }
   .surf-chart {
+    background-color: #313E51;
     width: 50%;
+    color: white;
+    border-radius: 20px;
+    .stacked-bar-chart-label {
+      fill: white;
+    }
+    .horizontal-axis {
+      stroke: white;
+      fill: white;
+      .horizontal-axis-ticks-and-labels {
+        fill: white;
+        stroke: white;
+        .horizontal-axis-tick-label {
+          stroke: none; 
+        }
+      }
+    }
   }
 }
 

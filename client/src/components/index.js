@@ -1,4 +1,5 @@
 export { default as StackedBarChart } from './StackedBarChart'
+export { default as BarChart } from './BarChart'
 export { default as AreaChart } from './AreaChart'
 export { default as SideNav } from './SideNav'
 export { default as GetStarted } from './GetStarted'

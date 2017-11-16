@@ -137,13 +137,10 @@ export const formatTideAndSunData = tideData => {
     })
   }
   next10Days.forEach(day => {
-    const currDayTideData = tideData.dataPoints.filter(tideEntry => {
-      tideEntry.lineChartCurtain = 500
-      return (
+    const currDayTideData = tideData.dataPoints.filter(tideEntry => (
         moment(tideEntry.Localtime).isBetween(day.dayStart, day.dayEnd, '[]') &&
         (tideEntry.type === 'NORMAL' || tideEntry.type === 'Low' || tideEntry.type === 'High')
-      )
-    })
+      ))
     const currDaySundData = tideData.SunPoints.filter(sunEntry =>
       moment(sunEntry.Localtime).isBetween(day.dayStart, day.dayEnd, '[]')
     )
@@ -167,12 +164,35 @@ export const formatTideAndSunData = tideData => {
   }
 }
 
+export const getTideMaxMin = tideData => {
+  let tideMin = 0
+  let tideMax = 0
+  tideData.forEach(day =>
+    day.forEach(data => {
+      if (data.height > tideMax) {
+        tideMax = data.height
+        return
+      }
+      if (data.height < tideMin) {
+        tideMin = data.height
+      }
+    })
+  )
+
+  return {
+    tideMin,
+    tideMax,
+  }
+}
+
 export const massageSurflineData = (data, isSpot) => {
   const surfData = data.Surf
   const Surf = formatSurfData(surfData, isSpot)
   const tideAndSun = formatTideAndSunData(data.Tide)
-
+  const { tideMin, tideMax, } = getTideMaxMin(tideAndSun.Tide)
   return {
+    tideMin,
+    tideMax,
     Surf,
     ...tideAndSun,
   }
