@@ -3,7 +3,7 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import ForecastPageContainer from './containers/ForecastPageContainer'
-import { ErrorBoundary } from './components'
+import { ErrorBoundary, About } from './components'
 
 const App = () => (
   <ErrorBoundary>
@@ -11,7 +11,7 @@ const App = () => (
       <Switch>
         <Route exact path="/" component={ForecastPageContainer} />
         <Route path="/forecast" component={ForecastPageContainer} />
-        <Route path="/info" component={ForecastPageContainer} />
+        <Route path="/info" component={About} />
       </Switch>
     </div>
   </ErrorBoundary>
