@@ -3,19 +3,13 @@
 /**
  * Module dependencies.
  */
-
+// eslint-disable-next-line
+import 'babel-polyfill'
 import { cacheBuoyDataJob, cacheSurflineDataJob } from '../helpers/jobs'
-import * as helpers from '../helpers/helpers.js'
 
 const app = require('../routes/index')
-const debug = require('debug')('server:server')
+require('debug')('server:server')
 const http = require('http')
-
-/**
- * Get port from environment and store in Express.
- */
-const port = normalizePort(process.env.SERVER_PORT || '3006')
-app.set('port', port)
 
 /**
  * Create HTTP server.
@@ -24,17 +18,8 @@ app.set('port', port)
 const server = http.createServer(app)
 
 /**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port)
-server.on('error', onError)
-server.on('listening', onListening)
-
-/**
  * Normalize a port into a number, string, or false.
  */
-
 function normalizePort(val) {
   const port = parseInt(val, 10)
 
@@ -50,6 +35,13 @@ function normalizePort(val) {
 
   return false
 }
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+const port = normalizePort(process.env.SERVER_PORT || '3006')
+app.set('port', port)
 
 /**
  * Event listener for HTTP server "error" event.
@@ -87,8 +79,16 @@ function onListening() {
   console.log(`Listening on ${bind}`)
 }
 
-// cacheBuoyDataJob().start()
-// console.log('cacheBuoyDataJob running: ', cacheBuoyDataJob.running)
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port)
+server.on('error', onError)
+server.on('listening', onListening)
+
+const cacheBuoyJob = cacheBuoyDataJob().start()
+console.log('cacheBuoyDataJob running: ', cacheBuoyJob.running)
 
 const cacheSurflineJob = cacheSurflineDataJob()
 cacheSurflineJob.start()
