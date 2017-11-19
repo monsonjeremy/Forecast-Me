@@ -2,16 +2,29 @@
 
 import React, { PureComponent } from 'react'
 import type { Node } from 'react'
-import * as d3 from 'd3'
 import moment from 'moment'
 import PropTypes from 'prop-types'
 import { DataInterpolationWrapper, ParentResize } from '../containers'
-import { ArrowButton, StackedBarChart, BarChart, HorizontalAxis } from './'
+import {
+  ArrowButton,
+  StackedBarChart,
+  WindForecast,
+  BarChart,
+  HorizontalAxis,
+  SunTimes,
+  SwellList
+} from './'
 
 import '../stylesheets/GraphContainer.css'
 
 type Props = {
   dataSets: Object,
+  sunData: {
+    sunrise: number,
+    sunset: number,
+    sunsetLocaltime: string,
+    sunriseLocaltime: string,
+  },
   numDays: number,
   activeDay: number,
   decrementDay: Function,
@@ -38,18 +51,12 @@ const GraphBox = ({ title, children, className, }: GraphBoxProps) => (
 
 class GraphPresentation extends PureComponent<Props> {
   render() {
-    const { dataSets, numDays, activeDay, decrementDay, incrementDay, } = this.props
-    const { surf, tide, } = dataSets
+    const { dataSets, sunData, } = this.props
+    const { surf, tide, wind, } = dataSets
     return (
       <div className="forecast-graphs text-center">
-        <ArrowButton
-          className={'arrow-wrapper'}
-          orientation={'left'}
-          disabled={!(activeDay > 0)}
-          onClick={() => decrementDay(activeDay)}
-        />
         <div className="graphs-container charts-wrapper" key="graph-container">
-          <GraphBox className="surf-chart" title={'Surf'}>
+          <GraphBox className="surf-chart" title="Surf">
             <ResponsiveSurfChart {...surf}>
               <HorizontalAxis
                 widthScale={surf.xScale}
@@ -59,7 +66,10 @@ class GraphPresentation extends PureComponent<Props> {
               />
             </ResponsiveSurfChart>
           </GraphBox>
-          <GraphBox className="tide-chart" title={'Tide'}>
+          <GraphBox className="wind-chart" title="Wind">
+            <WindForecast {...wind} />
+          </GraphBox>
+          <GraphBox className="tide-chart" title="Tide">
             <div className="tide-lows-highs">
               {tide.tideLowsHighs.map(d => (
                 <div className="tide-point" key={d.time}>
@@ -79,19 +89,25 @@ class GraphPresentation extends PureComponent<Props> {
               />
             </ResponsiveTideChart>
           </GraphBox>
+          <GraphBox className="swell-chart" title="Swells">
+            <SwellList {...surf} />
+          </GraphBox>
+          <GraphBox className="sun-chart" title="Sunrise/Sunset">
+            <SunTimes {...sunData} />
+          </GraphBox>
         </div>
-        <ArrowButton
-          className={'arrow-wrapper'}
-          disabled={!(activeDay < numDays - 1)}
-          orientation={'right'}
-          onClick={() => incrementDay(activeDay)}
-        />
       </div>
     )
   }
 }
 
 GraphPresentation.propTypes = {
+  sunData: PropTypes.shape({
+    sunrise: PropTypes.number.isRequired,
+    sunset: PropTypes.number.isRequired,
+    sunsetLocaltime: PropTypes.string.isRequired,
+    sunriseLocaltime: PropTypes.string.isRequired,
+  }).isRequired,
   dataSets: PropTypes.shape({
     surf: PropTypes.shape({}).isRequired,
     tide: PropTypes.shape({}).isRequired,

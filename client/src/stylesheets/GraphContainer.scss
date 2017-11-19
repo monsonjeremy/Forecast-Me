@@ -1,11 +1,16 @@
 .graphs-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  width: 96%;
+  padding-bottom: 70px;
+  width: 100%;
   .graph-box {
     margin: 15px;
+    background-color: #313E51;
+    border-radius: 20px;
+    color: white;
   }
 
   .graph-box-title {
@@ -20,11 +25,16 @@
     border-top-left-radius: 20px;
   }
 
+  .wind-chart {
+    width: 50%;
+  }
+
+  .sun-chart {
+    width: 70%;
+  }
+
   .tide-chart {
-    background-color: #313E51;
     width: 90%;
-    color: white;
-    border-radius: 20px;
 
     .tide-lows-highs {
       display: flex;
@@ -44,10 +54,7 @@
     }
   }
   .surf-chart {
-    background-color: #313E51;
     width: 40%;
-    color: white;
-    border-radius: 20px;
     .stacked-bar-chart-svg {
       padding: 10px;
     }

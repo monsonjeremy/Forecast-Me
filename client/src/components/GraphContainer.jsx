@@ -25,6 +25,16 @@ type Props = {
       swellPeriod2: Array<number>,
       swellPeriod3: Array<number>,
     }>,>,
+  numDays: number,
+  wind: Array<Array<{
+      date: string,
+      windDirection: number,
+      windSpeed: number,
+    }>,>,
+  sun: Array<{
+    sunsetLocaltime: string,
+    sunriseLocaltime: string,
+  }>,
   tide: {
     DisplayTides: string,
     Error: string,
@@ -71,6 +81,19 @@ class GraphContainer extends PureComponent<Props> {
 
     this.createSurfProps = this.createSurfProps.bind(this)
     this.createTideProps = this.createTideProps.bind(this)
+    this.createWindProps = this.createWindProps.bind(this)
+  }
+
+  createWindProps = () => {
+    const { wind, activeDay, } = this.props
+    const data = wind[activeDay]
+
+    const keysToInterp = ['windSpeed', 'windDirection']
+
+    return {
+      data,
+      keysToInterp,
+    }
   }
 
   createSurfProps = () => {
@@ -79,6 +102,7 @@ class GraphContainer extends PureComponent<Props> {
     // Massage ze data
     const data = surf[activeDay]
     const yMax = roundUpMaxSurfHeight(data[0].surfMaxMaximum)
+    const keysToInterp = dataKeys
 
     // Surf graph props
     const size = [70, 40]
@@ -110,10 +134,10 @@ class GraphContainer extends PureComponent<Props> {
 
     return {
       data,
+      keys: dataKeys,
       view,
       size,
-      keysToInterp: dataKeys,
-      keys: dataKeys,
+      keysToInterp,
       keyColors,
       xScaleKey,
       yMax,
@@ -194,16 +218,17 @@ class GraphContainer extends PureComponent<Props> {
   }
 
   render() {
-    const { surf, activeDay, decrementDay, incrementDay, } = this.props
+    const { activeDay, decrementDay, incrementDay, sun, } = this.props
 
-    const numDays = surf.length
+    const sunData = sun[activeDay]
 
     const dataSets = {
       surf: this.createSurfProps(),
       tide: this.createTideProps(),
+      wind: this.createWindProps(),
     }
 
-    return <GraphPresentation {...{ dataSets, numDays, incrementDay, decrementDay, activeDay, }} />
+    return <GraphPresentation {...{ dataSets, incrementDay, decrementDay, activeDay, sunData, }} />
   }
 }
 
@@ -243,6 +268,23 @@ GraphContainer.propTypes = {
         utctime: PropTypes.string.isRequired,
       })
     ).isRequired
+  ).isRequired,
+  wind: PropTypes.arrayOf(
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        date: PropTypes.string,
+        windSpeed: PropTypes.number,
+        windDirection: PropTypes.number,
+      })
+    )
+  ).isRequired,
+  sun: PropTypes.arrayOf(
+    PropTypes.shape({
+      sunriseLocaltime: PropTypes.string,
+      sunsetLocaltime: PropTypes.string,
+      sunrise: PropTypes.number,
+      sunset: PropTypes.number,
+    })
   ).isRequired,
 }
 

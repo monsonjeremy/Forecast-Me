@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { action as toggleSelector } from 'redux-burger-menu'
 import { WelcomeContainer } from './'
 import { SideNav, ForecastPagePresentation, Loader, GetStarted } from '../components'
 import {
@@ -48,6 +47,7 @@ class ForecastPageContainer extends Component {
       const props = {
         surf: this.props.appData.forecast.Surf,
         tide: this.props.appData.forecast.Tide,
+        wind: this.props.appData.forecast.Wind,
         tideMin: this.props.appData.forecast.tideMin,
         tideMax: this.props.appData.forecast.tideMax,
         sun: this.props.appData.forecast.Sun,
@@ -162,6 +162,7 @@ ForecastPageContainer.propTypes = {
     forecast: PropTypes.shape({
       Surf: PropTypes.instanceOf(Object),
       Tide: PropTypes.instanceOf(Object),
+      Wind: PropTypes.instanceOf(Object),
       Buoy: PropTypes.instanceOf(Object),
       Sun: PropTypes.instanceOf(Object),
       tideMin: PropTypes.number.isRequired,
@@ -178,7 +179,6 @@ const mapStateToProps = state => state
 const mapDispatchToProps = dispatch => ({
   incrementDay: activeDay => dispatch(incrementDay(activeDay)),
   decrementDay: activeDay => dispatch(decrementDay(activeDay)),
-  toggleSelector: () => dispatch(toggleSelector(true)),
   fetchSpotList: async () => {
     // Dispatch an action to set the loader state
     dispatch(fetchSpotList())

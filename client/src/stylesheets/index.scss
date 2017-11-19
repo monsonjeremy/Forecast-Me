@@ -218,6 +218,15 @@ p {
   margin-bottom: 14px;
 }
 
+.social-share-icon {
+  width: 50px;
+  height: 50px;
+  background-size: 50px 50px;
+  background-repeat: no-repeat;
+  display: inline-block;
+  margin-bottom: 14px;
+}
+
 .lrg-icon {
   width: 200px;
   height: 200px;
@@ -234,6 +243,14 @@ p {
   background-repeat: no-repeat;
   display: inline-block;
 }
+
+.flex-col-centered {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 
 .copy-text {
   line-height: 20px;

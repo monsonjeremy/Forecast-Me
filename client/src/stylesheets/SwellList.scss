@@ -1,0 +1,20 @@
+.swell-forecast-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+
+  .swell-container {
+    text-align: center;
+    margin: 20px;
+    .swell-timestamp {
+      padding: 10px;
+      white-space: nowrap;
+      text-decoration: underline;
+    }
+    .swell-info {
+      padding: 10px;
+      white-space: nowrap;
+    }
+  }
+}

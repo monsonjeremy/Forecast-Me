@@ -1,0 +1,53 @@
+.about-section {
+  position: absolute;
+  background-image: url(../assets/jjf-air.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 100%;
+  height: 100%;
+
+  .section-title {
+    padding: 10px;
+  }
+  .about-info{
+    display: flex;
+    align-items: center;
+    align-content: center;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    width: 50%;
+    margin-right: auto;
+    margin-left: auto;
+    
+    .about-thankyou-container {
+      background-color: white;
+      opacity: .8;
+      border-radius: 20px;
+      padding: 40px;
+      * {
+        opacity: 1;
+      }
+    }
+
+    p {
+      padding: 10px;
+    }
+    .about-title-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      align-content: center;
+      padding: 30px;
+    }
+  }
+
+  .social-share-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 20px;
+  }
+}
