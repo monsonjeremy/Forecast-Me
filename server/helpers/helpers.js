@@ -68,6 +68,20 @@ export const generatePushID = (() => {
 })()
 
 /**
+ * Massages the wind forecast data and returns a properly formatted array of objects
+ * 
+ * @param {Object} data 
+ */
+export const formatWindData = data =>
+  data.dateStamp.map((day, forecastDay) =>
+    day.map((date, index) => ({
+      date,
+      windDirection: data.wind_direction[forecastDay][index],
+      windSpeed: data.wind_speed[forecastDay][index],
+    }))
+  )
+
+/**
  * Massages the surf forecast data and returns a properly formatted array of objects
  * 
  * @param {Object} data 
@@ -77,10 +91,7 @@ export const formatSurfData = (data, isSpot) =>
   data.dateStamp.map((day, forecastDay) =>
     day.map((date, index) => {
       const surfData = {
-        dateTime: date,
         date,
-        anindex: index,
-        hour: moment(date, 'MMMM DD, YYYY HH:mm:ss').format('h A'),
         swellHeight1: data.swell_height1[forecastDay][index],
         swellHeight2: data.swell_height2[forecastDay][index],
         swellHeight3: data.swell_height3[forecastDay][index],
@@ -112,7 +123,6 @@ export const formatSurfData = (data, isSpot) =>
       }
     })
   )
-
 /**
  * Massages the tide and sunrise/sunset forecast data 
  * and returns a properly formatted array of objects
@@ -137,10 +147,11 @@ export const formatTideAndSunData = tideData => {
     })
   }
   next10Days.forEach(day => {
-    const currDayTideData = tideData.dataPoints.filter(tideEntry => (
+    const currDayTideData = tideData.dataPoints.filter(
+      tideEntry =>
         moment(tideEntry.Localtime).isBetween(day.dayStart, day.dayEnd, '[]') &&
         (tideEntry.type === 'NORMAL' || tideEntry.type === 'Low' || tideEntry.type === 'High')
-      ))
+    )
     const currDaySundData = tideData.SunPoints.filter(sunEntry =>
       moment(sunEntry.Localtime).isBetween(day.dayStart, day.dayEnd, '[]')
     )
@@ -190,10 +201,12 @@ export const massageSurflineData = (data, isSpot) => {
   const Surf = formatSurfData(surfData, isSpot)
   const tideAndSun = formatTideAndSunData(data.Tide)
   const { tideMin, tideMax, } = getTideMaxMin(tideAndSun.Tide)
+  const Wind = formatWindData(data.Wind)
   return {
     tideMin,
     tideMax,
     Surf,
+    Wind,
     ...tideAndSun,
   }
 }

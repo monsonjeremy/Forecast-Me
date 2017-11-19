@@ -9,7 +9,7 @@
     "start": "node ./bin/www",
     "build:server": "npx babel --presets env --ignore node_modules ./ -d dist",
     "start:server:dev":
-      "./node_modules/.bin/forever ./node_modules/.bin/nodemon -L --inspect=5050 --exec npx babel-node --ignore node_modules ./bin/www",
+      "./node_modules/.bin/nodemon --inspect=0.0.0.0:5858 --ignore node_modules/ --exec ./node_modules/.bin/babel-node --ignore node_modules ./bin/www",
     "start:server:prod": "./node_modules/.bin/forever ./bin/www"
   },
   "dependencies": {

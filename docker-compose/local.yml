@@ -37,8 +37,8 @@ services:
       - ../server/services:/server/services/
       - ../server/redis:/server/redis/
     ports:
+      - "5858:5858"
       - "3006:3006"
-      - "5050:5050"
     links:
       - redis
     depends_on:

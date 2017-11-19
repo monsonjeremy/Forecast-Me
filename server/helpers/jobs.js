@@ -42,7 +42,7 @@ export const regions = [
 
 export const surflineEndpoint = id =>
   encodeURI(
-    `http://api.surfline.com/v1/forecasts/${id}?resources=surf,tide&days=10&getAllSpots=false&units=e&interpolate=false&showOptimal=false`
+    `http://api.surfline.com/v1/forecasts/${id}?resources=surf,tide,wind&days=10&getAllSpots=false&units=e&interpolate=false&showOptimal=false`
   )
 
 export const getTimeZoneForRegion = async region => {

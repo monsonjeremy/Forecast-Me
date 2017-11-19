@@ -11,4 +11,5 @@ COPY ./server/ ./
 RUN npm install
 
 EXPOSE 3006
+EXPOSE 5858
 CMD ["npm", "run", "start:server:dev"]
