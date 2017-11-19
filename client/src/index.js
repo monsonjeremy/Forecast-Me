@@ -8,7 +8,7 @@ import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { createLogger } from 'redux-logger'
 
 import thunk from 'redux-thunk'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, Route } from 'react-router-dom'
 import { reducer as burgerMenu } from 'redux-burger-menu'
 
 import App from './App'
@@ -54,7 +54,7 @@ const store = makeStore()
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <App />
+      <Route component={App} />
     </BrowserRouter>
   </Provider>,
   document.getElementById('root')

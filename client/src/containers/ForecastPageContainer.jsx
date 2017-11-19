@@ -107,15 +107,14 @@ class ForecastPageContainer extends Component {
   }
 
   render() {
-    return [
-      this.renderSideNav(),
-      <div className="page-container" key="forecast-page-container">
+    return (
+      <div className="forecast-page-container" key="forecast-page-container">
         {this.renderLoader()}
         {this.renderWelcomeMessage()}
         {this.renderGetStarted()}
         {this.renderForecast()}
       </div>
-    ]
+    )
   }
 }
 

@@ -3,6 +3,7 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
 import { Collapse } from 'react-collapse'
+import { Link } from 'react-router-dom'
 import { debounce } from 'lodash'
 
 import '../stylesheets/Button.css'
@@ -101,14 +102,15 @@ class SpotSearch extends React.PureComponent<Props, State> {
             {searchResults.regions &&
               searchResults.regions.length > 0 &&
               searchResults.regions.map(region => (
-                <div
+                <Link
+                  to="/forecast"
                   key={`${region.name}`}
                   className={'region-result btn-hover-animation'}
                   role="button"
                   onClick={() => this.props.setRegion(region)}
                 >
                   <h3 className={'result-name'}>{region.name}</h3>
-                </div>
+                </Link>
               ))}
           </div>
           <div className="spot-results">
@@ -121,7 +123,8 @@ class SpotSearch extends React.PureComponent<Props, State> {
             {searchResults.spots &&
               searchResults.spots.map(region =>
                 region.spotSearchResults.map(spot => (
-                  <div
+                  <Link
+                    to="/forecast"
                     key={`${spot.name}`}
                     className={'spot-result btn-hover-animation'}
                     role="button"
@@ -130,7 +133,7 @@ class SpotSearch extends React.PureComponent<Props, State> {
                     }}
                   >
                     <h3 className={'result-name'}>{spot.name}</h3>
-                  </div>
+                  </Link>
                 ))
               )}
           </div>

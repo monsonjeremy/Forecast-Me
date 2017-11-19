@@ -2,6 +2,7 @@
 
 import React, { PureComponent } from 'react'
 import type { Node } from 'react'
+import { withRouter } from 'react-router'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { SpotSearch, DropdownSelector, Loader } from './'
@@ -67,16 +68,16 @@ class SideNav extends PureComponent<Props> {
             <h1 className="sidenav-title">Forecast.it</h1>
           </div>
           <div className="sidenav-links-container">
-            <div className="sidenav-links forecast-link">
+            <Link to="/forecast" className="sidenav-links forecast-link">
               <Link className="sidenav-link" to="/forecast">
                 Forecast
               </Link>
-            </div>
-            <div className="sidenav-links info-link">
+            </Link>
+            <Link to="/info" className="sidenav-links info-link">
               <Link className="sidenav-link" to="/info">
                 Info
-              </Link>{' '}
-            </div>
+              </Link>
+            </Link>
           </div>
           <SpotSearch
             placeholder="Search for a spot or region..."
