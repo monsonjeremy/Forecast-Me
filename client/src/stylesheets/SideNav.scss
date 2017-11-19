@@ -73,7 +73,7 @@
   align-items: center;
   justify-content: center;
   border-bottom: 1px solid #222;
-  background-image: linear-gradient(#efefef, #efefef);
+  background-image: linear-gradient(#cdcdcd, #cdcdcd);
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-size: 0% 100%;
@@ -176,7 +176,7 @@
 
   .result-header {
     width: 100%;
-    background-color: #efefef;
+    background-color: #e2e2e2;
     padding: 5px;
     text-align: center;
     margin-bottom: 5px;
@@ -188,14 +188,15 @@
     align-items: center;
     padding: 5px;
     margin-bottom: 5px;
+    color: black;
   }
 
   .spot-result {
     display: flex;
-    width: 100%;
     align-items: center;
     padding: 5px;
     margin-bottom: 5px;
+    color: black;
   }
 
   .result-name {
@@ -208,7 +209,7 @@
 .sidenav-container-items {
   .dropdown-selector {
     .dropdown-title-btn {
-      background-image: linear-gradient(#efefef, #efefef);
+      background-image: linear-gradient(#cdcdcd, #cdcdcd);
       background-repeat: no-repeat;
       background-position: 50% 50%;
       background-size: 0% 100%;
@@ -259,7 +260,7 @@
     .dropdown-items {
       background-color: #f7f7f7;
       .dropdown-item {
-        background-image: linear-gradient(#efefef, #efefef);
+        background-image: linear-gradient(#cdcdcd, #cdcdcd);
         background-repeat: no-repeat;
         background-position: 50% 50%;
         background-size: 0% 100%;
