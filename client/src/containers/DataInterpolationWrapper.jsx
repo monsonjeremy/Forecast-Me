@@ -16,7 +16,7 @@ const createMountInterpolatorDataProp = dataSet =>
     }
     return dataSet.mountInterpKeys.map(key => {
       // Create the interpolator and associate it to the accessor key
-      const interpolator = d3.interpolateNumber(0, datum[key])
+      const interpolator = d3.interpolate(0, datum[key])
       return { key, interpolator, }
     })
   })
@@ -38,7 +38,7 @@ const createInterpolatorDataProp = (dataSet, nextDataSet) => {
             const nextPropsDataKey = nextDataSet.keysToInterp[index]
             return {
               key,
-              interpolator: d3.interpolateNumber(
+              interpolator: d3.interpolate(
                 datum[key],
                 nextDataSet.data[datumIndex][nextPropsDataKey]
               ),
@@ -61,14 +61,11 @@ const createInterpolatorDataProp = (dataSet, nextDataSet) => {
           // this will just return the same value at every elapsed time point
           return {
             key,
-            interpolator: d3.interpolateNumber(datum[nextDataSetKey], datum[nextDataSetKey]),
+            interpolator: d3.interpolate(datum[nextDataSetKey], datum[nextDataSetKey]),
           }
         }
         // Else return interpolator as normal
-        const interpolator = d3.interpolateNumber(
-          dataSet.data[datumIndex][key],
-          datum[nextDataSetKey]
-        )
+        const interpolator = d3.interpolate(dataSet.data[datumIndex][key], datum[nextDataSetKey])
         return {
           key,
           interpolator,
@@ -81,10 +78,7 @@ const createInterpolatorDataProp = (dataSet, nextDataSet) => {
       // In case the next data uses different keys, use those keys for interpolation
       const nextDataSetKey = nextDataSet.keysToInterp[index]
       // Create the interpolator and associate it to the accessor key
-      const interpolator = d3.interpolateNumber(
-        datum[key],
-        nextDataSet.data[datumIndex][nextDataSetKey]
-      )
+      const interpolator = d3.interpolate(datum[key], nextDataSet.data[datumIndex][nextDataSetKey])
       return { key, interpolator, }
     })
   )
@@ -114,7 +108,7 @@ const createInterpolatorDataProp = (dataSet, nextDataSet) => {
   data keys as a string instead of an array of 1 string. It's not a priority however due
   to the fact that this project strucutres the data the same way.
 */
-const DataInterpolationWrapper = (transitionDuration = 200) => ComposedComponent => {
+const DataInterpolationWrapper = (transitionDuration = 400) => ComposedComponent => {
   class Composed extends Component {
     constructor(props) {
       super(props)
@@ -178,34 +172,42 @@ const DataInterpolationWrapper = (transitionDuration = 200) => ComposedComponent
       const oldState = this.state
       const updatedState = Object.keys(oldState)
         .map((dataSetKey, dataSetIndex) => {
-          const newDataSetData = oldState[dataSetKey].data
-            .map((datum, dataIndex) => {
-              if (nextProps !== null) {
-                return {
-                  ...nextProps[dataSetKey].data[dataIndex],
-                  ...interpolatedState[dataSetIndex][dataIndex],
-                }
-              }
-              return {
+          if (nextProps === null) {
+            const newDataSetData = oldState[dataSetKey].data
+              .map((datum, dataIndex) => ({
                 ...datum,
                 ...interpolatedState[dataSetIndex][dataIndex],
-              }
-            })
-            .filter(dataEntry => !_.isEmpty(dataEntry))
-
-          if (nextProps !== null) {
+              }))
+              .filter(dataEntry => !_.isEmpty(dataEntry))
             return {
               key: dataSetKey,
               newDataSetObject: {
-                ...nextProps[dataSetKey],
+                ...oldState[dataSetKey],
                 data: newDataSetData,
               },
             }
           }
+          // If the data lengths don't match choose the longer one to iterate to make sure
+          // we dont lose some datapoints during the interpolation
+          const oldDataLength = oldState[dataSetKey].data.length
+          const newDataLength = nextProps[dataSetKey].data.length
+          let arrToMap
+          if (oldDataLength >= newDataLength) {
+            arrToMap = oldState[dataSetKey].data
+          } else {
+            arrToMap = nextProps[dataSetKey].data
+          }
+          const newDataSetData = arrToMap
+            .map((datum, dataIndex) => ({
+              ...nextProps[dataSetKey].data[dataIndex],
+              ...interpolatedState[dataSetIndex][dataIndex],
+            }))
+            .filter(dataEntry => !_.isEmpty(dataEntry))
+
           return {
             key: dataSetKey,
             newDataSetObject: {
-              ...oldState[dataSetKey],
+              ...nextProps[dataSetKey],
               data: newDataSetData,
             },
           }
@@ -243,9 +245,6 @@ const DataInterpolationWrapper = (transitionDuration = 200) => ComposedComponent
         dataSets: state,
       }
 
-      // const newData = Object.keys(state).map(val => state[val])
-      // const newDataProps = { ...{ [dataProp]: newData, }, }
-      // const newProps = { ...props, ...newDataProps, }
       return <ComposedComponent {...newProps} />
     }
   }

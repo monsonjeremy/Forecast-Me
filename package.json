@@ -30,13 +30,16 @@
     "build:client:dev": "cd client && npm run build-css && npm run build",
     "start:server:dev": "cd server && npm run start:server:dev",
     "build:server:dev": "cd server && npm run build:server:dev",
+    "build:client:prod": "cd client && npm install && npm run build",
+    "start:app:prod": "cd server && npm run start:server:prod",
+    "build:server:prod": "cd server && npm install && npm run build:server:prod",
     "test": "./node_modules/.bin/eslint client/src server && ./node_modules/.bin/flow",
     "precommit": "npm run test",
     "prepush": "npm run test",
     "docker:build:local":
       "docker-compose -f ./docker-compose/local.yml -p forecast-me-dev up --force-recreate --build",
     "docker:build:prod":
-      "npm run build && docker-compose -f ./docker-compose/prod.yml -p forecast-me-prod up --force-recreate --build"
+      "docker-compose -f ./docker-compose/prod.yml -p forecast-me-prod up --force-recreate --build"
   },
   "lint-staged": {
     "*.{js,jsx,json}": [

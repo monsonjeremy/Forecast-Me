@@ -8,7 +8,7 @@
   color: white;
 
   .homepage-video {
-    position: absolute; 
+    position: relative; 
     right: 0; 
     bottom: 0;
     min-width: 100%; 
@@ -21,7 +21,8 @@
   }
 
   .get-started-container {
-    padding-top: 50px;
+    position: absolute;
+    padding-top: 100px;
     display: flex;
     align-items: center;
     justify-content: center;

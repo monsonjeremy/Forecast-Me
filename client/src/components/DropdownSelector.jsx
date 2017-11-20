@@ -3,6 +3,7 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { Collapse } from 'react-collapse'
+import { Link } from 'react-router-dom'
 
 import '../stylesheets/DropdownSelector.css'
 
@@ -57,7 +58,7 @@ class DropdownSelector extends PureComponent<Props, State> {
           toggleFunc={this.toggleDropdown}
         />
         <Collapse isOpened={this.state.dropdownOpen}>
-          <div className={'dropdown-items'}>
+          <div className={`dropdown-items ${this.props.type}`}>
             {/* If no options available (region hasn't been selected) then don't render subitems */}
             {!(this.props.options === null) &&
               /* flow-disable-next-line */
@@ -95,9 +96,14 @@ const DropdownTitle = ({ title, type, isDisabled, toggleFunc, isOpen, }) => (
 )
 
 const DropdownItem = ({ title, clickFunc, }) => (
-  <div className={`dropdown-item-${title} dropdown-item`} role="button" onClick={clickFunc}>
+  <Link
+    to="/forecast"
+    className={`dropdown-item-${title} dropdown-item`}
+    role="button"
+    onClick={clickFunc}
+  >
     <h3 className={'dropdown-item-title'}>{title}</h3>
-  </div>
+  </Link>
 )
 
 DropdownTitle.propTypes = {

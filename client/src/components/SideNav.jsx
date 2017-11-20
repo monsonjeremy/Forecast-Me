@@ -5,19 +5,34 @@ import type { Node } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { SpotSearch, DropdownSelector, Loader } from './'
+import { version } from '../../package.json'
 
 import '../stylesheets/SideNav.css'
 
 type Props = {
   children: Node,
   fetchSpotList: Function,
-  regions: Array<Object>,
   setRegion: Function,
   setSpotWithRegion: Function,
   setSpot: Function,
-  selectedRegion: Object,
-  spotList: Object,
+  selectedRegion: {
+    name: string,
+    id: string,
+    spots: Array<{
+      name: string,
+      id: string,
+    }>,
+  },
+  spotList: Array<{
+    name: string,
+    id: string,
+    spots: Array<{
+      name: string,
+      id: string,
+    }>,
+  }>,
   spotListIsLoading: boolean,
+  history: Object,
 }
 
 class SideNav extends PureComponent<Props> {
@@ -28,13 +43,13 @@ class SideNav extends PureComponent<Props> {
   }
   render() {
     const {
-      regions,
       setRegion,
       setSpotWithRegion,
       selectedRegion,
       spotList,
       setSpot,
       spotListIsLoading,
+      history,
     } = this.props
 
     const regionDropdownProps = {
@@ -64,29 +79,32 @@ class SideNav extends PureComponent<Props> {
         <aside className="sidenav-aside">
           <div className="sidenav-title-container">
             <figure className="surfer-icon sidenav-title-icon" />
-            <h1 className="sidenav-title">Forecast.it</h1>
+            <h1 className="sidenav-title">ForecastMe</h1>
           </div>
           <div className="sidenav-links-container">
-            <div className="sidenav-links forecast-link">
-              <Link className="sidenav-link" to="/forecast">
-                Forecast
-              </Link>
-            </div>
-            <div className="sidenav-links info-link">
-              <Link className="sidenav-link" to="/info">
-                Info
-              </Link>{' '}
-            </div>
+            <Link to="/forecast" className="sidenav-links forecast-link">
+              <div role="link" onClick={() => history.push('/forecast')} className="sidenav-link">
+                FORECAST
+              </div>
+            </Link>
+            <Link to="/info" className="sidenav-links info-link">
+              <div role="link" onClick={() => history.push('/forecast')} className="sidenav-link">
+                INFO
+              </div>
+            </Link>
           </div>
           <SpotSearch
             placeholder="Search for a spot or region..."
-            regions={regions}
+            regions={spotList}
             setRegion={setRegion}
             setSpotWithRegion={setSpotWithRegion}
           />
           <section className="sidenav-container-items">
             <DropdownSelector key={'region-dropdown'} {...regionDropdownProps} />
             <DropdownSelector key={'spot-dropdown'} {...spotDropdownProps} />
+          </section>
+          <section className="app-version">
+            <h3>Version: {version}</h3>
           </section>
         </aside>
       </section>
@@ -96,18 +114,7 @@ class SideNav extends PureComponent<Props> {
 
 SideNav.propTypes = {
   fetchSpotList: PropTypes.func.isRequired,
-  regions: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      id: PropTypes.string.isRequired,
-      spots: PropTypes.arrayOf(
-        PropTypes.shape({
-          name: PropTypes.string.isRequired,
-          id: PropTypes.string.isRequired,
-        })
-      ).isRequired,
-    })
-  ).isRequired,
+  history: PropTypes.instanceOf(Object).isRequired,
   setRegion: PropTypes.func.isRequired,
   setSpot: PropTypes.func.isRequired,
   setSpotWithRegion: PropTypes.func.isRequired,

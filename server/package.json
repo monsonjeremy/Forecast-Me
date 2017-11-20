@@ -1,17 +1,19 @@
 {
   "name": "forecast-me-server",
-  "version": "0.0.1-beta-forecastme-api",
+  "version": "0.0.2-beta-forecastme-api",
   "license": "MIT",
   "description": "Source code for the server side code of Forecast-Me",
   "repository": "https://github.com/monsonjeremy/Forecast-Me",
   "private": false,
   "scripts": {
     "start": "node ./bin/www",
-    "start:server:dev": "./node_modules/.bin/forever ./node_modules/.bin/nodemon -L --inspect=5050 --exec ./node_modules/.bin/babel-node ./bin/www",
-    "start:server:prod": "./node_modules/.bin/forever ./bin/www"
+    "build:server:prod": "npx babel --presets env --ignore node_modules ./ -d ./",
+    "start:server:dev":
+      "./node_modules/.bin/nodemon --inspect=0.0.0.0:5858 --ignore node_modules/ --exec ./node_modules/.bin/babel-node --ignore node_modules ./bin/www.js",
+    "start:server:prod": "./node_modules/.bin/forever ./bin/www.js"
   },
   "dependencies": {
-    "axios": "^0.17.0",
+    "axios": "^0.17.1",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "body-parser": "~1.18.2",
@@ -20,16 +22,18 @@
     "cron": "^1.3.0",
     "debug": "~2.6.9",
     "express": "~4.15.5",
+    "moment": "^2.19.2",
     "morgan": "~1.9.0",
     "redis": "^2.8.0"
   },
   "devDependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "forever": "^0.15.3",
     "nodemon": "^1.12.1"
   },
   "babel": {
-    "presets": [
-      "env"
-    ]
+    "presets": ["env"],
+    "plugins": ["transform-object-rest-spread"],
+    "ignore": ["/node_modules/"]
   }
 }

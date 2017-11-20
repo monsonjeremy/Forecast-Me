@@ -1,0 +1,18 @@
+.suntimes-forecast-container {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+
+  .suntime {
+    margin: 20px;
+  }
+  
+  .suntimes-icon {
+      background-color: transparent;
+      width: 100px;
+      height: 100px;
+      margin: 10px;
+  }
+}

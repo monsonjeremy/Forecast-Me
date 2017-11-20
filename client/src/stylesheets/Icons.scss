@@ -10,6 +10,21 @@
   mask-repeat: no-repeat;
 }
 
+.email-icon {
+  background-color: black;
+  mask-image: url(../assets/email.svg);
+  mask-size: 100% 100%;
+  mask-position: center;
+  mask-repeat: no-repeat;
+}
+.linkedin-icon {
+  background-color: black;
+  mask-image: url(../assets/linkedin.svg);
+  mask-size: 100% 100%;
+  mask-position: center;
+  mask-repeat: no-repeat;
+}
+
 .search-icon {
   background-color: black;
   mask-image: url(../assets/search-icon.svg);
@@ -43,4 +58,24 @@
 
 .left-arrow {
   background-image: url(../assets/arrow-icon-left.svg)
+}
+
+.wind-arrow {
+  background-color: black;
+  mask-image: url(../assets/wind-arrow.svg);
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+}
+
+.sunrise-icon {
+  background-color: transparent;
+  background-image: url(../assets/sunrise.svg);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+.sunset-icon {
+  background-color: transparent;
+  background-image: url(../assets/sunset.svg);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
 }

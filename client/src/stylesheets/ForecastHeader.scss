@@ -9,7 +9,11 @@
     background-color: #0058b0;
     color: white;
     width: 100%;
-    padding: 20px;
+    padding: 20px 0px;
+    
+    .day-date-title {
+      margin-bottom: 5px;
+    }
   }
   .day-data-header-container {
     color: white;
@@ -29,6 +33,20 @@
     margin-top: 10px;
     width: 100%;
     text-align: center;
+  }
+}
+
+.day-sticky-container {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  button {
+    border: 1px solid black;
+    border-radius: 0px;
+    width: 50%;
+    line-height: 40px;
+    font-size: 25px;
   }
 }
 

@@ -12,13 +12,13 @@ class WelcomeMessage extends PureComponent {
         </div>
         <div className="welcome-message container">
           <div className="welcome-title-container section-title">
-            <h1 className="welcome-title section-title">Welcome to Forecast Me</h1>
+            <h1 className="welcome-title section-title">Welcome to ForecastMe</h1>
             <p className="welcome-subtitle section-subtitle copy-text">
               Thanks for checking out my surf forecasting site. This is a passion project that
               I&apos;ve been working on building. Currently the app is built with a React/Redux
-              front-end and a NodeJS/Express/MongoDB backend. I&apos;ll be working on adding
-              features as soon as I can. See the <a>about</a> section for inquiries, contact
-              information, or more information about app itself.
+              front-end and a NodeJS/Express/Redis/PostgreSQL backend. I&apos;ll be working on
+              adding features as soon as I can. See the <a href="/info">about</a> section for
+              inquiries, contact information, or more information about app itself.
             </p>
           </div>
           <div className="welcome-content-container">
@@ -26,9 +26,9 @@ class WelcomeMessage extends PureComponent {
               <figure className="surfer-icon subsection-icon" />
               <h3 className="section-header">Reliable</h3>
               <p className="section-subtitle copy-text content-subsection">
-                This project is pulling data from <a href="https://surfline.com">Surfline</a> and{' '}
-                <a href="http://www.spitcast.com/">Spitcast</a>. This provides a reliable and
-                accurate forecast. All credit goes to Surfline and Spitcast for the data.
+                This project is pulling data from <a href="https://surfline.com">Surfline</a>. This
+                provides a reliable and accurate forecast. All credit goes to Surfline and Spitcast
+                for the data.
               </p>
             </div>
             <div className="triple-col">

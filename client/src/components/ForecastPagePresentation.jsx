@@ -41,14 +41,18 @@ class ForecastPagePresentation extends Component<Props> {
   }
 
   render() {
-    const { surf, buoy, spotName, } = this.props
-    const dayDateArray = surf.dateStamp[this.props.activeDay]
-    const date = moment(dayDateArray, 'MMMM DD, YYYY HH:mm:ss').format('ddd MMMM Do')
+    const { surf, buoy, spotName, activeDay, decrementDay, incrementDay, } = this.props
+    const currDay = surf[activeDay][0].date
+    const date = moment(currDay, 'MMMM DD, YYYY HH:mm:ss').format('ddd MMMM Do')
+    const numDays = surf.length
+
     return (
       <div className="forecast-container">
         <div className="forecast">
-          <ForecastHeader {...{ surf, buoy, spotName, date, }} />
-          <GraphContainer {...{ ...this.props, dayDateArray, date, }} />
+          <ForecastHeader
+            {...{ surf, buoy, numDays, spotName, date, activeDay, incrementDay, decrementDay, }}
+          />
+          <GraphContainer {...{ ...this.props, }} />
         </div>
       </div>
     )

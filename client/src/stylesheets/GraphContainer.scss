@@ -1,25 +1,82 @@
 .graphs-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  width: 96%;
+  padding-bottom: 70px;
+  width: 100%;
+  .graph-box {
+    margin: 15px;
+    background-color: #313E51;
+    border-radius: 20px;
+    color: white;
+  }
 
   .graph-box-title {
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    background-color: grey;
-    border-top-right-radius: 15px;
-    border-top-left-radius: 15px;
+    padding: 15px;
+    font-size: 25px;
+    background-color: rgb(38, 48, 63);
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+  }
+
+  .wind-chart {
+    width: 50%;
+  }
+
+  .sun-chart {
+    width: 70%;
+  }
+
+  .swell-chart {
+    width: 95%;
   }
 
   .tide-chart {
-    width: 100%;
+    width: 90%;
+
+    .tide-lows-highs {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      text-align: center;
+      padding: 0px 10px;
+      padding-top: 10px;
+    }
+    .bar-chart-bar-label {
+      fill: white;
+    }
+    .horizontal-axis {
+      stroke: white;
+      fill: white;
+      font-size: 4.5px;
+    }
   }
   .surf-chart {
-    width: 50%;
+    width: 40%;
+    .stacked-bar-chart-svg {
+      padding: 10px;
+    }
+    .stacked-bar-chart-label {
+      fill: white;
+    }
+    .horizontal-axis {
+      stroke: white;
+      fill: white;
+      .horizontal-axis-ticks-and-labels {
+        fill: white;
+        stroke: white;
+        font-size: 2.5px;
+        .horizontal-axis-tick-label {
+          stroke: none; 
+        }
+      }
+    }
   }
 }
 

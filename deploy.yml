@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+
+  app:
+    image: monsonjeremy/forecast-me:latest
+    mem_limit: 966367641
+    env_file:
+      - './docker-compose/prod.env'
+    ports:
+      - "80:80"
+    links:
+      - redis
+  redis:
+    image: redis:4.0.2-alpine
+    mem_limit: 966367641 
+    volumes: 
+      - /data:/data
+    ports:
+      - "6379:6379"

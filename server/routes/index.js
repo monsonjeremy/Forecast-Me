@@ -2,6 +2,7 @@ import express from 'express'
 import path from 'path'
 import buoysApi from './buoys'
 import surfApi from './surf'
+import { version } from '../package.json'
 
 const logger = require('morgan')
 const cors = require('cors')
@@ -21,7 +22,7 @@ app.use(cookieParser())
 
 // Node status for Load balancer to ping
 app.get('/__status__/node', (req, res) => {
-  res.sendStatus(200)
+  res.send({ version, })
 })
 
 // Create endpoint for redis API
@@ -32,9 +33,9 @@ app.use('/api/surf/v1', surfApi)
 
 if (!isLocalDev) {
   // Serve bundle on root URL
-  app.use(express.static(path.join(__dirname, '..', 'build')))
+  app.use(express.static(path.join(__dirname, '..', '..', 'client', 'build')))
   app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'build', 'index.html'))
+    res.sendFile(path.join(__dirname, '..', '..', 'client', 'build', 'index.html'))
   })
 }
 

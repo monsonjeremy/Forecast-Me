@@ -1,0 +1,24 @@
+.wind-forecast-container {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  color: white;
+  text-align: center;
+  .wind-data-container {
+    width: 20%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .wind-arrow-icon {
+      background-color: white;
+      width: 25px;
+      height: 25px;
+      margin: 20px;
+  }
+}

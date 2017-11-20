@@ -48,8 +48,11 @@
   .dropdown-items {
     background-color: white;
     .dropdown-item {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      padding: 15px;
       color: inherit;
-      padding: .8em;
       border-bottom: .5px solid white;
       &:last-child {
         border-bottom: 0px;

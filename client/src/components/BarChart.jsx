@@ -3,8 +3,7 @@
 import React, { PureComponent } from 'react'
 import type { Node } from 'react'
 import PropTypes from 'prop-types'
-import * as d3 from 'd3'
-import { roundedRect } from '../helpers/'
+import { roundedRect } from '../helpers'
 
 type Props = {
   data: Object,
@@ -13,9 +12,12 @@ type Props = {
   margins: Array<number>,
   xScale: Function,
   yScale: Function,
+  barLabelFn: Function,
+  colorScale: Function,
   keys: Array<string>,
   keyColors: Array<string>,
   xScaleKey: string,
+  yScaleKey: string,
   labelFn: Function,
   tickValues: Array<any>,
   tickOffset: number,
@@ -25,9 +27,10 @@ type BarProps = {
   data: Object,
   xScale: Function,
   yScale: Function,
-  keys: Array<string>,
-  keyColors: Array<string>,
+  barLabelFn: Function,
+  colorScale: Function,
   xScaleKey: string,
+  yScaleKey: string,
 }
 
 /**
@@ -41,77 +44,85 @@ type BarProps = {
  * @param {Function} yScale 
  * @param {Array<string>} keys 
  * @param {Array<string>} keyColors 
- * @returns SVG rect
+ * @returns SVG rect grouping
  */
-const Bars = ({ data, xScale, xScaleKey, yScale, keys, keyColors, }: BarProps) => {
-  // Creates a color scale based on data keys
-  const colorScale = d3
-    .scaleOrdinal()
-    .domain(keys)
-    .range(keyColors)
+const Bars = ({ data, xScale, xScaleKey, yScale, yScaleKey, colorScale, barLabelFn, }: BarProps) => {
+  const bars = data.map(d => {
+    const x = xScale(d[xScaleKey])
+    let y
+    if (d[yScaleKey] > 0) {
+      y = yScale(d[yScaleKey])
+    } else {
+      y = yScale(0)
+    }
 
-  // Instantiate stack based on the keys
-  const stack = d3
-    .stack()
-    .keys(keys)
-    .order(d3.stackOrderNone)
-    .offset(d3.stackOffsetNone)
-
-  // Use the stack generator to create the data
-  const stackData = stack(data)
-  const bars = stackData.map((datum, datumIndex) =>
-    datum.map(d => {
-      const x = xScale(d.data[xScaleKey])
-      const y = yScale(d[1])
-      const height = yScale(d[0]) - yScale(d[1])
-      const width = xScale.bandwidth()
-      const barMiddle = width / 2
-      if (datumIndex === stackData.length - 1) {
-        return (
-          <g key={`${datum.key}-${x}-${y}-${height}-${width}`}>
-            <path
-              d={roundedRect(x, y, width, height, 1.5, true, true, false, false)}
-              fill={colorScale(datum.key)}
-            />
-            <text
-              className="stacked-bar-chart-label"
-              x={x + barMiddle}
-              y={y - 3}
-              style={{ fontSize: '3px', }}
-              textAnchor={'middle'}
-            >
-              {d.data.label}
-            </text>
-          </g>
-        )
-      }
-      return (
-        <rect
-          x={x}
-          y={y}
-          key={`rect-${x}-${y}`}
-          height={height}
-          width={width}
-          fill={colorScale(datum.key)}
-        />
-      )
-    })
-  )
-  // Return all the lines to be rendered in a grouping
-  return <g key={'bar-charting-grouping'}>{bars.map(key => key.map(bar => bar))}</g>
+    const topLeftRounded = d[yScaleKey] > 0
+    const topRightRounded = d[yScaleKey] > 0
+    const bottomLeftRounded = d[yScaleKey] < 0
+    const bottomRightRounded = d[yScaleKey] < 0
+    const height = Math.abs(Math.round(10 * (yScale(d[yScaleKey]) - yScale(0))) / 10)
+    const width = xScale.bandwidth()
+    const barMiddle = width / 2
+    return (
+      <g key={`${d.key}-${x}-${y}-${height}-${width}`}>
+        {height > 1 && height > -1 ? (
+          <path
+            d={roundedRect(
+              x,
+              y,
+              width,
+              height,
+              3,
+              topLeftRounded,
+              topRightRounded,
+              bottomLeftRounded,
+              bottomRightRounded
+            )}
+            fill={colorScale(d)}
+          />
+        ) : (
+          <rect {...{ x, y, height, width, fill: colorScale(d), }} />
+        )}
+        {barLabelFn ? (
+          <text
+            className="bar-chart-bar-label"
+            x={x + barMiddle}
+            y={d[yScaleKey] >= 0 ? y - 3 : y + height + 5}
+            style={{ fontSize: '5px', }}
+            textAnchor={'middle'}
+          >
+            {barLabelFn(d)}
+          </text>
+        ) : null}
+      </g>
+    )
+  })
+  // Return all the bars to be rendered in a grouping
+  return <g key={'bar-charting-grouping'}>{bars.map(bar => bar)}</g>
 }
 
 /**
  * Class for a react component to create a bar chart with axes
  * 
- * @class StackedBarChart
+ * @class BarChart
  * @extends {PureComponent<Props>}
  */
-class StackedBarChart extends PureComponent<Props> {
+class BarChart extends PureComponent<Props> {
   static defaultProps: Object
 
   render() {
-    const { size, margins, data, keys, keyColors, xScaleKey, xScale, yScale, children, } = this.props
+    const {
+      size,
+      margins,
+      data,
+      yScaleKey,
+      xScaleKey,
+      xScale,
+      yScale,
+      colorScale,
+      children,
+      barLabelFn,
+    } = this.props
     // Create view box for SVG and then consider margins for graph size
     const viewBox = `0 0 ${size[0]} ${size[1]}`
     const xCenter = margins[3] // Translate value to X center graph in SVG parent
@@ -128,7 +139,7 @@ class StackedBarChart extends PureComponent<Props> {
       <svg className="stacked-bar-chart-svg" {...{ viewBox, }}>
         <g className="graph-and-axes" {...{ transform, }}>
           <g className="bars" key="bars">
-            <Bars {...{ data, xScale, xScaleKey, yScale, keys, keyColors, }} />
+            <Bars {...{ data, xScale, xScaleKey, yScale, yScaleKey, colorScale, barLabelFn, }} />
           </g>
           {children}
         </g>
@@ -137,27 +148,23 @@ class StackedBarChart extends PureComponent<Props> {
   }
 }
 
-StackedBarChart.propTypes = {
+BarChart.propTypes = {
   data: PropTypes.instanceOf(Object).isRequired,
   size: PropTypes.arrayOf(PropTypes.number).isRequired,
   view: PropTypes.arrayOf(PropTypes.number).isRequired,
   margins: PropTypes.arrayOf(PropTypes.number).isRequired,
   xScale: PropTypes.func.isRequired,
   yScale: PropTypes.func.isRequired,
-  keys: PropTypes.arrayOf(PropTypes.string).isRequired,
-  keyColors: PropTypes.arrayOf(PropTypes.string).isRequired,
-  labelFn: PropTypes.func,
-  tickValues: PropTypes.arrayOf(PropTypes.any),
-  tickOffset: PropTypes.number,
+  barLabelFn: PropTypes.func,
+  colorScale: PropTypes.func.isRequired,
   xScaleKey: PropTypes.string.isRequired,
+  yScaleKey: PropTypes.string.isRequired,
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
 }
 
-StackedBarChart.defaultProps = {
-  labelFn: tick => tick,
-  tickValues: [],
+BarChart.defaultProps = {
   children: null,
-  tickOffset: 0,
+  barLabelFn: null,
 }
 
-export default StackedBarChart
+export default BarChart

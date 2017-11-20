@@ -2,44 +2,39 @@
 
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
+import * as d3 from 'd3'
+import moment from 'moment'
 
-import { formatSurflineData, roundUpMaxSurfHeight, prepTideData } from '../helpers/helperFunctions'
+import { roundUpMaxSurfHeight } from '../helpers/helperFunctions'
 import { GraphPresentation } from './'
 
 type Props = {
-  surf: {
-    SwellSource: string,
-    agg_direction1: Array<number>,
-    agg_height1: Array<number>,
-    agg_location: Array<number>,
-    agg_period1: Array<number>,
-    agg_spread1: Array<number>,
-    agg_surf_max: Array<number>,
-    agg_surf_min: Array<number>,
-    dateStamp: Array<number>,
-    modelCode: Array<number>,
-    modelCodeDisplay: string,
-    modelRun: Array<number>,
-    modelRunDisplay: number,
-    periodSchedule: Array<number>,
-    startDate_GMT: number,
-    startDate_LOCAL: number,
-    startDate_pretty_GMT: string,
-    startDate_pretty_LOCAL: string,
-    surf_max: Array<number>,
-    surf_max_maximum: number,
-    surf_min: Array<number>,
-    swell_direction1: Array<number>,
-    swell_direction2: Array<number>,
-    swell_direction3: Array<number>,
-    swell_height1: Array<number>,
-    swell_height2: Array<number>,
-    swell_height3: Array<number>,
-    swell_period1: Array<number>,
-    swell_period2: Array<number>,
-    swell_period3: Array<number>,
-    units: string,
-  },
+  surf: Array<Array<{
+      date: string,
+      periodSchedule: Array<number>,
+      surfMax: Array<number>,
+      surfMaxMaximum: number,
+      surfMin: Array<number>,
+      swellDirection1: Array<number>,
+      swellDirection2: Array<number>,
+      swellDirection3: Array<number>,
+      swellHeight1: Array<number>,
+      swellHeight2: Array<number>,
+      swellHeight3: Array<number>,
+      swellPeriod1: Array<number>,
+      swellPeriod2: Array<number>,
+      swellPeriod3: Array<number>,
+    }>,>,
+  numDays: number,
+  wind: Array<Array<{
+      date: string,
+      windDirection: number,
+      windSpeed: number,
+    }>,>,
+  sun: Array<{
+    sunsetLocaltime: string,
+    sunriseLocaltime: string,
+  }>,
   tide: {
     DisplayTides: string,
     Error: string,
@@ -70,6 +65,8 @@ type Props = {
     units: string,
   },
   activeDay: number,
+  tideMax: number,
+  tideMin: number,
   dayDateArray: Array<string>,
   date: string,
   isSpot: boolean,
@@ -79,121 +76,189 @@ type Props = {
 }
 
 class GraphContainer extends PureComponent<Props> {
-  render() {
-    const {
-      surf,
-      activeDay,
-      dayDateArray,
-      date,
-      isSpot,
-      tide,
-      dataKeys,
-      decrementDay,
-      incrementDay,
-    } = this.props
+  constructor(props: Props) {
+    super(props)
 
-    const numDays = surf.dateStamp.length
+    this.createSurfProps = this.createSurfProps.bind(this)
+    this.createTideProps = this.createTideProps.bind(this)
+    this.createWindProps = this.createWindProps.bind(this)
+  }
 
+  createWindProps = () => {
+    const { wind, activeDay, } = this.props
+    const data = wind[activeDay]
+
+    const keysToInterp = ['windSpeed', 'windDirection']
+
+    return {
+      data,
+      keysToInterp,
+    }
+  }
+
+  createSurfProps = () => {
+    const { surf, activeDay, dataKeys, } = this.props
+    const margins = [5, 5, 5, 5]
     // Massage ze data
-    const forecast = formatSurflineData(dayDateArray, surf, activeDay, isSpot)
-    const maxSurf = roundUpMaxSurfHeight(surf.surf_max_maximum)
-    const formattedTideData = prepTideData(date, tide.dataPoints, 500)
-
-    // Margins for the axes of the graphs
-    const margins = [15, 15, 15, 15]
+    const data = surf[activeDay]
+    const yMax = roundUpMaxSurfHeight(data[0].surfMaxMaximum)
+    const keysToInterp = dataKeys
 
     // Surf graph props
-    const surfSize = [100, 70]
-    const surfVWidth = surfSize[0] - margins[1] - margins[3]
-    const surfVHeight = surfSize[1] - margins[0] - margins[2]
-    const surfView = [surfVWidth, surfVHeight]
+    const size = [70, 40]
+    const vWidth = size[0] - margins[1] - margins[3]
+    const vHeight = size[1] - margins[0] - margins[2]
+    const view = [vWidth, vHeight]
+    const xScaleKey = 'date'
+    const labelFn = (tick: string) =>
+      moment(tick, 'MMMM DD, YYYY HH:mm:ss')
+        .utc()
+        .local()
+        .format('hA')
+    const keyColors = ['#1a1aff', '#66a3ff']
 
+    const xScale = d3
+      .scaleBand()
+      // Creates a domain containing the 4 hours to graph
+      .domain(data.map(d => d.date))
+      .rangeRound([0, view[0]], 0.05) // Range of the X axis scale
+      .paddingInner(0.05) // .05 padding between bars
+    const yScale = d3
+      .scaleLinear() // Creates a yScale to calculate Y position of the bar
+      .domain([0, yMax]) // Sets the domain to be 0 to surfMax value pulled from API
+      .range([view[1], 0])
+
+    const tickValues = xScale.domain()
+    const tickOffset = xScale.bandwidth() / 2
+    const tickLength = 1.5
+
+    return {
+      data,
+      keys: dataKeys,
+      view,
+      size,
+      keysToInterp,
+      keyColors,
+      xScaleKey,
+      yMax,
+      xScale,
+      yScale,
+      labelFn,
+      tickValues,
+      tickOffset,
+      tickLength,
+      margins,
+    }
+  }
+
+  createTideProps = () => {
+    const { tide, activeDay, tideMin, tideMax, } = this.props
+    // Massage ze data
+    const data = tide[activeDay]
+    const margins = [10, 5, 10, 5]
     // Tide graph props
-    const tideSize = [500, 200]
-    const tideVWidth = tideSize[0] - margins[1] - margins[3]
-    const tideVHeight = tideSize[1] - margins[0] - margins[2]
-    const tideView = [tideVWidth, tideVHeight]
+    const size = [400, 130]
+    const vWidth = size[0] - margins[1] - margins[3]
+    const vHeight = size[1] - margins[0] - margins[2]
+    const view = [vWidth, vHeight]
+    const xScaleKey = 'time'
+    const yScaleKey = 'height'
+    const yScaleDomain = [Math.round(tideMin - 1), Math.round(tideMax + 1)]
+    const tideLowsHighs = data.filter(d => d.type === 'High' || d.type === 'Low')
 
-    const dataSets = {
-      surf: {
-        data: forecast,
-        view: surfView,
-        size: surfSize,
-        keysToInterp: dataKeys,
-        keys: dataKeys,
-        yMax: maxSurf,
-        margins,
-      },
-      tide: {
-        data: formattedTideData,
-        mountInterpKeys: ['lineChartCurtain'],
-        keysToInterp: ['height'],
-        view: tideView,
-        size: tideSize,
-        margins,
-      },
+    // Make the domain slightly larger
+    yScaleDomain[0] -= 1
+    yScaleDomain[1] += 1
+    const xScale = d3
+      .scaleBand()
+      .domain(data.map(d => d.time))
+      .range([0, view[0]]) // Range of the X axis scale
+      .paddingInner(0.15) // .05 padding between bars
+    const yScale = d3
+      .scaleLinear() // Creates a yScale to calculate Y position of the bar
+      .domain(yScaleDomain)
+      .range([view[1], 0])
+    const barLabelFn = (d: Object) => `${Math.round(10 * d.height) / 10}ft`
+    const tickLabelFn = (d: any) => moment(d * 1000).format('H:mm')
+    const colorScale = (d: Object) => {
+      if (d.height > 0) {
+        return '#1a1aff'
+      }
+      return '#66a3ff'
     }
 
-    return <GraphPresentation {...{ dataSets, numDays, incrementDay, decrementDay, activeDay, }} />
+    const showTicks = true
+    const tickAnchor = 'middle'
+    const tickLength = 0
+    const tickValues = xScale.domain()
+    const tickPos = (scale: Function) => scale(scale.domain()[0])
+    const tickOffset = xScale.bandwidth() / 2
+    return {
+      data,
+      mountInterpKeys: ['height'],
+      keysToInterp: ['height'],
+      view,
+      size,
+      xScale,
+      xScaleKey,
+      yScale,
+      yScaleKey,
+      margins,
+      barLabelFn,
+      tickLabelFn,
+      colorScale,
+      tickLength,
+      tickPos,
+      showTicks,
+      tickValues,
+      tickAnchor,
+      tickOffset,
+      tideLowsHighs,
+    }
+  }
+
+  render() {
+    const { activeDay, decrementDay, incrementDay, sun, } = this.props
+
+    const sunData = sun[activeDay]
+
+    const dataSets = {
+      surf: this.createSurfProps(),
+      tide: this.createTideProps(),
+      wind: this.createWindProps(),
+    }
+
+    return <GraphPresentation {...{ dataSets, incrementDay, decrementDay, activeDay, sunData, }} />
   }
 }
 
 GraphContainer.propTypes = {
   activeDay: PropTypes.number.isRequired,
-  dayDateArray: PropTypes.arrayOf(PropTypes.string).isRequired,
-  date: PropTypes.string.isRequired,
+  tideMax: PropTypes.number.isRequired,
+  tideMin: PropTypes.number.isRequired,
   isSpot: PropTypes.bool.isRequired,
   dataKeys: PropTypes.arrayOf(PropTypes.string).isRequired,
   decrementDay: PropTypes.func.isRequired,
   incrementDay: PropTypes.func.isRequired,
-  surf: PropTypes.shape({
-    SwellSource: PropTypes.string.isRequired,
-    agg_direction1: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
-    agg_height1: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
-    agg_location: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
-    agg_period1: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
-    agg_spread1: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
-    agg_surf_max: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
-    agg_surf_min: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
-    dateStamp: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-    modelCode: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-    modelCodeDisplay: PropTypes.string.isRequired,
-    modelRun: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    modelRunDisplay: PropTypes.number.isRequired,
-    periodSchedule: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-    startDate_GMT: PropTypes.number.isRequired,
-    startDate_LOCAL: PropTypes.number.isRequired,
-    startDate_pretty_GMT: PropTypes.string.isRequired,
-    startDate_pretty_LOCAL: PropTypes.string.isRequired,
-    surf_max: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    surf_max_maximum: PropTypes.number.isRequired,
-    surf_min: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    swell_direction1: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    swell_direction2: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    swell_direction3: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    swell_height1: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    swell_height2: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    swell_height3: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    swell_period1: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    swell_period2: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    swell_period3: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    units: PropTypes.string.isRequired,
-  }).isRequired,
-  tide: PropTypes.shape({
-    DisplayTides: PropTypes.string.isRequired,
-    Error: PropTypes.string.isRequired,
-    SunPoints: PropTypes.arrayOf(
+  surf: PropTypes.arrayOf(
+    PropTypes.arrayOf(
       PropTypes.shape({
-        Localtime: PropTypes.string.isRequired,
-        Rawtime: PropTypes.string.isRequired,
-        time: PropTypes.number.isRequired,
-        type: PropTypes.string.isRequired,
-        utctime: PropTypes.string.isRequired,
+        surfMax: PropTypes.number.isRequired,
+        surfMin: PropTypes.number.isRequired,
+        swellDirection1: PropTypes.number.isRequired,
+        swellDirection2: PropTypes.number.isRequired,
+        swellDirection3: PropTypes.number.isRequired,
+        swellHeight1: PropTypes.number.isRequired,
+        swellHeight2: PropTypes.number.isRequired,
+        swellHeight3: PropTypes.number.isRequired,
+        swellPeriod1: PropTypes.number.isRequired,
+        swellPeriod2: PropTypes.number.isRequired,
+        swellPeriod3: PropTypes.number.isRequired,
       }).isRequired
-    ).isRequired,
-    TideStation: PropTypes.string.isRequired,
-    TideType: PropTypes.string.isRequired,
-    dataPoints: PropTypes.arrayOf(
+    ).isRequired
+  ).isRequired,
+  tide: PropTypes.arrayOf(
+    PropTypes.arrayOf(
       PropTypes.shape({
         Localtime: PropTypes.string.isRequired,
         Rawtime: PropTypes.string.isRequired,
@@ -201,15 +266,26 @@ GraphContainer.propTypes = {
         time: PropTypes.number.isRequired,
         type: PropTypes.string.isRequired,
         utctime: PropTypes.string.isRequired,
-      }).isRequired
-    ).isRequired,
-    startDate_GMT: PropTypes.number.isRequired,
-    startDate_LOCAL: PropTypes.number.isRequired,
-    startDate_pretty_GMT: PropTypes.string.isRequired,
-    startDate_pretty_LOCAL: PropTypes.string.isRequired,
-    timezone: PropTypes.number.isRequired,
-    units: PropTypes.string.isRequired,
-  }).isRequired,
+      })
+    ).isRequired
+  ).isRequired,
+  wind: PropTypes.arrayOf(
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        date: PropTypes.string,
+        windSpeed: PropTypes.number,
+        windDirection: PropTypes.number,
+      })
+    )
+  ).isRequired,
+  sun: PropTypes.arrayOf(
+    PropTypes.shape({
+      sunriseLocaltime: PropTypes.string,
+      sunsetLocaltime: PropTypes.string,
+      sunrise: PropTypes.number,
+      sunset: PropTypes.number,
+    })
+  ).isRequired,
 }
 
 export default GraphContainer
