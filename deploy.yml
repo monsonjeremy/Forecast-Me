@@ -3,7 +3,7 @@ version: '2'
 services:
 
   app:
-    image: monsonjeremy/forecast-me:beta-0.0.1
+    image: monsonjeremy/forecast-me:latest
     mem_limit: 966367641
     env_file:
       - './docker-compose/prod.env'

@@ -79,26 +79,18 @@ class SideNav extends PureComponent<Props> {
         <aside className="sidenav-aside">
           <div className="sidenav-title-container">
             <figure className="surfer-icon sidenav-title-icon" />
-            <h1 className="sidenav-title">Forecast.it</h1>
+            <h1 className="sidenav-title">ForecastMe</h1>
           </div>
           <div className="sidenav-links-container">
             <Link to="/forecast" className="sidenav-links forecast-link">
-              <switch
-                role="link"
-                onClick={() => history.push('/forecast')}
-                className="sidenav-link"
-              >
+              <div role="link" onClick={() => history.push('/forecast')} className="sidenav-link">
                 FORECAST
-              </switch>
+              </div>
             </Link>
             <Link to="/info" className="sidenav-links info-link">
-              <switch
-                role="link"
-                onClick={() => history.push('/forecast')}
-                className="sidenav-link"
-              >
+              <div role="link" onClick={() => history.push('/forecast')} className="sidenav-link">
                 INFO
-              </switch>
+              </div>
             </Link>
           </div>
           <SpotSearch

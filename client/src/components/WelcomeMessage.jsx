@@ -12,7 +12,7 @@ class WelcomeMessage extends PureComponent {
         </div>
         <div className="welcome-message container">
           <div className="welcome-title-container section-title">
-            <h1 className="welcome-title section-title">Welcome to Forecast Me</h1>
+            <h1 className="welcome-title section-title">Welcome to ForecastMe</h1>
             <p className="welcome-subtitle section-subtitle copy-text">
               Thanks for checking out my surf forecasting site. This is a passion project that
               I&apos;ve been working on building. Currently the app is built with a React/Redux

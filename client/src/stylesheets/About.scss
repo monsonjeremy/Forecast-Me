@@ -9,6 +9,7 @@
 
   .section-title {
     padding: 10px;
+    line-height: 38px;
   }
   .about-info{
     display: flex;
@@ -16,8 +17,7 @@
     align-content: center;
     flex-direction: column;
     justify-content: center;
-    height: 100%;
-    width: 50%;
+    height: 100vh;
     margin-right: auto;
     margin-left: auto;
     

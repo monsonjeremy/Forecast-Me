@@ -1,16 +1,16 @@
 {
   "name": "forecast-me-server",
-  "version": "0.0.1-beta-forecastme-api",
+  "version": "0.0.2-beta-forecastme-api",
   "license": "MIT",
   "description": "Source code for the server side code of Forecast-Me",
   "repository": "https://github.com/monsonjeremy/Forecast-Me",
   "private": false,
   "scripts": {
     "start": "node ./bin/www",
-    "build:server:prod": "npx babel --presets env --ignore node_modules ./ -d dist",
+    "build:server:prod": "npx babel --presets env --ignore node_modules ./ -d ./",
     "start:server:dev":
       "./node_modules/.bin/nodemon --inspect=0.0.0.0:5858 --ignore node_modules/ --exec ./node_modules/.bin/babel-node --ignore node_modules ./bin/www.js",
-    "start:server:prod": "./node_modules/.bin/forever ./dist/bin/www.js"
+    "start:server:prod": "./node_modules/.bin/forever ./bin/www.js"
   },
   "dependencies": {
     "axios": "^0.17.1",

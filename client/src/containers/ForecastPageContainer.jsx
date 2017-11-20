@@ -17,7 +17,7 @@ class ForecastPageContainer extends Component {
   }
 
   renderForecast() {
-    const forecastIsLoaded = this.props.appData.forecast && !this.props.appData.forecastIsLoading
+    const forecastIsLoaded = this.props.appData.forecast
     if (forecastIsLoaded) {
       const dataKeys = ['surfMin', 'surfMax']
       let spotName = ''
