@@ -2,6 +2,7 @@ import express from 'express'
 import path from 'path'
 import buoysApi from './buoys'
 import surfApi from './surf'
+import { version } from '../package.json'
 
 const logger = require('morgan')
 const cors = require('cors')
@@ -21,7 +22,7 @@ app.use(cookieParser())
 
 // Node status for Load balancer to ping
 app.get('/__status__/node', (req, res) => {
-  res.sendStatus(200)
+  res.send({ version, })
 })
 
 // Create endpoint for redis API
