@@ -208,6 +208,9 @@
 
 .sidenav-container-items {
   .dropdown-selector {
+    .spot {
+      padding-bottom: 65px;
+    }
     .dropdown-title-btn {
       background-image: linear-gradient(#cdcdcd, #cdcdcd);
       background-repeat: no-repeat;
@@ -257,6 +260,7 @@
         }
       }
     }
+
     .dropdown-items {
       background-color: #f7f7f7;
       .dropdown-item {
@@ -272,5 +276,17 @@
       }
     }
   }
+
 }
 
+.app-version {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background-color: white;
+  width: 325px;
+  border-top: 1px solid black;
+  h3 {
+    padding: 20px;
+  }
+}

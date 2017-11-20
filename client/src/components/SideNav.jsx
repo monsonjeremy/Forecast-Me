@@ -6,6 +6,7 @@ import { withRouter } from 'react-router'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { SpotSearch, DropdownSelector, Loader } from './'
+import { version } from '../../package.json'
 
 import '../stylesheets/SideNav.css'
 
@@ -88,6 +89,9 @@ class SideNav extends PureComponent<Props> {
           <section className="sidenav-container-items">
             <DropdownSelector key={'region-dropdown'} {...regionDropdownProps} />
             <DropdownSelector key={'spot-dropdown'} {...spotDropdownProps} />
+          </section>
+          <section className="app-version">
+            <h3>Version: {version}</h3>
           </section>
         </aside>
       </section>
