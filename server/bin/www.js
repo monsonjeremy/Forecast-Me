@@ -87,7 +87,8 @@ server.listen(port)
 server.on('error', onError)
 server.on('listening', onListening)
 
-const cacheBuoyJob = cacheBuoyDataJob().start()
+const cacheBuoyJob = cacheBuoyDataJob()
+cacheBuoyJob.start()
 console.log('cacheBuoyDataJob running: ', cacheBuoyJob.running)
 
 const cacheSurflineJob = cacheSurflineDataJob()

@@ -9,7 +9,9 @@ services:
       - NODE_ENV=production
       - BABEL_ENV=production
     ports:
-      - "3006:3006"
+      - "80:80"
+    env_file:
+      - ./prod.env
     links:
       - redis
     depends_on:

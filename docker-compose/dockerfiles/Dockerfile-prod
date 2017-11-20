@@ -24,5 +24,5 @@ RUN cd client && npm install && npm run build
 COPY ./server/ /app/server
 RUN cd server && NODE_ENV=development npm install && npm run build:server:prod
 
-EXPOSE 3001
+EXPOSE 80
 CMD ["npm", "run", "start:app:prod"]
