@@ -1,8 +1,9 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import '../stylesheets/Loader.css'
 
-const Loader = () => (
-  <div className="loader-container">
+const Loader = ({ className, }) => (
+  <div className={`loader-container ${className}`}>
     <div className="loader">
       <ul className="hexagon-container">
         <li className="hexagon hex_1" />
@@ -16,4 +17,12 @@ const Loader = () => (
     </div>
   </div>
 )
+
+Loader.propTypes = {
+  className: PropTypes.string,
+}
+
+Loader.defaultProps = {
+  className: null,
+}
 export default Loader

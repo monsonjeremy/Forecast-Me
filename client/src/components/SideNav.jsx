@@ -75,7 +75,7 @@ class SideNav extends PureComponent<Props> {
 
     return (
       <section className="sidenav-container">
-        {spotListIsLoading && <Loader />}
+        {spotListIsLoading && <Loader className="side-nav-loader" />}
         <aside className="sidenav-aside">
           <div className="sidenav-title-container">
             <figure className="surfer-icon sidenav-title-icon" />
