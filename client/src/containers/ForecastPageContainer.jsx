@@ -2,25 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { WelcomeContainer } from './'
-import { SideNav, ForecastPagePresentation, Loader, GetStarted } from '../components'
-import {
-  fetchSpot as fetchSpotAPI,
-  getBuoyData,
-  getRegions,
-  getCookie,
-  setVisitedCookie
-} from '../helpers'
-import {
-  fetchForecast,
-  fetchSpotList,
-  setForecast,
-  setSpotList,
-  setRegion,
-  setSpot,
-  incrementDay,
-  decrementDay,
-  viewedWelcomeMessage
-} from '../actions'
+import { ForecastPagePresentation, Loader, GetStarted } from '../components'
+import { getCookie } from '../helpers'
+import { incrementDay, decrementDay } from '../actions'
 
 class ForecastPageContainer extends Component {
   constructor(props) {
@@ -30,7 +14,6 @@ class ForecastPageContainer extends Component {
     this.renderGetStarted = this.renderGetStarted.bind(this)
     this.renderLoader = this.renderLoader.bind(this)
     this.renderWelcomeMessage = this.renderWelcomeMessage.bind(this)
-    this.renderSideNav = this.renderSideNav.bind(this)
   }
 
   renderForecast() {
@@ -41,8 +24,9 @@ class ForecastPageContainer extends Component {
 
       if (this.props.appState.isSpot) {
         spotName = this.props.appState.selectedSpot.name
+      } else {
+        spotName = this.props.appState.selectedRegion.name
       }
-      spotName = this.props.appState.selectedRegion.name
 
       const props = {
         surf: this.props.appData.forecast.Surf,
@@ -91,21 +75,6 @@ class ForecastPageContainer extends Component {
     return <WelcomeContainer renderWelcomeMessage={renderWelcomeMessage} />
   }
 
-  renderSideNav() {
-    const sideNavProps = {
-      regions: this.props.appData.spotList,
-      spotListIsLoading: this.props.appData.spotListIsLoading,
-      setSpot: this.props.fetchSpot,
-      setSpotWithRegion: this.props.setSpotWithRegion,
-      setRegion: this.props.fetchRegion,
-      fetchSpotList: this.props.fetchSpotList,
-      selectedRegion: this.props.appState.selectedRegion,
-      selectedSpot: this.props.appState.selectedRegion,
-      spotList: this.props.appData.spotList,
-    }
-    return <SideNav key="forecast-page-sidenav" {...sideNavProps} />
-  }
-
   render() {
     return (
       <div className="forecast-page-container" key="forecast-page-container">
@@ -119,12 +88,8 @@ class ForecastPageContainer extends Component {
 }
 
 ForecastPageContainer.propTypes = {
-  fetchSpot: PropTypes.func.isRequired,
-  fetchRegion: PropTypes.func.isRequired,
-  fetchSpotList: PropTypes.func.isRequired,
   incrementDay: PropTypes.func.isRequired,
   decrementDay: PropTypes.func.isRequired,
-  setSpotWithRegion: PropTypes.func.isRequired,
   appState: PropTypes.shape({
     showWelcomeMessage: PropTypes.bool.isRequired,
     selectedRegion: PropTypes.shape({
@@ -140,30 +105,116 @@ ForecastPageContainer.propTypes = {
     forecastFetched: PropTypes.bool,
   }).isRequired,
   appData: PropTypes.shape({
-    spotList: PropTypes.arrayOf(
-      PropTypes.shape({
-        region: PropTypes.shape({
-          id: PropTypes.string.isRequired,
-          name: PropTypes.string.isRequired,
-          buoy: PropTypes.shape({
-            buoyId: PropTypes.string.isRequired,
-            buoyName: PropTypes.string.isRequired,
-          }),
-          spots: PropTypes.arrayOf(
-            PropTypes.shape({
-              id: PropTypes.string.isRequired,
-              name: PropTypes.string.isRequired,
-            }).isRequired
-          ).isRequired,
-        }),
-      })
-    ),
     forecast: PropTypes.shape({
-      Surf: PropTypes.instanceOf(Object),
-      Tide: PropTypes.instanceOf(Object),
-      Wind: PropTypes.instanceOf(Object),
-      Buoy: PropTypes.instanceOf(Object),
-      Sun: PropTypes.instanceOf(Object),
+      Surf: PropTypes.arrayOf(
+        PropTypes.arrayOf(
+          PropTypes.shape({
+            date: PropTypes.string.isRequired,
+            swellHeight1: PropTypes.number.isRequired,
+            swellHeight2: PropTypes.number.isRequired,
+            swellHeight3: PropTypes.number.isRequired,
+            swellPeriod1: PropTypes.number.isRequired,
+            swellPeriod2: PropTypes.number.isRequired,
+            swellPeriod3: PropTypes.number.isRequired,
+            swellDirection1: PropTypes.number.isRequired,
+            swellDirection2: PropTypes.number.isRequired,
+            swellDirection3: PropTypes.number.isRequired,
+            surfMaxMaximum: PropTypes.number.isRequired,
+            surfMax: PropTypes.number.isRequired,
+            surfMin: PropTypes.number.isRequired,
+            label: PropTypes.string.isRequired,
+          })
+        )
+      ),
+      Tide: PropTypes.arrayOf(
+        PropTypes.arrayOf(
+          PropTypes.shape({
+            Localtime: PropTypes.string.isRequired,
+            time: PropTypes.number.isRequired,
+            type: PropTypes.string.isRequired,
+            utctime: PropTypes.string.isRequired,
+            Rawtime: PropTypes.string.isRequired,
+            height: PropTypes.number.isRequired,
+          })
+        )
+      ),
+      Wind: PropTypes.arrayOf(
+        PropTypes.arrayOf(
+          PropTypes.shape({
+            date: PropTypes.string.isRequired,
+            windDirection: PropTypes.number.isRequired,
+            windSpeed: PropTypes.number.isRequired,
+          })
+        )
+      ),
+      Buoy: PropTypes.shape({
+        '#YY': PropTypes.shape({
+          units: PropTypes.string.isRequired,
+          data: PropTypes.string.isRequired,
+        }).isRequired,
+        MM: PropTypes.shape({
+          units: PropTypes.string.isRequired,
+          data: PropTypes.string.isRequired,
+        }).isRequired,
+        DD: PropTypes.shape({
+          units: PropTypes.string.isRequired,
+          data: PropTypes.string.isRequired,
+        }).isRequired,
+        hh: PropTypes.shape({
+          units: PropTypes.string.isRequired,
+          data: PropTypes.string.isRequired,
+        }).isRequired,
+        mm: PropTypes.shape({
+          units: PropTypes.string.isRequired,
+          data: PropTypes.string.isRequired,
+        }).isRequired,
+        WVHT: PropTypes.shape({
+          units: PropTypes.string.isRequired,
+          data: PropTypes.string.isRequired,
+        }).isRequired,
+        SwH: PropTypes.shape({
+          units: PropTypes.string.isRequired,
+          data: PropTypes.string.isRequired,
+        }).isRequired,
+        SwP: PropTypes.shape({
+          units: PropTypes.string.isRequired,
+          data: PropTypes.string.isRequired,
+        }).isRequired,
+        WWH: PropTypes.shape({
+          units: PropTypes.string.isRequired,
+          data: PropTypes.string.isRequired,
+        }).isRequired,
+        WWP: PropTypes.shape({
+          units: PropTypes.string.isRequired,
+          data: PropTypes.string.isRequired,
+        }).isRequired,
+        SwD: PropTypes.shape({
+          units: PropTypes.string.isRequired,
+          data: PropTypes.string.isRequired,
+        }).isRequired,
+        WWD: PropTypes.shape({
+          units: PropTypes.string.isRequired,
+          data: PropTypes.string.isRequired,
+        }).isRequired,
+        STEEPNESS: PropTypes.shape({
+          units: PropTypes.string.isRequired,
+          data: PropTypes.string.isRequired,
+        }).isRequired,
+        APD: PropTypes.shape({
+          units: PropTypes.string.isRequired,
+          data: PropTypes.string.isRequired,
+        }).isRequired,
+        MWD: PropTypes.shape({
+          units: PropTypes.string.isRequired,
+          data: PropTypes.string.isRequired,
+        }).isRequired,
+      }).isRequired,
+      Sun: PropTypes.shape({
+        sunriseLocaltime: PropTypes.string.isRequired,
+        sunrise: PropTypes.number.isRequired,
+        sunsetLocaltime: PropTypes.string.isRequired,
+        sunset: PropTypes.number.isRequired,
+      }).isRequired,
       tideMin: PropTypes.number.isRequired,
       tideMax: PropTypes.number.isRequired,
     }),
@@ -178,56 +229,6 @@ const mapStateToProps = state => state
 const mapDispatchToProps = dispatch => ({
   incrementDay: activeDay => dispatch(incrementDay(activeDay)),
   decrementDay: activeDay => dispatch(decrementDay(activeDay)),
-  fetchSpotList: async () => {
-    // Dispatch an action to set the loader state
-    dispatch(fetchSpotList())
-    // Hit that API
-    const spotList = await getRegions()
-    dispatch(setSpotList(spotList))
-  },
-  fetchRegion: async region => {
-    // User interacted with page, no need to show welcome message again
-    dispatch(viewedWelcomeMessage())
-    setVisitedCookie()
-    // Dispatch an action to update the selected region
-    dispatch(setRegion(region))
-    dispatch(fetchForecast())
-
-    // Get the forecast for the region and its buoy then add buoy data to region forecast
-    const regionForecast = await fetchSpotAPI(region.id)
-    const buoyData = await getBuoyData(region.buoy.buoyId)
-    regionForecast.data.Buoy = buoyData.data
-
-    dispatch(setForecast(regionForecast.data, false))
-    // dispatch(forecastLoaded())
-  },
-  setSpotWithRegion: async (region, spot) => {
-    // User interacted with page, no need to show welcome message again
-    dispatch(viewedWelcomeMessage())
-    setVisitedCookie()
-    // Dispatch an action to update the selected spot
-    dispatch(setRegion(region))
-    dispatch(setSpot(spot))
-    dispatch(fetchForecast())
-
-    // Get the forecast for the spot and its buoy then add buoy data to region forecast
-    const spotForecast = await fetchSpotAPI(spot.id)
-    const buoyData = await getBuoyData(region.buoy.buoyId)
-    spotForecast.data.Buoy = buoyData.data
-
-    dispatch(setForecast(spotForecast.data, false))
-  },
-  fetchSpot: async (spot, region) => {
-    // Dispatch an action to update the selected spot
-    dispatch(setSpot(spot))
-    dispatch(fetchForecast())
-    // Dispatch a Thunk to fetch the response of the API call and update the QA analysis
-    const spotForecast = await fetchSpotAPI(spot.id)
-    const buoyData = await getBuoyData(region.buoy.buoyId)
-    spotForecast.data.Buoy = buoyData.data
-
-    dispatch(setForecast(spotForecast.data, false))
-  },
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ForecastPageContainer)

@@ -8,10 +8,31 @@ import { convertMetersToFeet } from '../helpers/helperFunctions'
 
 import '../stylesheets/ForecastHeader.css'
 
+type buoyDataObject = {
+  units: string,
+  data: string,
+}
+
 type Props = {
   date: Array<string>,
   spotName: string,
-  buoy: Object,
+  buoy: {
+    '#YY': buoyDataObject,
+    MM: buoyDataObject,
+    DD: buoyDataObject,
+    hh: buoyDataObject,
+    mm: buoyDataObject,
+    WVHT: buoyDataObject,
+    SwH: buoyDataObject,
+    SwP: buoyDataObject,
+    WWH: buoyDataObject,
+    WWP: buoyDataObject,
+    SwD: buoyDataObject,
+    WWD: buoyDataObject,
+    STEEPNESS: buoyDataObject,
+    APD: buoyDataObject,
+    MWD: buoyDataObject,
+  },
   activeDay: number,
   numDays: number,
   incrementDay: Function,
@@ -93,7 +114,68 @@ const ForecastHeader = ({
 ForecastHeader.propTypes = {
   spotName: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
-  buoy: PropTypes.instanceOf(Object).isRequired,
+  buoy: PropTypes.shape({
+    '#YY': PropTypes.shape({
+      units: PropTypes.string.isRequired,
+      data: PropTypes.string.isRequired,
+    }).isRequired,
+    MM: PropTypes.shape({
+      units: PropTypes.string.isRequired,
+      data: PropTypes.string.isRequired,
+    }).isRequired,
+    DD: PropTypes.shape({
+      units: PropTypes.string.isRequired,
+      data: PropTypes.string.isRequired,
+    }).isRequired,
+    hh: PropTypes.shape({
+      units: PropTypes.string.isRequired,
+      data: PropTypes.string.isRequired,
+    }).isRequired,
+    mm: PropTypes.shape({
+      units: PropTypes.string.isRequired,
+      data: PropTypes.string.isRequired,
+    }).isRequired,
+    WVHT: PropTypes.shape({
+      units: PropTypes.string.isRequired,
+      data: PropTypes.string.isRequired,
+    }).isRequired,
+    SwH: PropTypes.shape({
+      units: PropTypes.string.isRequired,
+      data: PropTypes.string.isRequired,
+    }).isRequired,
+    SwP: PropTypes.shape({
+      units: PropTypes.string.isRequired,
+      data: PropTypes.string.isRequired,
+    }).isRequired,
+    WWH: PropTypes.shape({
+      units: PropTypes.string.isRequired,
+      data: PropTypes.string.isRequired,
+    }).isRequired,
+    WWP: PropTypes.shape({
+      units: PropTypes.string.isRequired,
+      data: PropTypes.string.isRequired,
+    }).isRequired,
+    SwD: PropTypes.shape({
+      units: PropTypes.string.isRequired,
+      data: PropTypes.string.isRequired,
+    }).isRequired,
+    WWD: PropTypes.shape({
+      units: PropTypes.string.isRequired,
+      data: PropTypes.string.isRequired,
+    }).isRequired,
+    STEEPNESS: PropTypes.shape({
+      units: PropTypes.string.isRequired,
+      data: PropTypes.string.isRequired,
+    }).isRequired,
+    APD: PropTypes.shape({
+      units: PropTypes.string.isRequired,
+      data: PropTypes.string.isRequired,
+    }).isRequired,
+    MWD: PropTypes.shape({
+      units: PropTypes.string.isRequired,
+      data: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
   activeDay: PropTypes.number.isRequired,
   incrementDay: PropTypes.func.isRequired,
   decrementDay: PropTypes.func.isRequired,

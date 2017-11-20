@@ -58,7 +58,7 @@ class DropdownSelector extends PureComponent<Props, State> {
           toggleFunc={this.toggleDropdown}
         />
         <Collapse isOpened={this.state.dropdownOpen}>
-          <div className={'dropdown-items'}>
+          <div className={`dropdown-items ${this.props.type}`}>
             {/* If no options available (region hasn't been selected) then don't render subitems */}
             {!(this.props.options === null) &&
               /* flow-disable-next-line */

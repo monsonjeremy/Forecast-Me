@@ -4,8 +4,6 @@ import React, { PureComponent } from 'react'
 import type { Node } from 'react'
 import PropTypes from 'prop-types'
 import * as d3 from 'd3'
-
-import { HorizontalAxis } from './'
 import { roundedRect } from '../helpers/'
 
 type Props = {

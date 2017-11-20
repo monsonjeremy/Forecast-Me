@@ -5,15 +5,7 @@ import type { Node } from 'react'
 import moment from 'moment'
 import PropTypes from 'prop-types'
 import { DataInterpolationWrapper, ParentResize } from '../containers'
-import {
-  ArrowButton,
-  StackedBarChart,
-  WindForecast,
-  BarChart,
-  HorizontalAxis,
-  SunTimes,
-  SwellList
-} from './'
+import { StackedBarChart, WindForecast, BarChart, HorizontalAxis, SunTimes, SwellList } from './'
 
 import '../stylesheets/GraphContainer.css'
 

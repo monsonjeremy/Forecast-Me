@@ -49,6 +49,7 @@ type Props = {
     }>,
     spotListIsLoading: boolean,
   },
+  history: Object,
 }
 class App extends PureComponent<Props> {
   constructor(props) {
@@ -58,7 +59,6 @@ class App extends PureComponent<Props> {
 
   renderSideNav = () => {
     const sideNavProps = {
-      regions: this.props.appData.spotList,
       spotListIsLoading: this.props.appData.spotListIsLoading,
       setSpot: this.props.fetchSpot,
       setSpotWithRegion: this.props.setSpotWithRegion,
@@ -67,6 +67,7 @@ class App extends PureComponent<Props> {
       selectedRegion: this.props.appState.selectedRegion,
       selectedSpot: this.props.appState.selectedRegion,
       spotList: this.props.appData.spotList,
+      history: this.props.history,
     }
 
     return <SideNav className="side-nav" key="sidenav" {...sideNavProps} />
@@ -147,6 +148,7 @@ const mapDispatchToProps = dispatch => ({
 App.propTypes = {
   fetchSpot: PropTypes.func.isRequired,
   fetchRegion: PropTypes.func.isRequired,
+  history: PropTypes.instanceOf(Object).isRequired,
   fetchSpotList: PropTypes.func.isRequired,
   setSpotWithRegion: PropTypes.func.isRequired,
   appState: PropTypes.shape({
