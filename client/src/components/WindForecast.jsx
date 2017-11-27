@@ -25,7 +25,7 @@ const WindForecast = ({ data, }: Props) => (
       return (
         <div className="wind-data-container" key={`${d.date}`}>
           <figure className="wind-arrow wind-arrow-icon" style={{ transform, backgroundColor, }} />
-          <h3>{moment(d.date).format('hA')}</h3>
+          <h3>{moment(d.date, 'MMMM DD, YYYY HH:mm:ss').format('hA')}</h3>
           <h3>{Math.round(d.windSpeed * 10) / 10} knots</h3>
         </div>
       )

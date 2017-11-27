@@ -34,8 +34,12 @@ app.use('/api/surf/v1', surfApi)
 if (!isLocalDev) {
   // Serve bundle on root URL
   app.use(express.static(path.join(__dirname, '..', '..', 'client', 'build')))
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', '..', 'client', 'build', 'index.html'))
+  app.use('*', (req, res) => {
+    if (!req.secure && req.get('X-Forwarded-Proto') !== 'https') {
+      res.redirect(`https://${req.get('Host')}${req.url}`)
+    } else {
+      res.sendFile(path.join(__dirname, '..', '..', 'client', 'build', 'index.html'))
+    }
   })
 }
 
