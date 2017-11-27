@@ -5,6 +5,7 @@ services:
     build:
       context: ../
       dockerfile: docker-compose/dockerfiles/Dockerfile-prod
+    image: forecastme-prod:latest
     environment:
       - NODE_ENV=production
       - BABEL_ENV=production

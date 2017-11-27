@@ -1,6 +1,10 @@
 {
   "name": "forecast-me",
   "version": "1.0.0",
+  "imageRepo": "707941731089.dkr.ecr.us-west-2.amazonaws.com/forecastme-prod",
+  "awsRegion": "us-west-2",
+  "awsEcsCluster": "prod-ecs-cluster",
+  "awsService": "forecastme",
   "license": "MIT",
   "description": "Forecasting Aggregation Site",
   "repository": "https://github.com/monsonjeremy/Forecast-Me",
