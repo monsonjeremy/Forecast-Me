@@ -1,0 +1,236 @@
+.mobile-form-page-container {
+  background-color: #c2c2c2;
+  width: 100vw;
+  z-index: 100001;
+  padding-bottom: 100px;
+  .container {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  .form-header-container {
+    text-align: center;
+    padding-top: 20px;
+    * {
+      margin: 5px;
+    }
+  }
+
+  .form-values-container {
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 30px;
+    * {
+      margin: 5px;
+    }
+  }
+
+  hr {
+    border: 1px solid black;
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+
+  .forms-list {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+
+    dl {
+      max-width: 40em;
+    }
+  
+    dt {
+      background-color: #ddd;
+      margin: 0;
+      padding: 16px;
+      color: #333;
+      border-radius: 6px 6px 0 0;
+    }
+  
+    dd {
+      background-color: #F5F5F5 ;
+      margin: 0 0 1em 0;
+      padding: 16px;
+      border: 1px solid #ddd;
+      border-radius: 0 0 6px 6px;
+    }
+  
+    dt h3 {
+      margin: 0;
+    }
+
+    button {
+      width: 90%;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      padding: 0;
+      border-radius: 6px;
+      margin: 0 0 16px 0;
+    }
+
+    .button-special{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .selected {
+        border: 2px solid black;
+
+        &:focus {
+          outline: none;
+        }
+
+      }
+
+      h3 {
+        margin: 0;
+        padding: 9px;
+        color: #fff;
+        pointer-events: none;
+      }
+    }
+
+    .button-very {
+      background-color: rgb(37, 203, 45);
+    }
+
+    .button-meh {
+      background-color: #ECA02A;
+    }
+
+    .button-no {
+      background-color: rgb(189, 17, 17);
+    }
+  }
+
+  form {
+    .submit-form {
+     padding: 10px 30px;
+     border-radius: 10px;
+     border: none;
+     color: white;
+     font-size: 20px;
+     margin: 20px;
+     background-color: rgb(37, 203, 45);
+   }
+  }
+  
+  /* basic label and input styles */
+  label {
+    display: block;
+    margin: 0 0 8px 0;
+    font-family: 'Neuton', serif;
+  }
+
+  input {
+    height: 1.75em;
+    width: 93%;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 0 8px;
+  }
+
+  .happiness-slider {
+    display: flex;
+    align-items: center;
+  }
+
+  .note {
+    font-size: .8em;
+    color: #777;
+    display: block;
+    margin: 8px 0 0 0;
+  }
+
+  .checkbox li, 
+  .checkboxes li {
+    margin-bottom: 4px;
+  }
+  .checkbox label, 
+  .checkboxes label {
+    padding: 9px 0;
+  }
+
+  .checkbox input, 
+  .checkboxes input {
+    width: 24px;
+    height: 1em;
+  }
+
+  fieldset {
+    border: 0;
+    margin: 0;
+    padding: 12px 0 0 0;
+  }
+
+  legend em {
+    font-weight: bold;
+    font-size: 1.25em;
+    font-style: normal;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+
+  /* utility class for accessibly hidden labels */
+  .hidden-label {
+    position: absolute;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect (1px 1px 1px 1px); /*for IE6 & 7*/
+    clip: rect (1px, 1px, 1px, 1px);
+  }
+
+  @media all and (min-width: 640px) {
+
+    label {
+      display: inline-block;
+      margin: 0 16px 0 0;
+      width: 8em;
+      text-align: right;
+    }
+    
+    input {
+      width: 60%;
+    }
+    
+    .checkbox label, 
+    .checkboxes label {
+      text-align: left;
+      width: 100%;
+    }
+
+    #phones li {
+      float: left;
+      width: 42%;
+      margin-right: 2em;
+    }
+
+    .note {
+      display: block;
+      margin-left: 11.5em;
+    }
+    
+    .note.no-left-margin { 
+      margin-left: 0; 
+    }
+    
+    .button-special{
+      button {
+        width: 50%;
+        margin-left: 1%;
+      }
+
+        button:first-child {
+        margin-left: 0;
+      }
+    }
+  }
+}

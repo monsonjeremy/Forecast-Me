@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
 import ForecastPageContainer from './containers/ForecastPageContainer'
-import { ErrorBoundary, About, SideNav } from './components'
+import { ErrorBoundary, About, SideNav, MobileResponsive } from './components'
 import { fetchSpot as fetchSpotAPI, getBuoyData, getRegions, setVisitedCookie } from './helpers'
 import {
   fetchForecast,
@@ -50,7 +50,11 @@ type Props = {
     spotListIsLoading: boolean,
   },
   history: Object,
+  location: {
+    pathname: string,
+  },
 }
+
 class App extends PureComponent<Props> {
   constructor(props) {
     super(props)
@@ -70,20 +74,28 @@ class App extends PureComponent<Props> {
       history: this.props.history,
     }
 
-    return <SideNav className="side-nav" key="sidenav" {...sideNavProps} />
+    if (this.props.location.pathname !== '/mobile') {
+      return <SideNav className="side-nav" key="sidenav" {...sideNavProps} />
+    }
+    return null
   }
   render() {
     return (
       <ErrorBoundary>
         <div className="app">
+          <Switch>
+            <Route exact path="/mobile" component={MobileResponsive} />
+          </Switch>
           {this.renderSideNav()}
-          <div className="page-container" key="page-container">
-            <Switch>
-              <Route exact path="/" component={ForecastPageContainer} />
-              <Route path="/forecast" component={ForecastPageContainer} />
-              <Route path="/info" component={About} />
-            </Switch>
-          </div>
+          {this.props.location.pathname !== '/mobile' && (
+            <div className="page-container" key="page-container">
+              <Switch>
+                <Route exact path="/" component={ForecastPageContainer} />
+                <Route path="/forecast" component={ForecastPageContainer} />
+                <Route path="/info" component={About} />
+              </Switch>
+            </div>
+          )}
         </div>
       </ErrorBoundary>
     )
@@ -181,6 +193,9 @@ App.propTypes = {
       })
     ),
     spotListIsLoading: PropTypes.bool,
+  }).isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
   }).isRequired,
 }
 
