@@ -4,6 +4,7 @@ import * as React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment-timezone'
 import Stickyfill from 'stickyfilljs'
+import { UnmountClosed } from 'react-collapse'
 import { convertMetersToFeet } from '../helpers/helperFunctions'
 
 import '../stylesheets/ForecastHeader.css'
@@ -65,7 +66,7 @@ const ForecastHeader = ({
           <h1 className="section-title spot-name">{spotName}</h1>
           <h2 className="section-subtitle forecast-date">{date}</h2>
         </div>
-        {activeDay === 0 && (
+        <div className={`buoy-readings-container ${activeDay === 0 ? '' : 'hidden'}`}>
           <div className="day-data-header-container">
             <div className="data-header-item">
               <h3>
@@ -84,12 +85,10 @@ const ForecastHeader = ({
               </h3>
             </div>
           </div>
-        )}
-        {activeDay === 0 && (
           <div className="buoy-last-updated">
             <p>Buoy data last updated: {buoyTimeLocal}</p>
           </div>
-        )}
+        </div>
       </div>
     </div>,
     <div className="day-sticky-container" key="day-stick-container">

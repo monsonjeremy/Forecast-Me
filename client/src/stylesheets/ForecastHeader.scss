@@ -11,6 +11,15 @@
     width: 100%;
     padding: 20px 0px;
     
+    .buoy-readings-container {
+      transition: max-height 1s;
+      max-height: 100px;
+      overflow: hidden;
+      &.hidden {
+        max-height: 0;
+      }
+    }
+
     .day-date-title {
       margin-bottom: 5px;
     }
