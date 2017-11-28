@@ -21,6 +21,7 @@ client/src/**/*.css
 .env.development.local
 .env.test.local
 .env.production.local
+.aws
 
 npm-debug.log*
 yarn-debug.log*

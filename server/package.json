@@ -1,6 +1,6 @@
 {
   "name": "forecast-me-server",
-  "version": "0.0.2-beta-forecastme-api",
+  "version": "0.0.3-beta-forecastme-api",
   "license": "MIT",
   "description": "Source code for the server side code of Forecast-Me",
   "repository": "https://github.com/monsonjeremy/Forecast-Me",
