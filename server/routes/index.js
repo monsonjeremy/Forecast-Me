@@ -32,14 +32,20 @@ app.use('/api/buoys/v1', buoysApi)
 app.use('/api/surf/v1', surfApi)
 
 if (!isLocalDev) {
-  // Serve bundle on root URL
-  app.use(express.static(path.join(__dirname, '..', '..', 'client', 'build')))
-  app.use('*', (req, res) => {
-    if (!req.secure && req.get('X-Forwarded-Proto') !== 'https') {
+  // If we're not on local dev, then we use Express for routing to the bundle
+
+  // If the X-Forwarded-Proto property in the request is not HTTPS, then redirect the user to HTTPS
+  app.use((req, res, next) => {
+    if (req.get('X-Forwarded-Proto') !== 'https') {
       res.redirect(`https://${req.get('Host')}${req.url}`)
     } else {
-      res.sendFile(path.join(__dirname, '..', '..', 'client', 'build', 'index.html'))
+      next()
     }
+  })
+
+  app.use(express.static(path.join(__dirname, '..', '..', 'client', 'build')))
+  app.use('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', '..', 'client', 'build', 'index.html'))
   })
 }
 
